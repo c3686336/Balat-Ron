@@ -7,90 +7,64 @@ type Kantsu = Tile
 type Shuntsu = Tile * Tile * Tile
 type Kotsu = Tile
 type Toitsu = Tile
-type Hand = int array
+type ListHand = (int * int) list // Tile's name and count
+type ArrayHand = int array
+type Hand = ArrayHand * Kantsu list
 type ParsedHand = Kantsu list * Shuntsu list * Kotsu list * Toitsu
 
-let (>=>) f g = fun x -> f x |> Option.bind g
+let TrimHead = List.skipWhile (snd >> (=) 0) 
 
-let internal IsValidTile (i: Tile): bool =
-  0 < i && i < 10
+let TryParseNTile n hand =
+  match hand with
+    | (t, c) :: xs when c >= n ->
+      (t, c - n) :: xs
+        |> TrimHead
+        |> fun x -> t, x
+        |> Some
+    | _ -> None
 
-let internal TryTakeNTile (i: Tile) (hand: Hand) (n: int): Hand option =
-  if IsValidTile i then
-    match hand[i] with
-      | n when n >= n -> Array.updateAt i (hand[i] - n) hand |> Some
-      | _ -> None
-  else
-    None
+let TryParseToitsu = TryParseNTile 2
+let TryParseKotsu = TryParseNTile 3
 
-let internal TryTakeTile (i: Tile) (hand: Hand): Hand option =
-  TryTakeNTile i hand 1
+let TryParseShuntsu hand =
+  match hand with
+    | (a, a1) :: (b, a2) :: (c, a3) :: xs when a1 > 0 && a2 > 0 && a3 > 0 && b = a + 1 && c = a + 2 ->
+      (a, a1 - 1) :: (b, a2 - 1) :: (c, a3 - 1) :: xs
+        |> TrimHead
+        |> fun x -> (a, b, c), x
+        |> Some
+    | _ -> None
 
-let internal TryParseShuntsuAt (i: int) (hand: Hand): (Shuntsu * Hand) option =
-  // TryTakeTile i hand
-  //   |> Option.bind (fun hand -> TryTakeTile (i + 1) hand)
-  //   |> Option.bind (fun hand -> TryTakeTile (i + 2) hand)
-  //   |> Option.bind (fun hand -> Some(Shuntsu (i, i + 1, i + 2), hand))
-  let TryTakeShuntsu =
-    TryTakeTile i
-    >=> TryTakeTile (i + 1)
-    >=> TryTakeTile (i + 2)
-
-  hand
-    |> TryTakeShuntsu
-    |> Option.map (fun hand -> (Shuntsu(i, i+1, i+2), hand))
-
-let internal TryParseKotsuAt (i: int) (hand: Hand): (Kotsu * Hand) option =
-  TryTakeNTile i hand 3
-    |> Option.map (fun hand -> (i, hand))
-
-let internal TryParseToitsuAt (i: int) (hand: Hand): (Toitsu * Hand) option =
-  TryTakeNTile i hand 2
-    |> Option.map (fun hand -> (i, hand))
-
-// let rec ParsePartialHandFrom (partialParsed: ParsedHand) (hand: Hand) (i: int): ParsedHand list =
-//   match i with
-//   | i when 1 <= i && i <= 9 && hand[i] > 0 ->
-//     let tryShuntsu = TryParseShuntsuAt i hand
-//     let tryKotsu = TryParseKotsuAt i hand
-//     let shuntsuResult =
-//       match tryShuntsu with
-//         | Some(shuntsu, hand) ->
-//           let (parsedKantsu, parsedShuntsu, parsedKotsu, parsedToitsu) = partialParsed
-//           ParsePartialHandFrom (parsedKantsu, shuntsu::parsedShuntsu, parsedKotsu, parsedToitsu) hand i
-//         | None -> []
-//     let kotsuResult =
-//           match tryKotsu with
-//             | Some(kotsu, hand) ->
-//               let (parsedKantsu, parsedShuntsu, parsedKotsu, parsedToitsu) = partialParsed
-//               ParsePartialHandFrom (parsedKantsu, parsedShuntsu, kotsu::parsedKotsu, parsedToitsu) hand i
-//             | None -> []
-//     match shuntsuResult @ kotsuResult with
-//       | [] -> None
-//       | x -> x |> Some
-//   | i when 1 <= i && 1 <= 9 && hand[i] = 0 ->
-//     ParsePartialHandFrom partialParsed hand (i + 1)
-//   | _ -> Some([])
-
-let rec ParsePartialHandFromIndex (partialParsed: ParsedHand) (hand: Hand) (i: int): ParsedHand list option =
-  // Parses remaining tiles from the hand and concatenates it to the partialParsed. Assume that any tiles less than i is all zero.
-  // If parsing fails, return None
-  match hand[i] with
-    | n when n > 0 ->
-      let (parsedKantsu, parsedShuntsu, parsedKotsu, parsedToitsu) = partialParsed;
+let rec TryParseHeadlessHandAsMuch (hand: ListHand) (parsedHand: ParsedHand) =
+  match hand with
+    | [] -> [parsedHand]
+    | hand ->
+      let (parsedKantsu, parsedShuntsu, parsedKotsu, parsedToitsu) = parsedHand
+      let shuntsu = TryParseShuntsu hand
+      let kotsu = TryParseKotsu hand
       
-      let shuntsu = TryParseShuntsuAt i hand
-      let kotsu = TryParseKotsuAt i hand
+      let shuntsuParsingResult =
+        shuntsu
+        |> Option.map (fun (newShuntsu, hand) -> TryParseHeadlessHandAsMuch hand (parsedKantsu, newShuntsu::parsedShuntsu, parsedKotsu, parsedToitsu))
+        |> Option.defaultValue []
+      let kotsuParsingResult =
+        kotsu
+        |> Option.map (fun (newKotsu, hand) -> TryParseHeadlessHandAsMuch hand (parsedKantsu, parsedShuntsu, newKotsu::parsedKotsu, parsedToitsu))
+        |> Option.defaultValue []
 
-      match shuntsu, kotsu with
-        | None, None ->
-          // Parsing failed
-          None
-        | shuntsu, kotsu ->
-          match shuntsu with
-            | Some(shuntsu, newHand) ->
-              let newPartialParsed =
-                (parsedKantsu, shuntsu::parsedShuntsu, parsedKotsu, parsedToitsu)
-              let rest = ParsePartialHandFromIndex newPartialParsed newHand i
-    | _ ->
-      ParsePartialHandFromIndex partialParsed hand (i + 1)
+      shuntsuParsingResult @ kotsuParsingResult
+
+let ArraytoList (hand: ArrayHand) =
+  List.fold (fun acc elem -> if hand[elem] <> 0 then (elem, hand[elem])::acc else acc) [] [1..9] |> List.rev
+
+let TryParseHeadlessHand (hand: ArrayHand) (toitsu) (kantsu: Kantsu list) =
+  let result = TryParseHeadlessHandAsMuch (ArraytoList hand) (kantsu, [], [], toitsu)
+  List.filter (fun (kan: Kantsu list, shun: Shuntsu list, ko: Kotsu list, toi: Toitsu) -> kan.Length + shun.Length + ko.Length = 4) result
+
+let TryParse ((hand, kantsu): Hand) =
+  List.fold (fun acc elem ->
+             if hand[elem] >= 2 then
+               (TryParseHeadlessHand (Array.updateAt elem (hand[elem] - 2) hand) elem kantsu)::acc
+             else
+               acc) [] [1..9]
+    |> List.filter ((<>) [])
