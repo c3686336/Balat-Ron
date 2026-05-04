@@ -1,19 +1,15 @@
-﻿module Program
+open Types
+open Evaluator
 
-open Evaluator;
+let testHand (name: string) (arr: int array) =
+    let result = TryParseNormalHand (arr, [])
+    printfn $"=== %s{name} ==="
+    printfn $"Found %d{result.Length} parsings."
+    for r in result do
+        printfn $"%O{r}"
+    printfn ""
 
-[<EntryPoint>]
-let main argv =
-  let result = TryParse ([|0;3;1;1;2;1;1;1;1;3|], [])
-  printfn $"{result}" |> ignore
-  let result = TryParse ([|0;4;1;1;1;1;1;1;1;3|], [])
-  printfn $"{result}" |> ignore
-  let result = TryParse ([|0;3;1;4;2;1;1;1;1;3|], [])
-  printfn $"{result}" |> ignore
-  let result = TryParse ([|0;3;1;1;1;1;1;1;1;4|], [])
-  printfn $"{result.ToString()}" |> ignore
-  // let result = TryParseHeadlessHandAsMuch [(Tile 1, 4); (Tile 2, 1); (Tile 3, 1); (Tile 4, 1); (Tile 5, 1); (Tile 6, 1); (Tile 7, 1); (Tile 8, 1); (Tile 9, 1)] ([], [], [], Tile 9)
-  let result = TryParseHeadlessHandAsMuch (ListHand [(Tile 1, 4); (Tile 2, 1); (Tile 3, 1)]) (ParsedHand ([], [], [], Toitsu (Tile 9)))
-  printfn $"{result}" |> ignore
-
-  0
+testHand "Ryanpeikou wait" [|0; 2; 2; 2; 2; 2; 2; 2; 0; 0|]
+testHand "Iipeikou with kotsu" [|0; 3; 2; 2; 2; 2; 3; 0; 0; 0|]
+testHand "Overlapping shuntsu 1" [|0; 1; 2; 3; 2; 1; 0; 0; 0; 5|] // 14 tiles. wait 1+2+3+2+1+5 = 14
+testHand "Overlapping shuntsu 2" [|0; 3; 4; 4; 3; 0; 0; 0; 0; 0|]

@@ -1,60 +1,7 @@
 module Evaluator
 
 open FSharp.Collections
-
-type Tile =
-  | Tile of int
-
-  override this.ToString() =
-    let (Tile v) = this
-    [|"Wat";"🀐";"🀑";"🀒";"🀓";"🀔";"🀕";"🀖";"🀗";"🀘"|][v]
-
-  member this.Value() =
-    let (Tile v) = this
-    v
-
-type Kantsu =
-  | Kantsu of Tile
-
-  override this.ToString (): string =
-    let (Kantsu t) = this
-    $"{t}🀫🀫{t}"
-
-type Shuntsu =
-  | Shuntsu of Tile * Tile * Tile
-
-  override this.ToString (): string =
-    let (Shuntsu (a, b, c)) = this
-    $"{a}{b}{c}"
-
-type Kotsu =
-  | Kotsu of Tile 
-
-  override this.ToString (): string =
-    let (Kotsu t) = this
-    $"{t}{t}{t}"
-
-type Toitsu =
-  | Toitsu of Tile
-
-  override this.ToString (): string =
-    let (Toitsu t) = this
-    $"{t}{t}"
-
-type ListHand =
-  | ListHand of (Tile * int) list // Tile's name and count
-
-type ArrayHand = int array
-
-type Hand =
-  ArrayHand * Kantsu list
-
-type ParsedHand =
-  | ParsedHand of Kantsu list * Shuntsu list * Kotsu list * Toitsu
-
-  override this.ToString (): string =
-    let (ParsedHand (kan, shun, ko, toi)) = this
-    $"Kantsu: {kan}, Shuntsu: {shun}, Kotsu: {ko}, Toitsu: {toi}"
+open Types;
 
 let FilterZero = List.filter (snd >> (<>) 0) 
 
@@ -80,7 +27,7 @@ let TryParseShuntsu (hand: ListHand): (Shuntsu * ListHand) option =
         |> Some
     | _ -> None
 
-let rec TryParseHeadlessHandAsMuch (hand: ListHand) (parsedHand: ParsedHand): ParsedHand list =
+let rec TryParseHeadlessHandAsMuch (hand: ListHand) (parsedHand: ParsedNormalHand): ParsedNormalHand list =
   match hand with
     | ListHand [] -> [parsedHand]
     | hand ->
@@ -103,14 +50,25 @@ let rec TryParseHeadlessHandAsMuch (hand: ListHand) (parsedHand: ParsedHand): Pa
 let ArraytoList (hand: ArrayHand): ListHand =
   List.fold (fun acc elem -> if hand[elem] <> 0 then (Tile elem, hand[elem])::acc else acc) [] [1..9] |> List.rev |> ListHand
 
-let TryParseHeadlessHand (hand: ArrayHand) (toitsu: Toitsu) (kantsu: Kantsu list): ParsedHand list =
+let TryParseHeadlessHand (hand: ArrayHand) (toitsu: Toitsu) (kantsu: Kantsu list): ParsedNormalHand list =
   let result = TryParseHeadlessHandAsMuch (ArraytoList hand) (ParsedHand (kantsu, [], [], toitsu))
   List.filter (fun (ParsedHand (kan: Kantsu list, shun: Shuntsu list, ko: Kotsu list, toi: Toitsu)) -> kan.Length + shun.Length + ko.Length = 4) result
 
-let TryParse ((hand, kantsu): Hand): ParsedHand list =
+let TryParseNormalHand ((hand, kantsu): Hand): ParsedNormalHand list =
   List.fold (fun acc elem ->
              if hand[elem] >= 2 then
                (TryParseHeadlessHand (Array.updateAt elem (hand[elem] - 2) hand) (Toitsu (Tile elem)) kantsu) :: acc
              else
                acc) [] [1..9]
     |> List.filter ((<>) []) |> List.concat
+
+let TryParseChitoitsu (hand: ArrayHand): ParsedChitoitsu option =
+  if Array.forall (fun x -> x = 0 || x = 2) hand then
+    Array.mapi (fun i x -> if x = 0 then Tile 0 else Tile i) hand |> Array.filter ((<>) (Tile 0)) |> Array.toList |> ParsedChitoitsu |> Some
+  else
+    None
+
+let Parse (hand: ArrayHand) (kantsu: Kantsu list): ParsedHand list =
+  match TryParseChitoitsu hand with
+    | None -> TryParseNormalHand (hand, kantsu) |> List.map NormalHand
+    | Some(x) -> Chitoitsu x :: []
