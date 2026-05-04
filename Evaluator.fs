@@ -68,7 +68,14 @@ let TryParseChitoitsu (hand: ArrayHand): ParsedChitoitsu option =
   else
     None
 
-let Parse (hand: ArrayHand) (kantsu: Kantsu list): ParsedHand list =
+let Parse ((hand, kantsu): Hand): ParsedHand list =
+  let normalParses = TryParseNormalHand (hand, kantsu) |> List.map NormalHand
   match TryParseChitoitsu hand with
-    | None -> TryParseNormalHand (hand, kantsu) |> List.map NormalHand
-    | Some(x) -> Chitoitsu x :: []
+    | None -> normalParses
+    | Some(x) ->
+        // Chitoitsu specifically requires 7 pairs (14 tiles). An empty hand or a hand with 4 pairs is not valid.
+        let (ParsedChitoitsu tiles) = x
+        if tiles.Length = 7 then
+            Chitoitsu x :: normalParses
+        else
+            normalParses

@@ -2,7 +2,7 @@ open Types
 open Evaluator
 
 let testHand (name: string) (arr: int array) =
-    let result = TryParseNormalHand (arr, [])
+    let result = Parse (arr, [])
     printfn $"=== %s{name} ==="
     printfn $"Found %d{result.Length} parsings."
     for r in result do
