@@ -16,6 +16,6 @@ testHand "Overlapping shuntsu 2" [|0; 3; 4; 4; 3; 0; 0; 0; 0; 0|]
 
 let hand = Hand ([|0;0;0;0;2;0;0;0;0;0|], [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
 
-let (han, fu, score) = CalculateScore hand (Tile 4)
+let (han, fu, score) = CalculateScore hand (Tile 4) [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 2
 
 printfn $"{han} {fu} {score}"

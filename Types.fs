@@ -11,6 +11,10 @@ type Tile =
     let (Tile v) = this
     v
 
+  member this.DoraTile() =
+    let (Tile v) = this
+    Tile <| v % 9 + 1
+
 type Kantsu =
   | Kantsu of Tile
 
@@ -71,3 +75,6 @@ type Machi =
 type ParsedHand =
   | NormalHand of ParsedNormalHand
   | Chitoitsu of ParsedChitoitsu
+
+type DoraIndicator =
+  Tile list

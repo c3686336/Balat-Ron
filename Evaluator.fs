@@ -4,6 +4,7 @@ open FSharp.Collections
 open Types
 open Yaku
 open Fu
+open Utils
 
 let FilterZero = List.filter (snd >> (<>) 0) 
 
@@ -127,8 +128,21 @@ let ParseHand ((hand, kantsu): Hand): ParsedHand list =
             Chitoitsu x :: normalParses
         else
             normalParses
+
+let CalculateDora ((arrayHand, kantsu): Hand) doraIndicators =
+  let doraInPlayableHand = List.map (fun (doraIndicator: Tile) -> arrayHand[doraIndicator.DoraTile().Value()]) doraIndicators |> List.sum
+  let doraInKantsu =
+    List.map (fun (doraIndicator: Tile) -> List.filter (fun (Kantsu (Tile x)) -> (=) x (doraIndicator.DoraTile().Value())) kantsu |> List.length) doraIndicators
+      |> List.sumBy (fun x -> x * 4)
+
+  doraInPlayableHand + doraInKantsu
+
+let Score han (fu: int) =
+  RoundUpTo (6I * bigint fu * (pown 2I (han + 2))) 100I
         
-let CalculateScore hand tsumo =
+let CalculateScore hand tsumo  doraIndicators additionalYaku =
+  let nDora = CalculateDora hand doraIndicators
+  
   ParseHand hand
     |> List.map (fun x ->
                  ParseMachi x tsumo
@@ -137,9 +151,9 @@ let CalculateScore hand tsumo =
     |> List.map (fun (hand, machi) ->
                  let fu = Fu hand machi tsumo
                  let han =
-                   List.map (fun (yakup, han) ->
-                             let fu = Fu hand machi tsumo
-                             if yakup hand machi tsumo then han else 0) YakuList
-                     |> List.sum
-                 (han, fu, 6I * bigint fu * (pown 6I han)))
+                   (List.map (fun (yakup, han) ->
+                              let fu = Fu hand machi tsumo
+                              if yakup hand machi tsumo then han else 0) YakuList
+                      |> List.sum) + nDora + additionalYaku
+                 (han, fu, Score han fu))
     |> List.maxBy (fun (_, _, score) -> score)
