@@ -70,5 +70,4 @@ type Machi =
 
 type ParsedHand =
   | NormalHand of ParsedNormalHand
-  | NormalHandMachi of ParsedNormalHand * Machi
   | Chitoitsu of ParsedChitoitsu
