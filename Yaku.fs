@@ -1,6 +1,7 @@
 module Yaku
 
 open Types
+open Fu
 
 let isTerminal (Tile t) = t = 1 || t = 9
 let isGreen (Tile t) = t = 2 || t = 3 || t = 4 || t = 6 || t = 8
@@ -23,14 +24,8 @@ let Tanyaop (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   | Chitoitsu (ParsedChitoitsu tiles) ->
     not (List.exists isTerminal tiles)
 
-let Pinfup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
-  match parsedHand with
-  | NormalHand (ParsedHand ([], shuntsu, [], _)) when shuntsu.Length = 4 ->
-    let (Tile t) = tsumo
-    shuntsu |> List.exists (fun (Shuntsu (Tile a, _, Tile c)) ->
-      (t = a && a <= 6) || (t = c && c >= 4)
-    )
-  | _ -> false
+let Pinfup (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
+   20 = Fu parsedHand machi tsumo
 
 let Iipeikoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with

@@ -74,25 +74,25 @@ let ParseMachi (ParsedHand (kan, shun, ko, toi)) (machi: Tile) =
     |> List.choose (fun (Shuntsu (a, b, c)) ->
                  match a, b, c with
                    | x, y, z when x = machi && z <> Tile 9 ->
-                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), Ryoumenmachi (x, y), machi)
+                     Some(Ryoumenmachi (x, y), machi)
                    | x, y, z when z = machi && x <> Tile 1 ->
-                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), Ryoumenmachi (y, z), machi)
+                     Some(Ryoumenmachi (y, z), machi)
                    | _ -> None)
   let kanchans = 
     shun
     |> List.choose (fun (Shuntsu (a, b, c)) ->
                  match a, b, c with
                    | x, y, z when y = machi ->
-                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), Ryoumenmachi (x, z), machi)
+                     Some(Kanchanmachi (x, z), machi)
                    | _ -> None)
   let penchans = 
     shun
     |> List.choose (fun (Shuntsu (a, b, c)) ->
                  match a, b, c with
                    | x, y, z when x = machi && z = Tile 9 ->
-                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), Ryoumenmachi (x, y), machi)
+                     Some(Penchanmachi (x, y), machi)
                    | x, y, z when z = machi && x = Tile 1 ->
-                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), Ryoumenmachi (y, z), machi)
+                     Some(Penchanmachi (y, z), machi)
                    | _ -> None)
   let shunpons =
     ko
@@ -100,11 +100,11 @@ let ParseMachi (ParsedHand (kan, shun, ko, toi)) (machi: Tile) =
                     match a with
                       | x when x = machi ->
                         let (Toitsu toiTile) = toi
-                        Some(ParsedHand(kan, shun, ko |> List.filter ((<>) (Kotsu a)), toi), Shanponmachi (toiTile, a), machi)
+                        Some(Shanponmachi (toiTile, a), machi)
                       | _ -> None)
   let tankis =
     match toi with
-      | (Toitsu a) when a = machi -> [(ParsedHand(kan, shun, ko, toi), Tanki a, machi)]
+      | (Toitsu a) when a = machi -> [(Tanki a, machi)]
       | _ -> []
 
   ryoumens @ kanchans @ penchans @ tankis
