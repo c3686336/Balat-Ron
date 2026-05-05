@@ -1,7 +1,9 @@
 module Evaluator
 
 open FSharp.Collections
-open Types;
+open Types
+open Yaku
+open Fu
 
 let FilterZero = List.filter (snd >> (<>) 0) 
 
@@ -68,47 +70,51 @@ let TryParseChitoitsu (hand: ArrayHand): ParsedChitoitsu option =
   else
     None
 
-let ParseMachi (ParsedHand (kan, shun, ko, toi)) (machi: Tile) =
+let ParseMachiNormalHand (ParsedHand (kan, shun, ko, toi)) (tsumo: Tile) =
   let ryoumens =
     shun
     |> List.choose (fun (Shuntsu (a, b, c)) ->
                  match a, b, c with
-                   | x, y, z when x = machi && z <> Tile 9 ->
-                     Some(Ryoumenmachi (x, y), machi)
-                   | x, y, z when z = machi && x <> Tile 1 ->
-                     Some(Ryoumenmachi (y, z), machi)
+                   | x, y, z when x = tsumo && z <> Tile 9 ->
+                     Some(Ryoumenmachi (x, y))
+                   | x, y, z when z = tsumo && x <> Tile 1 ->
+                     Some(Ryoumenmachi (y, z))
                    | _ -> None)
   let kanchans = 
     shun
     |> List.choose (fun (Shuntsu (a, b, c)) ->
                  match a, b, c with
-                   | x, y, z when y = machi ->
-                     Some(Kanchanmachi (x, z), machi)
+                   | x, y, z when y = tsumo ->
+                     Some(Kanchanmachi (x, z))
                    | _ -> None)
   let penchans = 
     shun
     |> List.choose (fun (Shuntsu (a, b, c)) ->
                  match a, b, c with
-                   | x, y, z when x = machi && z = Tile 9 ->
-                     Some(Penchanmachi (x, y), machi)
-                   | x, y, z when z = machi && x = Tile 1 ->
-                     Some(Penchanmachi (y, z), machi)
+                   | x, y, z when x = tsumo && z = Tile 9 ->
+                     Some(Penchanmachi (x, y))
+                   | x, y, z when z = tsumo && x = Tile 1 ->
+                     Some(Penchanmachi (y, z))
                    | _ -> None)
   let shunpons =
     ko
     |> List.choose (fun (Kotsu (a)) ->
                     match a with
-                      | x when x = machi ->
+                      | x when x = tsumo ->
                         let (Toitsu toiTile) = toi
-                        Some(Shanponmachi (toiTile, a), machi)
+                        Some(Shanponmachi (toiTile, a))
                       | _ -> None)
   let tankis =
     match toi with
-      | (Toitsu a) when a = machi -> [(Tanki a, machi)]
+      | (Toitsu a) when a = tsumo -> [Tanki a]
       | _ -> []
 
   ryoumens @ kanchans @ penchans @ tankis
   
+let ParseMachi hand tsumo =
+  match hand with
+    | Chitoitsu x -> [Tanki tsumo]
+    | NormalHand hand -> ParseMachiNormalHand hand tsumo
 
 let ParseHand ((hand, kantsu): Hand): ParsedHand list =
   let normalParses = TryParseNormalHand (hand, kantsu) |> List.map NormalHand
@@ -122,3 +128,18 @@ let ParseHand ((hand, kantsu): Hand): ParsedHand list =
         else
             normalParses
         
+let CalculateScore hand tsumo =
+  ParseHand hand
+    |> List.map (fun x ->
+                 ParseMachi x tsumo
+                   |> List.map (fun y -> (x, y)))
+    |> List.concat
+    |> List.map (fun (hand, machi) ->
+                 let fu = Fu hand machi tsumo
+                 let han =
+                   List.map (fun (yakup, han) ->
+                             let fu = Fu hand machi tsumo
+                             if yakup hand machi tsumo then han else 0) YakuList
+                     |> List.sum
+                 (han, fu, 6I * bigint fu * (pown 6I han)))
+    |> List.maxBy (fun (_, _, score) -> score)
