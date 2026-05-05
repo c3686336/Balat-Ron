@@ -5,12 +5,12 @@ open Types
 let isTerminal (Tile t) = t = 1 || t = 9
 let isGreen (Tile t) = t = 2 || t = 3 || t = 4 || t = 6 || t = 8
 
-let Sukantsup (parsedHand: ParsedHand) (_: Tile) =
+let Sukantsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
     | NormalHand (ParsedHand (k, _, _, _)) -> List.length k = 4
     | _ -> false
 
-let Tanyaop (parsedHand: ParsedHand) (_: Tile) =
+let Tanyaop (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, shuntsu, kotsu, Toitsu tToi)) ->
     let hasTerminalInShuntsu (Shuntsu (Tile a, _, Tile c)) = a = 1 || c = 9
@@ -23,7 +23,7 @@ let Tanyaop (parsedHand: ParsedHand) (_: Tile) =
   | Chitoitsu (ParsedChitoitsu tiles) ->
     not (List.exists isTerminal tiles)
 
-let Pinfup (parsedHand: ParsedHand) (tsumo: Tile) =
+let Pinfup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand ([], shuntsu, [], _)) when shuntsu.Length = 4 ->
     let (Tile t) = tsumo
@@ -32,7 +32,7 @@ let Pinfup (parsedHand: ParsedHand) (tsumo: Tile) =
     )
   | _ -> false
 
-let Iipeikoup (parsedHand: ParsedHand) (_: Tile) =
+let Iipeikoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (_, shuntsu, _, _)) ->
     let groups = shuntsu |> List.countBy id
@@ -40,7 +40,7 @@ let Iipeikoup (parsedHand: ParsedHand) (_: Tile) =
     pairs = 1
   | _ -> false
 
-let Ryanpeikoup (parsedHand: ParsedHand) (_: Tile) =
+let Ryanpeikoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (_, shuntsu, _, _)) ->
     let groups = shuntsu |> List.countBy id
@@ -48,7 +48,7 @@ let Ryanpeikoup (parsedHand: ParsedHand) (_: Tile) =
     pairs >= 2
   | _ -> false
 
-let Ittsup (parsedHand: ParsedHand) (_: Tile) =
+let Ittsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (_, shuntsu, _, _)) ->
     let has123 = shuntsu |> List.contains (Shuntsu (Tile 1, Tile 2, Tile 3))
@@ -57,41 +57,41 @@ let Ittsup (parsedHand: ParsedHand) (_: Tile) =
     has123 && has456 && has789
   | _ -> false
 
-let Toitoihoup (parsedHand: ParsedHand) (_: Tile) =
+let Toitoihoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, _)) ->
     kantsu.Length + kotsu.Length = 4
   | _ -> false
 
-let Sanankoup (parsedHand: ParsedHand) (_: Tile) =
+let Sanankoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, _)) ->
     kantsu.Length + kotsu.Length = 3
   | _ -> false
 
-let Suuankoup (parsedHand: ParsedHand) (tsumo: Tile) =
+let Suuankoup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, Toitsu tToi)) ->
     kantsu.Length + kotsu.Length = 4 && tToi <> tsumo
   | _ -> false
 
-let SuuankouTankip (parsedHand: ParsedHand) (tsumo: Tile) =
+let SuuankouTankip (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, Toitsu tToi)) ->
     kantsu.Length + kotsu.Length = 4 && tToi = tsumo
   | _ -> false
 
-let Sankantsup (parsedHand: ParsedHand) (_: Tile) =
+let Sankantsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, _, _)) -> kantsu.Length = 3
   | _ -> false
 
-let Chitoitsup (parsedHand: ParsedHand) (_: Tile) =
+let Chitoitsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | Chitoitsu _ -> true
   | _ -> false
 
-let Chinroutoup (parsedHand: ParsedHand) (_: Tile) =
+let Chinroutoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, [], kotsu, Toitsu tToi)) ->
     let allTerminal =
@@ -103,7 +103,7 @@ let Chinroutoup (parsedHand: ParsedHand) (_: Tile) =
     tiles |> List.forall isTerminal
   | _ -> false
 
-let Junchanp (parsedHand: ParsedHand) (_: Tile) =
+let Junchanp (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, shuntsu, kotsu, Toitsu tToi)) ->
     let hasTerminalInShuntsu (Shuntsu (Tile a, _, Tile c)) = a = 1 || c = 9
@@ -114,7 +114,7 @@ let Junchanp (parsedHand: ParsedHand) (_: Tile) =
     (isTerminal tToi)
   | _ -> false
 
-let Ryuuiisoup (parsedHand: ParsedHand) (_: Tile) =
+let Ryuuiisoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, shuntsu, kotsu, Toitsu tToi)) ->
     (kantsu |> List.forall (fun (Kantsu t) -> isGreen t)) &&
@@ -124,7 +124,7 @@ let Ryuuiisoup (parsedHand: ParsedHand) (_: Tile) =
   | Chitoitsu (ParsedChitoitsu tiles) ->
     tiles |> List.forall isGreen
 
-let JunseiChuurenPoutoup (parsedHand: ParsedHand) (tsumo: Tile) =
+let JunseiChuurenPoutoup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand ([], shuntsu, kotsu, Toitsu (Tile tToi))) ->
     let counts = Array.zeroCreate 10
@@ -139,7 +139,7 @@ let JunseiChuurenPoutoup (parsedHand: ParsedHand) (tsumo: Tile) =
     (seq { 2 .. 8 } |> Seq.forall (fun i -> counts[i] = 1))
   | _ -> false
 
-let ChuurenPoutoup (parsedHand: ParsedHand) (tsumo: Tile) =
+let ChuurenPoutoup (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand ([], shuntsu, kotsu, Toitsu (Tile tToi))) ->
     let counts = Array.zeroCreate 10
@@ -151,14 +151,14 @@ let ChuurenPoutoup (parsedHand: ParsedHand) (tsumo: Tile) =
         counts[1] >= 3 && counts[9] >= 3 &&
         (seq { 2 .. 8 } |> Seq.forall (fun i -> counts[i] >= 1))
         
-    isBaseChuuren && not (JunseiChuurenPoutoup parsedHand tsumo)
+    isBaseChuuren && not (JunseiChuurenPoutoup parsedHand machi tsumo)
   | _ -> false
 
-let Chinitsup (parsedHand: ParsedHand) (_: Tile) =
+let Chinitsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   true
 
-let Chantap (parsedHand: ParsedHand) (tsumo: Tile) =
-  Junchanp parsedHand tsumo
+let Chantap (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
+  Junchanp parsedHand machi tsumo
 
 let YakuList = [
   (Tanyaop, 1)
