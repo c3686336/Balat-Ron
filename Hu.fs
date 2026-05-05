@@ -1,4 +1,0 @@
-module Hu
-
-open Types
-
