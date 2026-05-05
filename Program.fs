@@ -1,5 +1,6 @@
 open Types
 open Evaluator
+open System
 
 let testHand (name: string) (arr: int array) =
     let result = ParseHand (arr, [])
@@ -16,6 +17,19 @@ testHand "Overlapping shuntsu 2" [|0; 3; 4; 4; 3; 0; 0; 0; 0; 0|]
 
 let hand = Hand ([|0;0;0;0;2;0;0;0;0;0|], [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
 
-let (han, fu, score) = CalculateScore hand (Tile 4) [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 2
+let (han, fu, score) = CalculateScore hand (Tile 4) [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 0
 
 printfn $"{han} {fu} {score}"
+
+[<EntryPoint>]
+let main argv =
+  let rng =
+    if Array.length argv = 2 then
+      Random(int argv[1])
+    else
+      Random(Environment.TickCount)
+
+
+  let pile: Pile =
+  
+  0

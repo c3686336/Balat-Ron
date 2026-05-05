@@ -78,3 +78,6 @@ type ParsedHand =
 
 type DoraIndicator =
   Tile list
+
+type Pile =
+  Tile list
