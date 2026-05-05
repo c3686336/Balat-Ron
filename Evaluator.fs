@@ -110,7 +110,7 @@ let ParseMachi (ParsedHand (kan, shun, ko, toi)) (machi: Tile) =
   ryoumens @ kanchans @ penchans @ tankis
   
 
-let ParseCompleteHand ((hand, kantsu): Hand): ParsedHand list =
+let ParseHand ((hand, kantsu): Hand): ParsedHand list =
   let normalParses = TryParseNormalHand (hand, kantsu) |> List.map NormalHand
   match TryParseChitoitsu hand with
     | None -> normalParses
@@ -121,4 +121,4 @@ let ParseCompleteHand ((hand, kantsu): Hand): ParsedHand list =
             Chitoitsu x :: normalParses
         else
             normalParses
-
+        
