@@ -61,6 +61,14 @@ type ParsedChitoitsu =
     let (ParsedChitoitsu (a::b::c::d::e::f::g)) = this
     $"Chitoitsu: {a}{a}{b}{b}{c}{c}{d}{d}{e}{e}{f}{f}{g}{g}"
 
+type Machi =
+  | Tanki of Tile
+  | Shanponmachi of Tile * Tile
+  | Penchanmachi of Tile * Tile
+  | Kanchanmachi of Tile * Tile
+  | Ryoumenmachi of Tile * Tile
+
 type ParsedHand =
   | NormalHand of ParsedNormalHand
+  | NormalHandMachi of ParsedNormalHand * Machi
   | Chitoitsu of ParsedChitoitsu

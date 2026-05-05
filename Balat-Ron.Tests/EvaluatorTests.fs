@@ -7,7 +7,7 @@ open Types
 [<Fact>]
 let ``TryParse with standard winning hand`` () =
     let handArray = [|0; 3; 1; 1; 2; 1; 1; 1; 1; 3|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Single(result) |> ignore
     let (NormalHand (ParsedHand (kantsu, shuntsu, kotsu, toitsu))) = result.Head
@@ -32,7 +32,7 @@ let ``TryParse with standard winning hand`` () =
 [<Fact>]
 let ``TryParse with multiple groups of same tile`` () =
     let handArray = [|0; 4; 1; 1; 1; 1; 1; 1; 1; 3|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Single(result) |> ignore
     let (NormalHand (ParsedHand (kantsu, shuntsu, kotsu, toitsu))) = result.Head
@@ -52,14 +52,14 @@ let ``TryParse with multiple groups of same tile`` () =
 let ``TryParse with unparsable hand returns empty list`` () =
     // 17 tiles, invalid hand
     let handArray = [|0; 3; 1; 4; 2; 1; 1; 1; 1; 3|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Empty(result)
 
 [<Fact>]
 let ``TryParse with 9-kotsu and 1-toitsu`` () =
     let handArray = [|0; 3; 1; 1; 1; 1; 1; 1; 1; 4|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Single(result) |> ignore
     let (NormalHand (ParsedHand (kantsu, shuntsu, kotsu, toitsu))) = result.Head
@@ -82,7 +82,7 @@ let ``TryParse with ambiguous hand returning multiple valid parses`` () =
     // Can be 123 123 123 444 55
     // Can be 111 222 333 444 55
     let handArray = [|0; 3; 3; 3; 3; 2; 0; 0; 0; 0|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     // There are multiple ways to parse this hand
     Assert.True(result.Length > 1)
@@ -92,7 +92,7 @@ let ``TryParse with one kantsu`` () =
     // Hand has 10 tiles left, needing 3 sets and 1 pair
     let handArray = [|0; 3; 1; 1; 2; 1; 1; 2; 0; 0|] // 1-1-1, 2-3-4, 4-5-6, 7-7
     let kantsu = [Kantsu (Tile 9)]
-    let result = Parse (handArray, kantsu)
+    let result = ParseCompleteHand (handArray, kantsu)
     
     Assert.Single(result) |> ignore
     let (NormalHand (ParsedHand (k, shuntsu, kotsu, toitsu))) = result.Head
@@ -105,14 +105,14 @@ let ``TryParse with one kantsu`` () =
 [<Fact>]
 let ``TryParse with empty hand returns empty`` () =
     let handArray = Array.zeroCreate 10
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     Assert.Empty(result)
 [<Fact>]
 let ``TryParse with Ryanpeikou shape returns 3 valid parses`` () =
     // 1-1, 2-2, 3-3, 4-4, 5-5, 6-6, 7-7
     // Pairs: 11, 44, 77. Shuntsu: 234 234 567 567 etc.
     let handArray = [|0; 2; 2; 2; 2; 2; 2; 2; 0; 0|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     // Since this is 7 pairs, it also parses as Chitoitsu now, so there are 4 results total
     Assert.Equal(4, result.Length)
@@ -127,7 +127,7 @@ let ``TryParse with Ryanpeikou shape returns 3 valid parses`` () =
 let ``TryParse with 3-2-2-2-2-3 shape returns 2 parses`` () =
     // 111, 22, 33, 44, 55, 666
     let handArray = [|0; 3; 2; 2; 2; 2; 3; 0; 0; 0|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Equal(2, result.Length)
     
@@ -139,7 +139,7 @@ let ``TryParse with 3-2-2-2-2-3 shape returns 2 parses`` () =
 let ``TryParse with 3-4-4-3 shape returns 4 parses`` () =
     // 111, 2222, 3333, 444
     let handArray = [|0; 3; 4; 4; 3; 0; 0; 0; 0; 0|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Equal(4, result.Length)
     
@@ -151,7 +151,7 @@ let ``TryParse with 3-4-4-3 shape returns 4 parses`` () =
 let ``Parse Chitoitsu standard case returns exactly 1 result`` () =
     // Hand: 11, 22, 44, 55, 77, 88, 99
     let handArray = [|0; 2; 2; 0; 2; 2; 0; 2; 2; 2|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     Assert.Single(result) |> ignore
     
@@ -166,7 +166,7 @@ let ``Parse Chitoitsu standard case returns exactly 1 result`` () =
 let ``Parse Chitoitsu rejects hands with 4 identical tiles (if no other pairs make up 7 pairs)`` () =
     // Hand: 11, 22, 33, 4444, 55 (Not a valid Chitoitsu in standard rules, Balat-Ron rule check)
     let handArray = [|0; 2; 2; 2; 4; 2; 0; 0; 0; 0|]
-    let result = Parse (handArray, [])
+    let result = ParseCompleteHand (handArray, [])
     
     let isChitoitsu = result |> List.exists (function Chitoitsu _ -> true | _ -> false)
     Assert.False(isChitoitsu)
@@ -176,7 +176,7 @@ let ``Parse Chitoitsu with kantsu ignores Chitoitsu`` () =
     // Even if you have 10 tiles that are pairs, if there is a kantsu, you can't have 7 pairs
     let handArray = [|0; 2; 2; 2; 2; 2; 0; 0; 0; 0|] // 10 tiles (5 pairs)
     let kantsu = [Kantsu (Tile 9)] // 4 tiles
-    let result = Parse (handArray, kantsu)
+    let result = ParseCompleteHand (handArray, kantsu)
     
     let isChitoitsu = result |> List.exists (function Chitoitsu _ -> true | _ -> false)
     Assert.False(isChitoitsu)

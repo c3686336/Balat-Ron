@@ -68,7 +68,49 @@ let TryParseChitoitsu (hand: ArrayHand): ParsedChitoitsu option =
   else
     None
 
-let Parse ((hand, kantsu): Hand): ParsedHand list =
+let ParseMachi (ParsedHand (kan, shun, ko, toi)) (machi: Tile) =
+  let ryoumens =
+    shun
+    |> List.choose (fun (Shuntsu (a, b, c)) ->
+                 match a, b, c with
+                   | x, y, z when x = machi && z <> Tile 9 ->
+                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), (Ryoumenmachi (x, y)))
+                   | x, y, z when z = machi && x <> Tile 1 ->
+                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), (Ryoumenmachi (y, z)))
+                   | _ -> None)
+  let kanchans = 
+    shun
+    |> List.choose (fun (Shuntsu (a, b, c)) ->
+                 match a, b, c with
+                   | x, y, z when y = machi ->
+                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), (Ryoumenmachi (x, z)))
+                   | _ -> None)
+  let penchans = 
+    shun
+    |> List.choose (fun (Shuntsu (a, b, c)) ->
+                 match a, b, c with
+                   | x, y, z when x = machi && z = Tile 9 ->
+                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), (Ryoumenmachi (x, y)))
+                   | x, y, z when z = machi && x = Tile 1 ->
+                     Some(ParsedHand (kan, shun |> List.filter ((<>) (Shuntsu (a, b, c))), ko, toi), (Ryoumenmachi (y, z)))
+                   | _ -> None)
+  let shunpons =
+    ko
+    |> List.choose (fun (Kotsu (a)) ->
+                    match a with
+                      | x when x = machi ->
+                        let (Toitsu toiTile) = toi
+                        Some(ParsedHand(kan, shun, ko |> List.filter ((<>) (Kotsu a)), toi), (Shanponmachi (toiTile, a)))
+                      | _ -> None)
+  let tankis =
+    match toi with
+      | (Toitsu a) when a = machi -> [(ParsedHand(kan, shun, ko, toi), Tanki a)]
+      | _ -> []
+
+  ryoumens @ kanchans @ penchans @ tankis
+  
+
+let ParseCompleteHand ((hand, kantsu): Hand): ParsedHand list =
   let normalParses = TryParseNormalHand (hand, kantsu) |> List.map NormalHand
   match TryParseChitoitsu hand with
     | None -> normalParses
@@ -79,3 +121,4 @@ let Parse ((hand, kantsu): Hand): ParsedHand list =
             Chitoitsu x :: normalParses
         else
             normalParses
+
