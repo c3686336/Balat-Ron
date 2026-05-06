@@ -48,8 +48,37 @@ type ListHand =
 
 type ArrayHand = int array
 
+let ArrayHandToString (arrayHand: ArrayHand): string =
+  arrayHand
+        |> Array.mapi (fun i x -> String.replicate x $"{Tile i}") |> String.concat ""
+
 type Hand =
-  | Hand of ArrayHand * Kantsu list
+  | Hand of ArrayHand * Tile * Kantsu list
+
+  override this.ToString (): string =
+    let (Hand (arrayHand, tsumo, kantsu)) = this
+
+    let playableHandString =
+      arrayHand
+        |> ArrayHandToString
+
+    let kantsuString =
+      kantsu
+        |> List.map (fun x -> $"{x}") |> String.concat " "
+
+    $"{playableHandString} {tsumo}  {kantsuString}"
+
+  member this.playableHand () =
+    let (Hand (arrayHand, _, _)) = this
+    arrayHand
+
+  member this.Kantsu () =
+    let (Hand (_, _, kantsu)) = this
+    kantsu
+
+  member this.Tsumo () =
+    let (Hand (_, tsumo, _)) = this
+    tsumo
 
 type ParsedNormalHand =
   | ParsedHand of Kantsu list * Shuntsu list * Kotsu list * Toitsu
