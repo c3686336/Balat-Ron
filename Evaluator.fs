@@ -57,7 +57,7 @@ let TryParseHeadlessHand (hand: ArrayHand) (toitsu: Toitsu) (kantsu: Kantsu list
   let result = TryParseHeadlessHandAsMuch (ArraytoList hand) (ParsedHand (kantsu, [], [], toitsu))
   List.filter (fun (ParsedHand (kan: Kantsu list, shun: Shuntsu list, ko: Kotsu list, toi: Toitsu)) -> kan.Length + shun.Length + ko.Length = 4) result
 
-let TryParseNormalHand ((hand, kantsu): Hand): ParsedNormalHand list =
+let TryParseNormalHand ((Hand (hand, kantsu)): Hand): ParsedNormalHand list =
   List.fold (fun acc elem ->
              if hand[elem] >= 2 then
                (TryParseHeadlessHand (Array.updateAt elem (hand[elem] - 2) hand) (Toitsu (Tile elem)) kantsu) :: acc
@@ -117,8 +117,8 @@ let ParseMachi hand tsumo =
     | Chitoitsu x -> [Tanki tsumo]
     | NormalHand hand -> ParseMachiNormalHand hand tsumo
 
-let ParseHand ((hand, kantsu): Hand): ParsedHand list =
-  let normalParses = TryParseNormalHand (hand, kantsu) |> List.map NormalHand
+let ParseHand ((Hand (hand, kantsu)): Hand): ParsedHand list =
+  let normalParses = TryParseNormalHand (Hand (hand, kantsu)) |> List.map NormalHand
   match TryParseChitoitsu hand with
     | None -> normalParses
     | Some(x) ->
@@ -129,7 +129,7 @@ let ParseHand ((hand, kantsu): Hand): ParsedHand list =
         else
             normalParses
 
-let CalculateDora ((arrayHand, kantsu): Hand) doraIndicators =
+let CalculateDora ((Hand (arrayHand, kantsu)): Hand) doraIndicators =
   let doraInPlayableHand = List.map (fun (doraIndicator: Tile) -> arrayHand[doraIndicator.DoraTile().Value()]) doraIndicators |> List.sum
   let doraInKantsu =
     List.map (fun (doraIndicator: Tile) -> List.filter (fun (Kantsu (Tile x)) -> (=) x (doraIndicator.DoraTile().Value())) kantsu |> List.length) doraIndicators

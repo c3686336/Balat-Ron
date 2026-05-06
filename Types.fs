@@ -49,7 +49,7 @@ type ListHand =
 type ArrayHand = int array
 
 type Hand =
-  ArrayHand * Kantsu list
+  | Hand of ArrayHand * Kantsu list
 
 type ParsedNormalHand =
   | ParsedHand of Kantsu list * Shuntsu list * Kotsu list * Toitsu

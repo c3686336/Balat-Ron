@@ -4,7 +4,7 @@ open Evaluator
 open System
 
 let testHand (name: string) (arr: int array) =
-    let result = ParseHand (arr, [])
+    let result = ParseHand (Hand (arr, []))
     printfn $"=== %s{name} ==="
     printfn $"Found %d{result.Length} parsings."
     for r in result do
@@ -34,7 +34,7 @@ let main argv =
   let mutable pile: Tile array = List.toArray allTiles
   rng.Shuffle pile
 
-  let mutable handArray: ArrayHand = TileArrayToHand (Array.take 13 pile)
+  let mutable handArray: Hand = Hand (TileArrayToHand (Array.take 13 pile), [])
   pile <- Array.truncate 13 pile
 
   let mutable tsumoTile: Tile = Array.head pile
