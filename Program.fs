@@ -82,6 +82,6 @@ let main argv =
   let maybeScore = CalculateScore hand [] 0 []
 
   match maybeScore with
-    | Some (han, fu, score, _) -> printfn $"{x}"
+    | Some (han, fu, score, _) -> printfn $"{han}판 {fu}부 {score}점"
 
   0
