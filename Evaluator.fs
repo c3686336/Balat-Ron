@@ -147,17 +147,21 @@ let CalculateScore hand  doraIndicators additionalYaku =
   let nDora = CalculateDora hand doraIndicators
   let (Hand (_, tsumo, _)) = hand
   
-  ParseHand hand
+  let result =
+    ParseHand hand
     |> List.map (fun x ->
                  ParseMachi x tsumo
                    |> List.map (fun y -> (x, y)))
     |> List.concat
     |> List.map (fun (hand, machi) ->
                  let fu = Fu hand machi tsumo
-                 let han =
-                   (List.map (fun (yakup, han) ->
+                 let (han, names) =
+                   (List.map (fun (yakup, han, name) ->
                               let fu = Fu hand machi tsumo
-                              if yakup hand machi tsumo then han else 0) YakuList
-                      |> List.sum) + nDora + additionalYaku
-                 (han, fu, Score han fu))
-    |> List.maxBy (fun (_, _, score) -> score)
+                              if yakup hand machi tsumo then (han, name) else (0, name)) YakuList
+                      |> List.fold (fun state (han, name) -> (fst state + han, if han = 0 then snd state else name :: snd state)) (nDora + additionalYaku, [$"Dora {nDora}"])) 
+                 (han, fu, Score han fu, names))
+
+  match result with
+    | [] -> None
+    | x -> Some(List.maxBy (fun (_, _, score, _) -> score) x)
