@@ -35,7 +35,7 @@ let main argv =
   rng.Shuffle pile
 
   let mutable hand: Hand = Hand (TileArrayToHand (Array.take 13 pile), Array.head pile, [])
-  pile <- Array.truncate 14 pile
+  pile <- Array.skip 14 pile
 
   let mutable isTenhouApplicable = true
   let mutable isRinShanApplicable = false
@@ -52,10 +52,10 @@ let main argv =
         // List.map (fun x -> printfn $"{x}") names |> ignore
         // printfn $"{han} {fu} {score}"
       | None ->
-        printfn "No Tenhou?"
+        ignore ()
 
     let rec Ask () =
-      printfn "1-9 to discard or tsumo to shout tsumo"
+      printfn "1-9 to discard, kn with kan n or t to shout tsumo"
       let choice = Console.ReadLine ()
       match PlayerInput.TryParse(choice) with
         | Some(x) ->
@@ -63,6 +63,7 @@ let main argv =
             | Tsumo -> if maybeScore <> None then Tsumo else Ask ()
             | Kan(t) when hand.IsKanVaild(t) -> Kan(t)
             | Discard(t) when hand.IsDiscardValid(t) -> Discard(t)
+            | _ -> Ask ()
         | None -> Ask ()
 
     let action = Ask ()
@@ -71,11 +72,16 @@ let main argv =
       | Tsumo -> didTsumo <- true
       | Kan(t) ->
         hand <- hand.Kan t (Array.head pile)
-        pile <- Array.truncate 1 pile
+        pile <- Array.skip 1 pile
       | Discard(t) ->
         hand <- hand.Discard t (Array.head pile)
-        pile <- Array.truncate 1 pile
+        pile <- Array.skip 1 pile
 
   printfn $"{hand}"
+
+  let maybeScore = CalculateScore hand [] 0 []
+
+  match maybeScore with
+    | Some (han, fu, score, _) -> printfn $"{x}"
 
   0

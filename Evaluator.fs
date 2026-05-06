@@ -153,7 +153,6 @@ let CalculateScore hand  doraIndicators additionalYaku additionalYakuNames =
     |> List.map (fun x ->
                  ParseMachi x tsumo
                    |> List.map (fun y -> (x, y)))
-    |> (fun x -> printfn "c %A" x |> ignore; x)
     |> List.concat
     |> List.map (fun (hand, machi) ->
                  let fu = Fu hand machi tsumo
