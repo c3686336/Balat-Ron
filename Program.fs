@@ -11,12 +11,12 @@ let (han, fu, score) = CalculateScore hand  [Tile 1; Tile 1; Tile 1; Tile 1; Til
 
 printfn $"{han} {fu} {score}"
 
-let hand2 = Hand ([|2;2;2;2;2;2;1;0;0;0|], Tile 7, [])
+let hand2 = Hand ([|0;2;2;2;2;2;2;1;0;0|], Tile 7, [])
 
 printfn $"{hand2}"
 let (han2, fu2, score2) = CalculateScore hand2  [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 0
 
-printfn $"{han} {fu} {score}"
+printfn $"{han2} {fu2} {score2}"
 
 [<EntryPoint>]
 let main argv =
