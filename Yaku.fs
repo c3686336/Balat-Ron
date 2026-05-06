@@ -55,7 +55,7 @@ let Ittsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
 let Toitoihoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, _)) ->
-    kantsu.Length + kotsu.Length = 4
+    kantsu.Length + kotsu.Length = 4 && kotsu.Length <> 4 // Shouldn't overlap with Sukantsu
   | _ -> false
 
 let Sanankoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =

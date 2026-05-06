@@ -1,5 +1,7 @@
 module Types
 
+open System
+
 type Tile =
   | Tile of int
 
@@ -14,6 +16,12 @@ type Tile =
   member this.DoraTile() =
     let (Tile v) = this
     Tile <| v % 9 + 1
+
+  member this.IsValid () =
+    1 <= this.Value () && this.Value () <= 9
+
+  member this.IsTerminal () =
+    this.Value () = 1 || this.Value () = 9
 
 type Kantsu =
   | Kantsu of Tile
@@ -52,6 +60,29 @@ let ArrayHandToString (arrayHand: ArrayHand): string =
   arrayHand
         |> Array.mapi (fun i x -> String.replicate x $"{Tile i}") |> String.concat ""
 
+
+type PlayerInput =
+  | Tsumo
+  | Kan of Tile
+  | Discard of Tile
+
+  static member TryParse (input: string) =
+    let truncated = input.Trim ()
+
+    match truncated with
+      | "t" -> Some (Tsumo)
+      | str ->
+        match Int32.TryParse (str) with
+          | (true, value) when 1 <= value && value <= 9 -> Some (Discard (Tile value))
+          | (true, _) -> None
+          | (false, _) ->
+            if str.StartsWith("k") then
+              match Int32.TryParse (str.Substring(1)) with
+                | (true, value) when 1 <= value && value <= 9 -> Some (Kan (Tile value))
+                | _ -> None
+            else
+              None
+
 type Hand =
   | Hand of ArrayHand * Tile * Kantsu list
 
@@ -79,6 +110,34 @@ type Hand =
   member this.Tsumo () =
     let (Hand (_, tsumo, _)) = this
     tsumo
+
+  member this.IsKanVaild (t: Tile) =
+    this.playableHand()[t.Value()] >= 4 || this.Tsumo () = t && this.playableHand()[t.Value()] >= 3
+
+  member this.IsDiscardValid (t: Tile) =
+    this.playableHand()[t.Value()] >= 1 || this.Tsumo () = t
+
+  member this.Discard (t: Tile) (newTsumo: Tile)=
+    let (Hand (arrayHand, tsumo, kantsu)) = this
+    if t <> this.Tsumo () then
+      let discardedArrayHand = Array.updateAt (t.Value()) (arrayHand[t.Value()] - 1) arrayHand
+      let arrayHandWithTsumo = Array.updateAt (tsumo.Value()) (discardedArrayHand[tsumo.Value()] + 1) discardedArrayHand
+
+      Hand (arrayHandWithTsumo, newTsumo, kantsu)
+    else
+      Hand (arrayHand, newTsumo, kantsu)
+
+  member this.Kan (t: Tile) (newTsumo: Tile) =
+    let (Hand (arrayHand, tsumo, kantsu)) = this
+    if t <> this.Tsumo () then
+      let kannedArrayHand = Array.updateAt (t.Value()) (arrayHand[t.Value()] - 4) arrayHand
+      let arrayHandWithTsumo = Array.updateAt (tsumo.Value()) (kannedArrayHand[tsumo.Value()] + 1) kannedArrayHand
+      
+      Hand (arrayHandWithTsumo, newTsumo, Kantsu t :: kantsu)
+    else
+      let kannedArrayHand = Array.updateAt (t.Value()) (arrayHand[t.Value()] - 3) arrayHand
+
+      Hand (kannedArrayHand, newTsumo, Kantsu t :: kantsu)
 
 type ParsedNormalHand =
   | ParsedHand of Kantsu list * Shuntsu list * Kotsu list * Toitsu
@@ -110,3 +169,7 @@ type DoraIndicator =
 
 type Pile =
   Tile array 
+
+                  
+                  
+  

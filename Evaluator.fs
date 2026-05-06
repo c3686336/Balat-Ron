@@ -61,7 +61,7 @@ let TryParseNormalHand ((Hand (hand, tsumo, kantsu)): Hand): ParsedNormalHand li
   let handWithTsumo = Array.updateAt (tsumo.Value ()) (hand[tsumo.Value ()] + 1) hand
   List.fold (fun acc elem ->
              if handWithTsumo[elem] >= 2 then
-               (TryParseHeadlessHand (Array.updateAt elem (handWithTsumo[elem] - 2) hand) (Toitsu (Tile elem)) kantsu) :: acc
+               (TryParseHeadlessHand (Array.updateAt elem (handWithTsumo[elem] - 2) handWithTsumo) (Toitsu (Tile elem)) kantsu) :: acc
              else
                acc) [] [1..9]
     |> List.filter ((<>) []) |> List.concat
@@ -111,7 +111,7 @@ let ParseMachiNormalHand (ParsedHand (kan, shun, ko, toi)) (tsumo: Tile) =
       | (Toitsu a) when a = tsumo -> [Tanki a]
       | _ -> []
 
-  ryoumens @ kanchans @ penchans @ tankis
+  ryoumens @ kanchans @ penchans @ shunpons @ tankis
   
 let ParseMachi hand tsumo =
   match hand with
@@ -122,7 +122,8 @@ let ParseHand ((Hand (hand, tsumo, kantsu)): Hand): ParsedHand list =
   let normalParses = TryParseNormalHand (Hand (hand, tsumo, kantsu)) |> List.map NormalHand
   let handWithTsumo = Array.updateAt (tsumo.Value ()) (hand[tsumo.Value ()] + 1) hand
   match TryParseChitoitsu handWithTsumo with
-    | None -> normalParses
+    | None ->
+      normalParses
     | Some(x) ->
         // Chitoitsu specifically requires 7 pairs (14 tiles). An empty hand or a hand with 4 pairs is not valid.
         let (ParsedChitoitsu tiles) = x
@@ -143,7 +144,7 @@ let CalculateDora ((Hand (arrayHand, tsumo, kantsu)): Hand) doraIndicators =
 let Score han (fu: int) =
   RoundUpTo (6I * bigint fu * (pown 2I (han + 2))) 100I
         
-let CalculateScore hand  doraIndicators additionalYaku =
+let CalculateScore hand  doraIndicators additionalYaku additionalYakuNames =
   let nDora = CalculateDora hand doraIndicators
   let (Hand (_, tsumo, _)) = hand
   
@@ -152,6 +153,7 @@ let CalculateScore hand  doraIndicators additionalYaku =
     |> List.map (fun x ->
                  ParseMachi x tsumo
                    |> List.map (fun y -> (x, y)))
+    |> (fun x -> printfn "c %A" x |> ignore; x)
     |> List.concat
     |> List.map (fun (hand, machi) ->
                  let fu = Fu hand machi tsumo
@@ -159,7 +161,7 @@ let CalculateScore hand  doraIndicators additionalYaku =
                    (List.map (fun (yakup, han, name) ->
                               let fu = Fu hand machi tsumo
                               if yakup hand machi tsumo then (han, name) else (0, name)) YakuList
-                      |> List.fold (fun state (han, name) -> (fst state + han, if han = 0 then snd state else name :: snd state)) (nDora + additionalYaku, [$"Dora {nDora}"])) 
+                      |> List.fold (fun state (han, name) -> (fst state + han, if han = 0 then snd state else name :: snd state)) (nDora + additionalYaku, $"Dora {nDora}" :: additionalYakuNames)) 
                  (han, fu, Score han fu, names))
 
   match result with
