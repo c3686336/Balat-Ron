@@ -1,4 +1,5 @@
 open Types
+open Utils
 open Evaluator
 open System
 
@@ -30,6 +31,13 @@ let main argv =
       Random(Environment.TickCount)
 
 
-  let pile: Pile =
-  
+  let mutable pile: Tile array = List.toArray allTiles
+  rng.Shuffle pile
+
+  let mutable handArray: ArrayHand = TileArrayToHand (Array.take 13 pile)
+  pile <- Array.truncate 13 pile
+
+  let mutable tsumoTile: Tile = Array.head pile
+  pile <- Array.truncate 1 pile
+
   0
