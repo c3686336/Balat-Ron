@@ -57,6 +57,7 @@ let main argv =
     let maybeScore = calculateScore gameState
 
     printfn $"{gameState.hand}"
+    gameState.dora |> Array.map (fun x -> x.ToString()) |> String.concat "" |> printfn "%s"
     
     match maybeScore with
       | Some (_) ->
@@ -93,7 +94,9 @@ let main argv =
   let maybeScore = calculateScore gameState
 
   match maybeScore with
-    | Some (han, fuVal, scoreVal, _) -> printfn $"{han}판 {fuVal}부 {scoreVal}점"
+    | Some (han, fuVal, scoreVal, names) ->
+      let namesStr = names |> List.map (fun x -> x.ToString()) |> String.concat "\n"
+      printfn $"{namesStr}\n{han}판 {fuVal}부 {scoreVal}점"
     | None -> ()
 
   0
