@@ -3,19 +3,34 @@ open Utils
 open Evaluator
 open System
 
+let emptyState hand dora items = {
+    rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
+    rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
+    isTenhouApplicable = false; items = items
+}
+
 let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
+let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
+let items1 = Yaku.yakuItems @ [
+  ("Riichi", "", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 1u])
+  ("Kaitei", "", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 1u])
+  ("Ippatsu", "", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 1u])
+]
+
+let dummyState1 = emptyState hand dora1 items1
 
 printfn $"{hand}"
 
-let (Some (han, fuVal, scoreVal, names)) = calculateScore hand  [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 2 ["Riichi"; "Kaitei"; "Ippatsu"]
+let (Some (han, fuVal, scoreVal, names)) = calculateScore dummyState1
 
 List.map (fun x -> printfn $"{x}") names |> ignore
 printfn $"{han} {fuVal} {scoreVal}\n"
 
 let hand2 = Hand ([|0;1;1;2;3;2;1;1;0;2|], Tile 9, [])
+let dummyState2 = emptyState hand2 [||] Yaku.yakuItems
 
 printfn $"{hand2}"
-let (Some (han2, fu2, score2, names2)) = calculateScore hand2  [] 0 []
+let (Some (han2, fu2, score2, names2)) = calculateScore dummyState2
 
 List.map (fun x -> printfn $"{x}") names2 |> ignore
 printfn $"{han2} {fu2} {score2}\n{names}"
@@ -34,17 +49,14 @@ let main argv =
   let mutable pile: Tile array = List.toArray allTiles
   rng.Shuffle pile
 
-  let mutable hand: Hand = Hand (tileArrayToHand (Array.take 13 pile), Array.head pile, [])
-  pile <- Array.skip 14 pile
+  let mutable gameState = GameState.createGameState rng
 
-  let mutable isTenhouApplicable = true
-  let mutable isRinShanApplicable = false
   let mutable didTsumo = false
 
   while not didTsumo do
-    let maybeScore = calculateScore hand [] 0 []
+    let maybeScore = calculateScore gameState
 
-    printfn $"{hand}"
+    printfn $"{gameState.hand}"
     
     match maybeScore with
       | Some (_) ->
@@ -61,8 +73,8 @@ let main argv =
         | Some(x) ->
           match x with
             | Tsumo -> if maybeScore <> None then Tsumo else Ask ()
-            | Kan(t) when hand.IsKanValid(t) -> Kan(t)
-            | Discard(t) when hand.IsDiscardValid(t) -> Discard(t)
+            | Kan(t) when gameState.hand.IsKanValid(t) -> Kan(t)
+            | Discard(t) when gameState.hand.IsDiscardValid(t) -> Discard(t)
             | _ -> Ask ()
         | None -> Ask ()
 
@@ -72,18 +84,13 @@ let main argv =
       | Tsumo ->
         didTsumo <- true
       | Kan(t) ->
-        hand <- hand.Kan t (Array.head pile)
-        pile <- Array.skip 1 pile
-        isRinShanApplicable <- true
+        gameState <- Option.get (GameState.kan t gameState)
       | Discard(t) ->
-        hand <- hand.Discard t (Array.head pile)
-        pile <- Array.skip 1 pile
-        isTenhouApplicable <- false
-        isRinShanApplicable <- false
+        gameState <- Option.get (GameState.discard t gameState)
 
-  printfn $"{hand}"
+  printfn $"{gameState.hand}"
 
-  let maybeScore = calculateScore hand [] 0 []
+  let maybeScore = calculateScore gameState
 
   match maybeScore with
     | Some (han, fuVal, scoreVal, _) -> printfn $"{han}판 {fuVal}부 {scoreVal}점"

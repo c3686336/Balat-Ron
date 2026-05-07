@@ -11,18 +11,11 @@ let sukantsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
     | NormalHand (ParsedHand (k, _, _, _)) -> List.length k = 4
     | _ -> false
 
-let tanyaop (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
-  match parsedHand with
-  | NormalHand (ParsedHand (kantsu, shuntsu, kotsu, Toitsu tToi)) ->
-    let hasTerminalInShuntsu (Shuntsu (Tile a, _, Tile c)) = a = 1 || c = 9
-    let noTerminal = 
-      not (List.exists (fun (Kantsu t) -> isTerminal t) kantsu) &&
-      not (List.exists (fun (Kotsu t) -> isTerminal t) kotsu) &&
-      not (List.exists hasTerminalInShuntsu shuntsu) &&
-      not (isTerminal tToi)
-    noTerminal
-  | Chitoitsu (ParsedChitoitsu tiles) ->
-    not (List.exists isTerminal tiles)
+let tanyaopRaw (hand: Hand) =
+  let (Hand(arr, tsumo, kantsu)) = hand
+  arr.[1] = 0 && arr.[9] = 0 &&
+  tsumo.Value() <> 1 && tsumo.Value() <> 9 &&
+  kantsu |> List.forall (fun (Kantsu t) -> t.Value() <> 1 && t.Value() <> 9)
 
 let pinfup (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
    20 = fu parsedHand machi tsumo
@@ -86,17 +79,11 @@ let chitoitsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   | Chitoitsu _ -> true
   | _ -> false
 
-let chinroutoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
-  match parsedHand with
-  | NormalHand (ParsedHand (kantsu, [], kotsu, Toitsu tToi)) ->
-    let allTerminal =
-      (kantsu |> List.forall (fun (Kantsu t) -> isTerminal t)) &&
-      (kotsu |> List.forall (fun (Kotsu t) -> isTerminal t)) &&
-      (isTerminal tToi)
-    allTerminal
-  | Chitoitsu (ParsedChitoitsu tiles) ->
-    tiles |> List.forall isTerminal
-  | _ -> false
+let chinroutoupRaw (hand: Hand) =
+  let (Hand(arr, tsumo, kantsu)) = hand
+  (seq {2..8} |> Seq.forall (fun i -> arr.[i] = 0)) &&
+  (tsumo.Value() = 1 || tsumo.Value() = 9) &&
+  kantsu |> List.forall (fun (Kantsu t) -> t.Value() = 1 || t.Value() = 9)
 
 let junchanp (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
@@ -109,15 +96,12 @@ let junchanp (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
     (isTerminal tToi)
   | _ -> false
 
-let ryuuiisoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
-  match parsedHand with
-  | NormalHand (ParsedHand (kantsu, shuntsu, kotsu, Toitsu tToi)) ->
-    (kantsu |> List.forall (fun (Kantsu t) -> isGreen t)) &&
-    (kotsu |> List.forall (fun (Kotsu t) -> isGreen t)) &&
-    (shuntsu |> List.forall (fun (Shuntsu (a, b, c)) -> isGreen a && isGreen b && isGreen c)) &&
-    (isGreen tToi)
-  | Chitoitsu (ParsedChitoitsu tiles) ->
-    tiles |> List.forall isGreen
+let ryuuiisoupRaw (hand: Hand) =
+  let (Hand(arr, tsumo, kantsu)) = hand
+  let isGreen v = v = 2 || v = 3 || v = 4 || v = 6 || v = 8
+  (seq {1..9} |> Seq.forall (fun i -> isGreen i || arr.[i] = 0)) &&
+  isGreen (tsumo.Value()) &&
+  kantsu |> List.forall (fun (Kantsu t) -> isGreen (t.Value()))
 
 let junseiChuurenPoutoup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
   match parsedHand with
@@ -149,30 +133,27 @@ let chuurenPoutoup (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
     isBaseChuuren && not (junseiChuurenPoutoup parsedHand machi tsumo)
   | _ -> false
 
-let chinitsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
-  true
-
 let chantap (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
   junchanp parsedHand machi tsumo
 
-let yakuList = [
-  (tanyaop, 1, "Tanyao")
-  (pinfup, 1, "Pinfu")
-  (iipeikoup, 1, "Iipeikou")
-  (ryanpeikoup, 3, "Ryanpeikou")
-  (ittsup, 2, "Ittsu")
-  (toitoihoup, 2, "Toitoihou")
-  (sanankoup, 2, "Sanankou")
-  (sankantsup, 2, "Sankantsu")
-  (chitoitsup, 2, "Chitoitsu")
-  (chantap, 2, "Chanta")
-  (junchanp, 3, "Junchan")
-  (chinitsup, 6, "Chinitsu")
-  (suuankoup, 13, "Suuankou")
-  (sukantsup, 13, "Sukantsu")
-  (chinroutoup, 13, "Chinroutou")
-  (ryuuiisoup, 13, "Ryuuiisou")
-  (chuurenPoutoup, 13, "ChuurenPoutou")
-  (suuankouTankip, 26, "SuuankouTanki")
-  (junseiChuurenPoutoup, 26, "JunseiChuurenPoutou")
+let yakuItems : Item list = [
+  ("Tanyao", "All Simples", [YakuTrigger], ByRawHand tanyaopRaw, fun () -> [ItemEffect.Yaku 1u])
+  ("Pinfu", "Pinfu", [YakuTrigger], ByParsedHand pinfup, fun () -> [ItemEffect.Yaku 1u])
+  ("Iipeikou", "Pure Double Sequence", [YakuTrigger], ByParsedHand iipeikoup, fun () -> [ItemEffect.Yaku 1u])
+  ("Ryanpeikou", "Twice Pure Double Sequence", [YakuTrigger], ByParsedHand ryanpeikoup, fun () -> [ItemEffect.Yaku 3u])
+  ("Ittsu", "Pure Straight", [YakuTrigger], ByParsedHand ittsup, fun () -> [ItemEffect.Yaku 2u])
+  ("Toitoihou", "All Pongs", [YakuTrigger], ByParsedHand toitoihoup, fun () -> [ItemEffect.Yaku 2u])
+  ("Sanankou", "Three Concealed Pongs", [YakuTrigger], ByParsedHand sanankoup, fun () -> [ItemEffect.Yaku 2u])
+  ("Sankantsu", "Three Quads", [YakuTrigger], ByParsedHand sankantsup, fun () -> [ItemEffect.Yaku 2u])
+  ("Chitoitsu", "Seven Pairs", [YakuTrigger], ByParsedHand chitoitsup, fun () -> [ItemEffect.Yaku 2u])
+  ("Chanta", "Half Outside Hand", [YakuTrigger], ByParsedHand chantap, fun () -> [ItemEffect.Yaku 2u])
+  ("Junchan", "Fully Outside Hand", [YakuTrigger], ByParsedHand junchanp, fun () -> [ItemEffect.Yaku 3u])
+  ("Chinitsu", "Full Flush", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 6u])
+  ("Suuankou", "Four Concealed Pongs", [YakuTrigger], ByParsedHand suuankoup, fun () -> [ItemEffect.Yaku 13u])
+  ("Sukantsu", "Four Quads", [YakuTrigger], ByParsedHand sukantsup, fun () -> [ItemEffect.Yaku 13u])
+  ("Chinroutou", "All Terminals", [YakuTrigger], ByRawHand chinroutoupRaw, fun () -> [ItemEffect.Yaku 13u])
+  ("Ryuuiisou", "All Green", [YakuTrigger], ByRawHand ryuuiisoupRaw, fun () -> [ItemEffect.Yaku 13u])
+  ("ChuurenPoutou", "Nine Gates", [YakuTrigger], ByParsedHand chuurenPoutoup, fun () -> [ItemEffect.Yaku 13u])
+  ("SuuankouTanki", "Four Concealed Pongs Single Wait", [YakuTrigger], ByParsedHand suuankouTankip, fun () -> [ItemEffect.Yaku 26u])
+  ("JunseiChuurenPoutou", "Pure Nine Gates", [YakuTrigger], ByParsedHand junseiChuurenPoutoup, fun () -> [ItemEffect.Yaku 26u])
 ]

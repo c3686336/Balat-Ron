@@ -5,6 +5,7 @@ open Types
 open Yaku
 open Fu
 open Utils
+open System
 
 let filterZero = List.filter (snd >> (<>) 0) 
 
@@ -141,27 +142,48 @@ let calculateDora ((Hand (arrayHand, tsumo, kantsu)): Hand) doraIndicators =
 
   doraInPlayableHand + doraInKantsu + doraInTsumo
 
+let rec evaluateCondition (rng: Random) cond state hand parsedHand machi tsumo =
+  match cond with
+  | Always -> true
+  | ByChance r -> rng.NextDouble() < r
+  | ByGameState f -> f state
+  | ByParsedHand f -> f parsedHand machi tsumo
+  | ByRawHand f -> f hand
+  | Or (a, b) -> evaluateCondition rng a state hand parsedHand machi tsumo || evaluateCondition rng b state hand parsedHand machi tsumo
+  | And (a, b) -> evaluateCondition rng a state hand parsedHand machi tsumo && evaluateCondition rng b state hand parsedHand machi tsumo
+
 let score han (fuVal: int) =
   roundUpTo (6I * bigint fuVal * (pown 2I (han + 2))) 100I
         
-let calculateScore hand doraIndicators additionalYaku additionalYakuNames =
-  let nDora = calculateDora hand doraIndicators
-  let (Hand (_, tsumo, _)) = hand
+let calculateScore (state: GameState) =
+  let nDora = calculateDora state.hand (Array.toList state.dora)
+  let (Hand (_, tsumo, _)) = state.hand
   
   let result =
-    parseHand hand
+    parseHand state.hand
     |> List.map (fun x ->
                  parseMachi x tsumo
                    |> List.map (fun y -> (x, y)))
     |> List.concat
-    |> List.map (fun (hand, machi) ->
-                 let fuVal = fu hand machi tsumo
-                 let (han, names) =
-                   (List.map (fun (yakup, han, name) ->
-                              if yakup hand machi tsumo then (han, name) else (0, name)) yakuList
-                      |> List.fold (fun state (han, name) -> (fst state + han, if han = 0 then snd state else name :: snd state)) (nDora + additionalYaku, $"Dora {nDora}" :: additionalYakuNames)) 
-                 (han, fuVal, score han fuVal, names))
+    |> List.map (fun (parsedHand, machi) ->
+                 let fuVal = fu parsedHand machi tsumo
+                 let activeYakus =
+                     state.items
+                     |> List.filter (fun (_, _, triggers, cond, _) ->
+                         List.contains YakuTrigger triggers &&
+                         evaluateCondition (state.rng) cond state state.hand parsedHand machi tsumo
+                     )
+                     |> List.choose (fun (name, _, _, _, effect) ->
+                         let effs = effect ()
+                         let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
+                         if han > 0 then Some (int han, name) else None
+                     )
+                 let totalHan = activeYakus |> List.sumBy fst
+                 let names = activeYakus |> List.map snd
+                 let finalHan = nDora + totalHan
+
+                 (finalHan, fuVal, score finalHan fuVal, $"Dora {nDora}" :: names))
 
   match result with
     | [] -> None
-    | x -> Some(List.maxBy (fun (_, _, score, _) -> score) x)
+    | x -> Some(List.maxBy (fun (_, _, scoreVal, _) -> scoreVal) x)

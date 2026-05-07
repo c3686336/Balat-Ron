@@ -171,7 +171,7 @@ type Pile =
   Tile array
 
 type GameState =
-  {hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list }
+  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list }
 
 and ItemEffect =
   | ExtraScore of uint * uint
@@ -186,6 +186,8 @@ and ItemCondition =
   | Always
   | ByChance of float
   | ByGameState of (GameState -> bool)
+  | ByParsedHand of (ParsedHand -> Machi -> Tile -> bool)
+  | ByRawHand of (Hand -> bool)
   | Or of (ItemCondition * ItemCondition)
   | And of (ItemCondition * ItemCondition)
 
@@ -198,6 +200,7 @@ and ItemTrigger =
   | WhenObtained
   | PlayerTrigger
   | WhenPileEmpty
+  | YakuTrigger
 
 and Item = string * string * ItemTrigger list * ItemCondition * (unit -> ItemEffect list)
 
