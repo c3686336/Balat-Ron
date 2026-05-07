@@ -69,13 +69,17 @@ let main argv =
     let action = Ask ()
 
     match action with
-      | Tsumo -> didTsumo <- true
+      | Tsumo ->
+        didTsumo <- true
       | Kan(t) ->
         hand <- hand.Kan t (Array.head pile)
         pile <- Array.skip 1 pile
+        isRinShanApplicable <- true
       | Discard(t) ->
         hand <- hand.Discard t (Array.head pile)
         pile <- Array.skip 1 pile
+        isTenhouApplicable <- false
+        isRinShanApplicable <- false
 
   printfn $"{hand}"
 

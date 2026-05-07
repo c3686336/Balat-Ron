@@ -38,7 +38,7 @@ type Shuntsu =
     $"{a}{b}{c}"
 
 type Kotsu =
-  | Kotsu of Tile 
+  | Kotsu of Tile
 
   override this.ToString (): string =
     let (Kotsu t) = this
@@ -132,7 +132,7 @@ type Hand =
     if t <> this.Tsumo () then
       let kannedArrayHand = Array.updateAt (t.Value()) (arrayHand[t.Value()] - 4) arrayHand
       let arrayHandWithTsumo = Array.updateAt (tsumo.Value()) (kannedArrayHand[tsumo.Value()] + 1) kannedArrayHand
-      
+
       Hand (arrayHandWithTsumo, newTsumo, Kantsu t :: kantsu)
     else
       let kannedArrayHand = Array.updateAt (t.Value()) (arrayHand[t.Value()] - 3) arrayHand
@@ -149,7 +149,7 @@ type ParsedNormalHand =
 type ParsedChitoitsu =
   | ParsedChitoitsu of Tile list
 
-  override this.ToString (): string = 
+  override this.ToString (): string =
     let (ParsedChitoitsu (a::b::c::d::e::f::g)) = this
     $"Chitoitsu: {a}{a}{b}{b}{c}{c}{d}{d}{e}{e}{f}{f}{g}{g}"
 
@@ -168,8 +168,37 @@ type DoraIndicator =
   Tile list
 
 type Pile =
-  Tile array 
+  Tile array
 
-                  
-                  
-  
+type GameState =
+  {hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; }
+
+type ItemEffect =
+  | ExtraScore of uint * uint
+  | MultiplicativeExtraScore of uint * uint
+  | Yaku of uint
+  | AddTsumo of int
+  | MultiplyTargetScore of float
+  | ModifyPile of (Pile -> Pile)
+  | ModifyGameState of (GameState -> GameState)
+
+type ItemCondition =
+  | Always
+  | ByChance of float
+  | ByGameState of (GameState -> bool)
+  | Or of (ItemCondition * ItemCondition)
+  | And of (ItemCondition * ItemCondition)
+
+type ItemTrigger =
+  | OnScoreCalculation // After Yaku calculation
+  | OnTsumo // Before Yaku calculation
+  | OnDiscard
+  | OnKan
+  | OnRoundEnd
+  | WhenObtained
+  | PlayerTrigger
+  | WhenPileEmpty
+
+type Item = string * string * ItemTrigger list * ItemCondition * (unit -> ItemEffect list)
+
+// Example item: ("name", "Adds 1 han per every Kan", OnKan, Always, ExtraScore (1, 0))
