@@ -7,15 +7,15 @@ let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| T
 
 printfn $"{hand}"
 
-let (Some (han, fu, score, names)) = CalculateScore hand  [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 2 ["Riichi"; "Kaitei"; "Ippatsu"]
+let (Some (han, fuVal, scoreVal, names)) = calculateScore hand  [Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7] 2 ["Riichi"; "Kaitei"; "Ippatsu"]
 
 List.map (fun x -> printfn $"{x}") names |> ignore
-printfn $"{han} {fu} {score}\n"
+printfn $"{han} {fuVal} {scoreVal}\n"
 
 let hand2 = Hand ([|0;1;1;2;3;2;1;1;0;2|], Tile 9, [])
 
 printfn $"{hand2}"
-let (Some (han2, fu2, score2, names2)) = CalculateScore hand2  [] 0 []
+let (Some (han2, fu2, score2, names2)) = calculateScore hand2  [] 0 []
 
 List.map (fun x -> printfn $"{x}") names2 |> ignore
 printfn $"{han2} {fu2} {score2}\n{names}"
@@ -34,7 +34,7 @@ let main argv =
   let mutable pile: Tile array = List.toArray allTiles
   rng.Shuffle pile
 
-  let mutable hand: Hand = Hand (TileArrayToHand (Array.take 13 pile), Array.head pile, [])
+  let mutable hand: Hand = Hand (tileArrayToHand (Array.take 13 pile), Array.head pile, [])
   pile <- Array.skip 14 pile
 
   let mutable isTenhouApplicable = true
@@ -42,7 +42,7 @@ let main argv =
   let mutable didTsumo = false
 
   while not didTsumo do
-    let maybeScore = CalculateScore hand [] 0 []
+    let maybeScore = calculateScore hand [] 0 []
 
     printfn $"{hand}"
     
@@ -61,7 +61,7 @@ let main argv =
         | Some(x) ->
           match x with
             | Tsumo -> if maybeScore <> None then Tsumo else Ask ()
-            | Kan(t) when hand.IsKanVaild(t) -> Kan(t)
+            | Kan(t) when hand.IsKanValid(t) -> Kan(t)
             | Discard(t) when hand.IsDiscardValid(t) -> Discard(t)
             | _ -> Ask ()
         | None -> Ask ()
@@ -83,9 +83,10 @@ let main argv =
 
   printfn $"{hand}"
 
-  let maybeScore = CalculateScore hand [] 0 []
+  let maybeScore = calculateScore hand [] 0 []
 
   match maybeScore with
-    | Some (han, fu, score, _) -> printfn $"{han}판 {fu}부 {score}점"
+    | Some (han, fuVal, scoreVal, _) -> printfn $"{han}판 {fuVal}부 {scoreVal}점"
+    | None -> ()
 
   0

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,10 +9,10 @@
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Utils.fs" />
-    <Compile Include="GameState.fs" />
     <Compile Include="Fu.fs" />
     <Compile Include="Yaku.fs" />
     <Compile Include="Evaluator.fs" />
+    <Compile Include="GameState.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

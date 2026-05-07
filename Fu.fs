@@ -3,7 +3,7 @@ module Fu
 open Types
 open Utils
 
-let Fu (hand: ParsedHand) (machiType: Machi) (tsumoTile: Tile): int =
+let fu (hand: ParsedHand) (machiType: Machi) (tsumoTile: Tile): int =
   match hand with
     | Chitoitsu _ -> 25
     | NormalHand normalHand ->
@@ -19,4 +19,4 @@ let Fu (hand: ParsedHand) (machiType: Machi) (tsumoTile: Tile): int =
           | Kanchanmachi(_) | Penchanmachi(_) | Tanki(_) -> 2
       let baseFu = 20 + if ankoFu + ankanFu + machiFu = 0 then 0 else 2 // Always menzen tsumo
       
-      RoundUpTo (baseFu + ankoFu + ankanFu + machiFu + ankoYaoFu + ankanYaoFu) 10
+      roundUpTo (baseFu + ankoFu + ankanFu + machiFu + ankoYaoFu + ankanYaoFu) 10

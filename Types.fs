@@ -56,7 +56,7 @@ type ListHand =
 
 type ArrayHand = int array
 
-let ArrayHandToString (arrayHand: ArrayHand): string =
+let arrayHandToString (arrayHand: ArrayHand): string =
   arrayHand
         |> Array.mapi (fun i x -> String.replicate x $"{Tile i}") |> String.concat ""
 
@@ -91,7 +91,7 @@ type Hand =
 
     let playableHandString =
       arrayHand
-        |> ArrayHandToString
+        |> arrayHandToString
 
     let kantsuString =
       kantsu
@@ -99,7 +99,7 @@ type Hand =
 
     $"{playableHandString} {tsumo}  {kantsuString}"
 
-  member this.playableHand () =
+  member this.PlayableHand () =
     let (Hand (arrayHand, _, _)) = this
     arrayHand
 
@@ -111,11 +111,11 @@ type Hand =
     let (Hand (_, tsumo, _)) = this
     tsumo
 
-  member this.IsKanVaild (t: Tile) =
-    this.playableHand()[t.Value()] >= 4 || this.Tsumo () = t && this.playableHand()[t.Value()] >= 3
+  member this.IsKanValid (t: Tile) =
+    this.PlayableHand()[t.Value()] >= 4 || this.Tsumo () = t && this.PlayableHand()[t.Value()] >= 3
 
   member this.IsDiscardValid (t: Tile) =
-    this.playableHand()[t.Value()] >= 1 || this.Tsumo () = t
+    this.PlayableHand()[t.Value()] >= 1 || this.Tsumo () = t
 
   member this.Discard (t: Tile) (newTsumo: Tile)=
     let (Hand (arrayHand, tsumo, kantsu)) = this
@@ -171,9 +171,9 @@ type Pile =
   Tile array
 
 type GameState =
-  {hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; }
+  {hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list }
 
-type ItemEffect =
+and ItemEffect =
   | ExtraScore of uint * uint
   | MultiplicativeExtraScore of uint * uint
   | Yaku of uint
@@ -182,14 +182,14 @@ type ItemEffect =
   | ModifyPile of (Pile -> Pile)
   | ModifyGameState of (GameState -> GameState)
 
-type ItemCondition =
+and ItemCondition =
   | Always
   | ByChance of float
   | ByGameState of (GameState -> bool)
   | Or of (ItemCondition * ItemCondition)
   | And of (ItemCondition * ItemCondition)
 
-type ItemTrigger =
+and ItemTrigger =
   | OnScoreCalculation // After Yaku calculation
   | OnTsumo // Before Yaku calculation
   | OnDiscard
@@ -199,6 +199,6 @@ type ItemTrigger =
   | PlayerTrigger
   | WhenPileEmpty
 
-type Item = string * string * ItemTrigger list * ItemCondition * (unit -> ItemEffect list)
+and Item = string * string * ItemTrigger list * ItemCondition * (unit -> ItemEffect list)
 
 // Example item: ("name", "Adds 1 han per every Kan", OnKan, Always, ExtraScore (1, 0))
