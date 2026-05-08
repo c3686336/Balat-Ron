@@ -6,7 +6,7 @@ open System
 let emptyState hand dora items = {
     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
     rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
-    isTenhouApplicable = false; items = items
+    isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0
 }
 
 let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
