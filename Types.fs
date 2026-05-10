@@ -174,7 +174,7 @@ type Pile =
 type GameState =
   {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint }
 
-  member this.ToString () =
+  override this.ToString (): string =
     let hand = sprintf $"{this.hand}"
     let dora = this.dora |> Array.map (fun x -> x.ToString()) |> String.concat ""
     let discardPile = this.discardPile |> Array.map (fun x -> x.ToString()) |> String.concat ""

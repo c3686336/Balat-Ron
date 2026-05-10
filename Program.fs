@@ -97,7 +97,7 @@ let main argv =
             pileEmpty <- true
     
       if didTsumo then
-        printfn $"{gameState.hand}"
+        printfn $"{gameState}"
       
         let maybeScore = calculateScore gameState
       
