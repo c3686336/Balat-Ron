@@ -51,6 +51,7 @@ let main argv =
 
   while not isGameOver do
     printfn $"Goal score: {gameState.goalScore}"
+    printfn $"Tsumo left: {gameState.tsumoLeft}"
     while gameState.tsumoLeft <> 0 do
       let mutable didTsumo = false
       let mutable pileEmpty = false
@@ -58,8 +59,7 @@ let main argv =
       while not didTsumo && not pileEmpty do
         let maybeScore = calculateScore gameState
     
-        printfn $"{gameState.hand}"
-        gameState.dora |> Array.map (fun x -> x.ToString()) |> String.concat "" |> printfn "%s"
+        printfn $"{gameState}"
         
         match maybeScore with
           | Some (_) ->
@@ -109,10 +109,11 @@ let main argv =
           | None -> ()
       else if pileEmpty then
         printfn "Pile empty!"
-        gameState <- nextTsumoWithScore gameState 0
+        gameState <- nextTsumoWithScore gameState 0I
   
       printfn $"Total score: {gameState.currentScore} / Goal score: {gameState.goalScore}"
       printfn $"{gameState.tsumoLeft} tsumos left"
+      printfn "----------"
 
     if gameState.currentScore >= gameState.goalScore then
       printfn "Round clear!"

@@ -177,8 +177,9 @@ type GameState =
   member this.ToString () =
     let hand = sprintf $"{this.hand}"
     let dora = this.dora |> Array.map (fun x -> x.ToString()) |> String.concat ""
+    let discardPile = this.discardPile |> Array.map (fun x -> x.ToString()) |> String.concat ""
 
-    $"{hand}  {dora}"
+    $"{hand}\n{dora}\nDiscard: {discardPile}"
 
 and ItemEffect =
   | ExtraScore of uint * uint
