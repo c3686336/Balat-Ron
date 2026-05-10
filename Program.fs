@@ -53,14 +53,17 @@ let main argv =
   while not isGameOver do
     printfn $"Goal score: {gameState.goalScore}"
     printfn $"Tsumo left: {gameState.tsumoLeft}"
-    gameState.items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printfn "Items:\n%s\n----"
+
 
     while gameState.tsumoLeft <> 0 && gameState.currentScore < gameState.goalScore do
+      gameState.items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printfn "Items:\n%s----"
+      
       let mutable didTsumo = false
       let mutable pileEmpty = false
     
       while not (didTsumo || pileEmpty) do
         let maybeScore = calculateScore gameState
+
     
         printfn $"{gameState}"
         
@@ -109,10 +112,13 @@ let main argv =
             let namesStr = names |> List.map (fun x -> x.ToString()) |> String.concat "\n"
             printfn $"{namesStr}\n{han}판 {fuVal}부 {scoreVal}점"
             gameState <- nextTsumoWithScore gameState scoreVal
-          | None -> ()
+          | None ->
+            ()
       else if pileEmpty then
         printfn "Pile empty!"
+        printfn $"{gameState.tsumoLeft}"
         gameState <- nextTsumoWithScore gameState 0I
+        printfn $"{gameState.tsumoLeft}"
   
       printfn $"Total score: {gameState.currentScore} / Goal score: {gameState.goalScore}"
       printfn $"{gameState.tsumoLeft} tsumo left"
