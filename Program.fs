@@ -7,7 +7,7 @@ open GameState
 let emptyState hand dora items = {
     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
     rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
-    isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0
+    isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0; gold = 0
 }
 
 let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
@@ -53,11 +53,11 @@ let main argv =
     printfn $"Goal score: {gameState.goalScore}"
     printfn $"Tsumo left: {gameState.tsumoLeft}"
 
-    while gameState.tsumoLeft <> 0 || gameState.currentScore < gameState.goalScore do
+    while gameState.tsumoLeft <> 0 && gameState.currentScore < gameState.goalScore do
       let mutable didTsumo = false
       let mutable pileEmpty = false
     
-      while not didTsumo && not pileEmpty do
+      while not (didTsumo || pileEmpty) do
         let maybeScore = calculateScore gameState
     
         printfn $"{gameState}"
@@ -113,7 +113,7 @@ let main argv =
         gameState <- nextTsumoWithScore gameState 0I
   
       printfn $"Total score: {gameState.currentScore} / Goal score: {gameState.goalScore}"
-      printfn $"{gameState.tsumoLeft} tsumos left"
+      printfn $"{gameState.tsumoLeft} tsumo left"
       printfn "----------"
 
     if gameState.currentScore >= gameState.goalScore then
@@ -124,6 +124,7 @@ let main argv =
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
       
     else
+      printfn "Game Over"
       isGameOver <- true
 
   0
