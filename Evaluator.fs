@@ -169,14 +169,14 @@ let calculateScore (state: GameState) =
                  let fuVal = fu parsedHand machi tsumo
                  let activeYakus =
                      state.items
-                     |> List.filter (fun (_, _, triggers, cond, _) ->
-                         List.contains YakuTrigger triggers &&
-                         evaluateCondition (state.rng) cond state state.hand parsedHand machi tsumo
+                     |> List.filter (fun item ->
+                         List.contains YakuTrigger item.triggers &&
+                         evaluateCondition (state.rng) item.condition state state.hand parsedHand machi tsumo
                      )
-                     |> List.choose (fun (name, _, _, _, effect) ->
-                         let effs = effect ()
+                     |> List.choose (fun item ->
+                         let effs = item.effect
                          let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
-                         if han > 0 then Some (int han, name) else None
+                         if han > 0 then Some (int han, item.name) else None
                      )
                  let totalHan = activeYakus |> List.sumBy fst
                  let names = activeYakus |> List.map snd

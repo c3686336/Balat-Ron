@@ -172,7 +172,7 @@ type Pile =
   Tile array
 
 type GameState =
-  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int }
+  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; itemsLeft: Item list }
 
   override this.ToString (): string =
     let hand = sprintf $"{this.hand}"
@@ -210,6 +210,15 @@ and ItemTrigger =
   | WhenPileEmpty
   | YakuTrigger
 
-and Item = string * string * ItemTrigger list * ItemCondition * (unit -> ItemEffect list)
+and Item =
+  { name: string
+    description: string
+    triggers: ItemTrigger list
+    condition: ItemCondition
+    effect: ItemEffect list
+    cost: int }
+
+  override this.ToString(): string =
+    $"{this.name} ({this.cost} golds): {this.description}"
 
 // Example item: ("name", "Adds 1 han per every Kan", OnKan, Always, ExtraScore (1, 0))

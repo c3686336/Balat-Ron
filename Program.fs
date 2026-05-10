@@ -3,19 +3,20 @@ open Utils
 open Evaluator
 open System
 open GameState
+open Items
 
 let emptyState hand dora items = {
     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
     rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
-    isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0; gold = 0
+    isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0; gold = 0; itemsLeft = []
 }
 
 let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
 let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
-let items1 = Yaku.yakuItems @ [
-  ("Riichi", "", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 1u])
-  ("Kaitei", "", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 1u])
-  ("Ippatsu", "", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 1u])
+let items1 = allItems @ [
+  { name = "Riichi"; description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw."; triggers = [YakuTrigger]; condition = Always; effect = [ItemEffect.Yaku 1u]; cost = 50 }
+  { name = "Kaitei"; description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round."; triggers = [YakuTrigger]; condition = Always; effect = [ItemEffect.Yaku 1u]; cost = 50 }
+  { name = "Ippatsu"; description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness."; triggers = [YakuTrigger]; condition = Always; effect = [ItemEffect.Yaku 1u]; cost = 50 }
 ]
 
 let dummyState1 = emptyState hand dora1 items1
@@ -28,7 +29,7 @@ List.map (fun x -> printfn $"{x}") names |> ignore
 printfn $"{han} {fuVal} {scoreVal}\n"
 
 let hand2 = Hand ([|0;1;1;2;3;2;1;1;0;2|], Tile 9, [])
-let dummyState2 = emptyState hand2 [||] Yaku.yakuItems
+let dummyState2 = emptyState hand2 [||] allItems 
 
 printfn $"{hand2}"
 let (Some (han2, fu2, score2, names2)) = calculateScore dummyState2
@@ -122,6 +123,31 @@ let main argv =
       gameState <- newGameState
 
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
+
+      // Shop phase
+      let items = List.randomChoicesWith rng 3 gameState.itemsLeft
+
+      items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printf "%s"
+
+      let rec Ask () =
+        printfn "0-2 to chose the item to buy. s to Skip"
+
+        match Console.ReadLine().Trim() with
+          | "s" -> None
+          | s ->
+            match Int32.TryParse(s) with
+              | (true, x) when 0 <= x && x <= 2 && gameState.gold >= items.[x].cost ->
+                Some (items.[x]) 
+              | _ -> Ask()
+
+      match Ask () with
+        | None ->
+          printfn "No item was bought"
+        | Some(item) ->
+          printfn $"Bought {item.name}"
+          gameState <- buyItem gameState item
+
+      printfn $"Golds: {gameState.gold}"
       
     else
       printfn "Game Over"

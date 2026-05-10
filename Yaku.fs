@@ -136,24 +136,3 @@ let chuurenPoutoup (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
 let chantap (parsedHand: ParsedHand) (machi: Machi) (tsumo: Tile) =
   junchanp parsedHand machi tsumo
 
-let yakuItems : Item list = [
-  ("Tanyao", "All Simples", [YakuTrigger], ByRawHand tanyaopRaw, fun () -> [ItemEffect.Yaku 1u])
-  ("Pinfu", "Pinfu", [YakuTrigger], ByParsedHand pinfup, fun () -> [ItemEffect.Yaku 1u])
-  ("Iipeikou", "Pure Double Sequence", [YakuTrigger], ByParsedHand iipeikoup, fun () -> [ItemEffect.Yaku 1u])
-  ("Ryanpeikou", "Twice Pure Double Sequence", [YakuTrigger], ByParsedHand ryanpeikoup, fun () -> [ItemEffect.Yaku 3u])
-  ("Ittsu", "Pure Straight", [YakuTrigger], ByParsedHand ittsup, fun () -> [ItemEffect.Yaku 2u])
-  ("Toitoihou", "All Pongs", [YakuTrigger], ByParsedHand toitoihoup, fun () -> [ItemEffect.Yaku 2u])
-  ("Sanankou", "Three Concealed Pongs", [YakuTrigger], ByParsedHand sanankoup, fun () -> [ItemEffect.Yaku 2u])
-  ("Sankantsu", "Three Quads", [YakuTrigger], ByParsedHand sankantsup, fun () -> [ItemEffect.Yaku 2u])
-  ("Chitoitsu", "Seven Pairs", [YakuTrigger], ByParsedHand chitoitsup, fun () -> [ItemEffect.Yaku 2u])
-  ("Chanta", "Half Outside Hand", [YakuTrigger], ByParsedHand chantap, fun () -> [ItemEffect.Yaku 2u])
-  ("Junchan", "Fully Outside Hand", [YakuTrigger], ByParsedHand junchanp, fun () -> [ItemEffect.Yaku 3u])
-  ("Chinitsu", "Full Flush", [YakuTrigger], Always, fun () -> [ItemEffect.Yaku 6u])
-  ("Suuankou", "Four Concealed Pongs", [YakuTrigger], ByParsedHand suuankoup, fun () -> [ItemEffect.Yaku 13u])
-  ("Sukantsu", "Four Quads", [YakuTrigger], ByParsedHand sukantsup, fun () -> [ItemEffect.Yaku 13u])
-  ("Chinroutou", "All Terminals", [YakuTrigger], ByRawHand chinroutoupRaw, fun () -> [ItemEffect.Yaku 13u])
-  ("Ryuuiisou", "All Green", [YakuTrigger], ByRawHand ryuuiisoupRaw, fun () -> [ItemEffect.Yaku 13u])
-  ("ChuurenPoutou", "Nine Gates", [YakuTrigger], ByParsedHand chuurenPoutoup, fun () -> [ItemEffect.Yaku 13u])
-  ("SuuankouTanki", "Four Concealed Pongs Single Wait", [YakuTrigger], ByParsedHand suuankouTankip, fun () -> [ItemEffect.Yaku 26u])
-  ("JunseiChuurenPoutou", "Pure Nine Gates", [YakuTrigger], ByParsedHand junseiChuurenPoutoup, fun () -> [ItemEffect.Yaku 26u])
-]
