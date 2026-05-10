@@ -2,6 +2,7 @@ open Types
 open Utils
 open Evaluator
 open System
+open GameState
 
 let emptyState hand dora items = {
     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
@@ -45,58 +46,70 @@ let main argv =
     else
       Random(Environment.TickCount)
 
-
-  let mutable pile: Tile array = List.toArray allTiles
-  rng.Shuffle pile
-
   let mutable gameState = GameState.createGameState rng
 
-  let mutable didTsumo = false
+  printfn $"Goal score: {gameState.goalScore}"
+  while true do
+    let mutable didTsumo = false
+    let mutable pileEmpty = false
+  
+    while not didTsumo && not pileEmpty do
+      let maybeScore = calculateScore gameState
+  
+      printfn $"{gameState.hand}"
+      gameState.dora |> Array.map (fun x -> x.ToString()) |> String.concat "" |> printfn "%s"
+      
+      match maybeScore with
+        | Some (_) ->
+          printfn "Tsumo available"
+          // List.map (fun x -> printfn $"{x}") names |> ignore
+          // printfn $"{han} {fu} {score}"
+        | None ->
+          ignore ()
 
-  while not didTsumo do
-    let maybeScore = calculateScore gameState
-
-    printfn $"{gameState.hand}"
-    gameState.dora |> Array.map (fun x -> x.ToString()) |> String.concat "" |> printfn "%s"
+      printfn $"{Array.length gameState.pile} tiles remaining" 
+  
+      let rec Ask () =
+        printfn "1-9 to discard, kn with kan n or t to shout tsumo."
+        let choice = Console.ReadLine ()
+        match PlayerInput.TryParse(choice) with
+          | Some(x) ->
+            match x with
+              | Tsumo -> if maybeScore <> None then Tsumo else Ask ()
+              | Kan(t) when gameState.hand.IsKanValid(t) -> Kan(t)
+              | _ when isPileEmpty gameState -> EmptyPile
+              | Discard(t) when gameState.hand.IsDiscardValid(t) -> Discard(t)
+              | _ -> Ask ()
+          | None -> Ask ()
+  
+      let action = Ask ()
+  
+      match action with
+        | Tsumo ->
+          didTsumo <- true
+        | Kan(t) ->
+          gameState <- Option.get (GameState.kan t gameState)
+        | Discard(t) ->
+          gameState <- Option.get (GameState.discard t gameState)
+        | EmptyPile ->
+          pileEmpty <- true
+  
+    if didTsumo then
+      printfn $"{gameState.hand}"
     
-    match maybeScore with
-      | Some (_) ->
-        printfn "Tsumo available"
-        // List.map (fun x -> printfn $"{x}") names |> ignore
-        // printfn $"{han} {fu} {score}"
-      | None ->
-        ignore ()
+      let maybeScore = calculateScore gameState
+    
+      match maybeScore with
+        | Some (han, fuVal, scoreVal, names) ->
+          let namesStr = names |> List.map (fun x -> x.ToString()) |> String.concat "\n"
+          printfn $"{namesStr}\n{han}판 {fuVal}부 {scoreVal}점"
+          gameState <- nextTsumoWithScore gameState scoreVal
+        | None -> ()
+    else if pileEmpty then
+      printfn "Pile empty!"
+      gameState <- nextTsumoWithScore gameState 0
 
-    let rec Ask () =
-      printfn "1-9 to discard, kn with kan n or t to shout tsumo"
-      let choice = Console.ReadLine ()
-      match PlayerInput.TryParse(choice) with
-        | Some(x) ->
-          match x with
-            | Tsumo -> if maybeScore <> None then Tsumo else Ask ()
-            | Kan(t) when gameState.hand.IsKanValid(t) -> Kan(t)
-            | Discard(t) when gameState.hand.IsDiscardValid(t) -> Discard(t)
-            | _ -> Ask ()
-        | None -> Ask ()
-
-    let action = Ask ()
-
-    match action with
-      | Tsumo ->
-        didTsumo <- true
-      | Kan(t) ->
-        gameState <- Option.get (GameState.kan t gameState)
-      | Discard(t) ->
-        gameState <- Option.get (GameState.discard t gameState)
-
-  printfn $"{gameState.hand}"
-
-  let maybeScore = calculateScore gameState
-
-  match maybeScore with
-    | Some (han, fuVal, scoreVal, names) ->
-      let namesStr = names |> List.map (fun x -> x.ToString()) |> String.concat "\n"
-      printfn $"{namesStr}\n{han}판 {fuVal}부 {scoreVal}점"
-    | None -> ()
+    printfn $"Total score: {gameState.currentScore} / Goal score: {gameState.goalScore}"
+    printfn $"{gameState.tsumoLeft} tsumos left"
 
   0

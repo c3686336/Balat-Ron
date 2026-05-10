@@ -65,6 +65,7 @@ type PlayerInput =
   | Tsumo
   | Kan of Tile
   | Discard of Tile
+  | EmptyPile
 
   static member TryParse (input: string) =
     let truncated = input.Trim ()
