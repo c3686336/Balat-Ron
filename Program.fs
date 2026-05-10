@@ -53,7 +53,7 @@ let main argv =
   while not isGameOver do
     printfn $"Goal score: {gameState.goalScore}"
     printfn $"Tsumo left: {gameState.tsumoLeft}"
-    gameState.items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printf "Items:\n%s\n----"
+    gameState.items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printfn "Items:\n%s\n----"
 
     while gameState.tsumoLeft <> 0 && gameState.currentScore < gameState.goalScore do
       let mutable didTsumo = false
