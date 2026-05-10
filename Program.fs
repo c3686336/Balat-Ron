@@ -52,7 +52,8 @@ let main argv =
   while not isGameOver do
     printfn $"Goal score: {gameState.goalScore}"
     printfn $"Tsumo left: {gameState.tsumoLeft}"
-    while gameState.tsumoLeft <> 0 do
+
+    while gameState.tsumoLeft <> 0 || gameState.currentScore < gameState.goalScore do
       let mutable didTsumo = false
       let mutable pileEmpty = false
     
@@ -117,7 +118,11 @@ let main argv =
 
     if gameState.currentScore >= gameState.goalScore then
       printfn "Round clear!"
-      gameState <- nextRound gameState
+      let (additionalGolds, newGameState) = nextRound gameState
+      gameState <- newGameState
+
+      printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
+      
     else
       isGameOver <- true
 

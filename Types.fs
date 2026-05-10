@@ -172,7 +172,7 @@ type Pile =
   Tile array
 
 type GameState =
-  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint }
+  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int }
 
   override this.ToString (): string =
     let hand = sprintf $"{this.hand}"
