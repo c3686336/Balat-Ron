@@ -8,8 +8,8 @@ let nextGoalScore (currentGoalScore: bigint) =
     currentGoalScore + currentGoalScore
 
 let calculateGoldsEarned (tsumoLeft: int) =
-    tsumoLeft * 100 + 50
+    tsumoLeft * 50 + 25 
 
-let numberOfShopItems = 3
+let numberOfShopItems = 4
 
 let maxItems = 5

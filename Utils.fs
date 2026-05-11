@@ -20,9 +20,9 @@ let chooseRandom (rng: Random) count list =
 let rarityWeight (r: Rarity) =
     match r with
     | Common -> 60.0
-    | Uncommon -> 25.0
-    | Rare -> 10.0
-    | Legendary -> 5.0
+    | Uncommon -> 50.0
+    | Rare -> 30.0
+    | Legendary -> 10.0
 
 let chooseShopItems (rng: Random) count (items: Item list) =
     items
