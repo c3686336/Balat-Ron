@@ -132,7 +132,7 @@ let main argv =
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
 
       // Shop phase
-      let items = List.randomChoicesWith rng 3 gameState.itemsLeft
+      let items = chooseRandom rng 3 gameState.itemsLeft
 
       items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printf "%s"
 
