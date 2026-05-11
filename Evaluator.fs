@@ -166,7 +166,7 @@ let calculateScore (state: GameState) =
                    |> List.map (fun y -> (x, y)))
     |> List.concat
     |> List.map (fun (parsedHand, machi) ->
-                 let fuVal = fu parsedHand machi tsumo
+                 let fuVal = fu parsedHand machi tsumo + snd state.baseScore
                  let activeYakus =
                      state.items
                      |> List.filter (fun item ->
@@ -180,7 +180,7 @@ let calculateScore (state: GameState) =
                      )
                  let totalHan = activeYakus |> List.sumBy fst
                  let names = activeYakus |> List.map snd
-                 let finalHan = nDora + totalHan
+                 let finalHan = nDora + totalHan + fst state.baseScore
 
                  (finalHan, fuVal, score finalHan fuVal, $"Dora {nDora}" :: names))
 

@@ -47,6 +47,7 @@ let createGameState (rng: Random) : GameState =
         goalScore = Config.initialGoalScore
         gold = 0
         itemsLeft = allItems
+        baseScore = (0, 0)
     }
 
 let discard (t: Tile) (state: GameState) : GameState option =
@@ -138,6 +139,7 @@ let nextTsumoWithScore (state: GameState) (score: bigint) =
     (resetPile state) with
       tsumoLeft = state.tsumoLeft - 1
       currentScore = state.currentScore + score
+      baseScore = (0, 0)
   }
 
 let nextRound (state: GameState) =
@@ -150,6 +152,7 @@ let nextRound (state: GameState) =
        round = state.round + 1
        goalScore = Config.nextGoalScore state.goalScore
        gold = state.gold + additionalGolds 
+       baseScore = (0, 0)
    })
 
 let buyItem (state: GameState) (item: Item) =
