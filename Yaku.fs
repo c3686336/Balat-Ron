@@ -25,7 +25,7 @@ let iipeikoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   | NormalHand (ParsedHand (_, shuntsu, _, _)) ->
     let groups = shuntsu |> List.countBy id
     let pairs = groups |> List.sumBy (fun (_, count) -> count / 2)
-    pairs = 1
+    pairs >= 1
   | _ -> false
 
 let ryanpeikoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
