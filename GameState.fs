@@ -161,3 +161,12 @@ let buyItem (state: GameState) (item: Item) =
       items = item :: state.items
       gold = state.gold - item.cost
   }
+
+let sellItem (state: GameState) (item: Item) =
+  let newItems = List.filter (fun x -> x.name <> item.name) state.items
+  {
+    state with
+      items = newItems
+      itemsLeft = item :: state.itemsLeft
+      gold = state.gold + item.cost
+  }

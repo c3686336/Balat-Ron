@@ -133,29 +133,44 @@ let main argv =
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
 
       // Shop phase
-      let items = chooseRandom rng Config.numberOfShopItems gameState.itemsLeft
+      let mutable shopItems = chooseRandom rng Config.numberOfShopItems gameState.itemsLeft
+      let mutable inShop = true
 
-      items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printf "%s"
-
-      let rec Ask () =
-        printfn $"0-{Config.numberOfShopItems - 1} to chose the item to buy. s to Skip"
-
+      while inShop do
+        printfn "\n--- Shop ---"
+        printfn $"Gold: {gameState.gold} | Items: {gameState.items.Length}/{Config.maxItems}"
+        printfn "Available to Buy:"
+        if shopItems.Length = 0 then printfn "  (None)"
+        else shopItems |> List.iteri (fun i x -> printfn $"  {i}. {x.name} ({x.cost}G) - {x.description}")
+        
+        printfn "\nYour Items (Sell):"
+        if gameState.items.Length = 0 then printfn "  (None)"
+        else gameState.items |> List.iteri (fun i x -> printfn $"  s{i}. Sell {x.name} (+{x.cost}G)")
+        
+        printfn "\nEnter item number to buy, 's' followed by number to sell (e.g. s0), or 'q' to finish shopping."
         match Console.ReadLine().Trim() with
-          | "s" -> None
-          | s ->
-            match Int32.TryParse(s) with
-              | (true, x) when 0 <= x && x < Config.numberOfShopItems && gameState.gold >= items.[x].cost ->
-                Some (items.[x]) 
-              | _ -> Ask()
-
-      match Ask () with
-        | None ->
-          printfn "No item was bought"
-        | Some(item) ->
-          printfn $"Bought {item.name}"
-          gameState <- buyItem gameState item
-
-      printfn $"Golds: {gameState.gold}"
+        | "q" -> inShop <- false
+        | s when s.StartsWith("s") ->
+          match Int32.TryParse(s.Substring(1)) with
+          | (true, idx) when 0 <= idx && idx < gameState.items.Length ->
+            let itemToSell = gameState.items.[idx]
+            gameState <- sellItem gameState itemToSell
+            shopItems <- itemToSell :: shopItems
+            printfn $"Sold {itemToSell.name} for {itemToSell.cost}G."
+          | _ -> printfn "Invalid item to sell."
+        | s ->
+          match Int32.TryParse(s) with
+          | (true, idx) when 0 <= idx && idx < shopItems.Length ->
+            let itemToBuy = shopItems.[idx]
+            if gameState.items.Length >= Config.maxItems then
+              printfn "You cannot hold any more items. Sell an item first."
+            elif gameState.gold < itemToBuy.cost then
+              printfn "Not enough gold!"
+            else
+              gameState <- buyItem gameState itemToBuy
+              shopItems <- shopItems |> List.removeAt idx
+              printfn $"Bought {itemToBuy.name}."
+          | _ -> printfn "Invalid input."
       
     else
       printfn "Game Over"
