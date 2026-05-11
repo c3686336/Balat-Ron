@@ -4,13 +4,24 @@ open Xunit
 open Evaluator
 open Types
 
+let ParseHand (handArray: int array, kantsu: Kantsu list) =
+    match handArray |> Array.tryFindIndex (fun x -> x > 0) with
+    | Some firstTile ->
+        let updatedArray = Array.updateAt firstTile (handArray[firstTile] - 1) handArray
+        parseHand (Hand (updatedArray, Tile firstTile, kantsu))
+    | None ->
+        parseHand (Hand (handArray, Tile 1, kantsu))
+
 [<Fact>]
 let ``TryParse with standard winning hand`` () =
     let handArray = [|0; 3; 1; 1; 2; 1; 1; 1; 1; 3|]
     let result = ParseHand (handArray, [])
     
     Assert.Single(result) |> ignore
-    let (NormalHand (ParsedHand (kantsu, shuntsu, kotsu, toitsu))) = result.Head
+    let (ParsedHand (kantsu, shuntsu, kotsu, toitsu)) = 
+        match result.Head with
+        | NormalHand n -> n
+        | _ -> failwith "Expected NormalHand"
     
     Assert.Empty(kantsu)
     Assert.Equal(3, shuntsu.Length)
@@ -35,7 +46,10 @@ let ``TryParse with multiple groups of same tile`` () =
     let result = ParseHand (handArray, [])
     
     Assert.Single(result) |> ignore
-    let (NormalHand (ParsedHand (kantsu, shuntsu, kotsu, toitsu))) = result.Head
+    let (ParsedHand (kantsu, shuntsu, kotsu, toitsu)) = 
+        match result.Head with
+        | NormalHand n -> n
+        | _ -> failwith "Expected NormalHand"
     
     Assert.Empty(kantsu)
     Assert.Equal(3, shuntsu.Length)
@@ -62,7 +76,10 @@ let ``TryParse with 9-kotsu and 1-toitsu`` () =
     let result = ParseHand (handArray, [])
     
     Assert.Single(result) |> ignore
-    let (NormalHand (ParsedHand (kantsu, shuntsu, kotsu, toitsu))) = result.Head
+    let (ParsedHand (kantsu, shuntsu, kotsu, toitsu)) = 
+        match result.Head with
+        | NormalHand n -> n
+        | _ -> failwith "Expected NormalHand"
     
     Assert.Empty(kantsu)
     Assert.Equal(3, shuntsu.Length)
@@ -95,7 +112,10 @@ let ``TryParse with one kantsu`` () =
     let result = ParseHand (handArray, kantsu)
     
     Assert.Single(result) |> ignore
-    let (NormalHand (ParsedHand (k, shuntsu, kotsu, toitsu))) = result.Head
+    let (ParsedHand (k, shuntsu, kotsu, toitsu)) = 
+        match result.Head with
+        | NormalHand n -> n
+        | _ -> failwith "Expected NormalHand"
     
     Assert.Single(k) |> ignore
     Assert.Equal(Kantsu (Tile 9), k.Head)

@@ -142,15 +142,18 @@ let calculateDora ((Hand (arrayHand, tsumo, kantsu)): Hand) doraIndicators =
 
   doraInPlayableHand + doraInKantsu + doraInTsumo
 
-let rec evaluateCondition (rng: Random) cond state hand parsedHand machi tsumo =
+let rec evaluateCondition cond state hand parsedHandOpt machiOpt tsumo =
   match cond with
   | Always -> true
-  | ByChance r -> rng.NextDouble() < r
+  | ByChance r -> state.rng.NextDouble() < r
   | ByGameState f -> f state
-  | ByParsedHand f -> f parsedHand machi tsumo
+  | ByParsedHand f -> 
+      match parsedHandOpt, machiOpt with
+      | Some p, Some m -> f p m tsumo
+      | _ -> false
   | ByRawHand f -> f hand
-  | Or (a, b) -> evaluateCondition rng a state hand parsedHand machi tsumo || evaluateCondition rng b state hand parsedHand machi tsumo
-  | And (a, b) -> evaluateCondition rng a state hand parsedHand machi tsumo && evaluateCondition rng b state hand parsedHand machi tsumo
+  | Or (a, b) -> evaluateCondition a state hand parsedHandOpt machiOpt tsumo || evaluateCondition b state hand parsedHandOpt machiOpt tsumo
+  | And (a, b) -> evaluateCondition a state hand parsedHandOpt machiOpt tsumo && evaluateCondition b state hand parsedHandOpt machiOpt tsumo
 
 let score han (fuVal: int) =
   roundUpTo (6I * bigint fuVal * (pown 2I (han + 2))) 100I
@@ -171,7 +174,7 @@ let calculateScore (state: GameState) =
                      state.items
                      |> List.filter (fun item ->
                          List.contains YakuTrigger item.triggers &&
-                         evaluateCondition (state.rng) item.condition state state.hand parsedHand machi tsumo
+                         evaluateCondition item.condition state state.hand (Some parsedHand) (Some machi) tsumo
                      )
                      |> List.choose (fun item ->
                          let effs = item.effect

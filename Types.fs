@@ -182,13 +182,14 @@ type GameState =
     $"{hand}\n{dora}\nDiscard: {discardPile}"
 
 and ItemEffect =
-  | ExtraScore of uint * uint
-  | MultiplicativeExtraScore of uint * uint
+  | ExtraScore of int * int
+//   | MultiplicativeExtraScore of uint * uint
   | Yaku of uint
   | AddTsumo of int
-  | MultiplyTargetScore of float
+  | SubtractTargetScore of bigint 
   | ModifyPile of (Pile -> Pile)
   | ModifyGameState of (GameState -> GameState)
+  | AddGold of int
 
 and ItemCondition =
   | Always
@@ -200,7 +201,6 @@ and ItemCondition =
   | And of (ItemCondition * ItemCondition)
 
 and ItemTrigger =
-  | OnScoreCalculation // After Yaku calculation
   | OnTsumo // Before Yaku calculation
   | OnDiscard
   | OnKan
