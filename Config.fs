@@ -2,10 +2,10 @@ module Config
 
 let tsumoPerRound = 3
 
-let initialGoalScore = 2000I
+let initialGoalScore = 1500I
 
 let nextGoalScore (currentGoalScore: bigint) =
-    2I * currentGoalScore
+    currentGoalScore + currentGoalScore / 2I
 
 let calculateGoldsEarned (tsumoLeft: int) =
     tsumoLeft * 100 + 50

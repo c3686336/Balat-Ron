@@ -26,7 +26,7 @@
       - Make runs wrap around
       - Treat some tiles as terminal
       - *n score if it's the last tsumo
-      - 
+      - Force 4 of some tiles
     - AI Ideas
 
 * TODO Implement graphics (optional)
