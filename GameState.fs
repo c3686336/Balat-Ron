@@ -38,7 +38,7 @@ let processItems (state: GameState) (trigger: ItemTrigger) items =
           | ModifyPile f -> {state with pile = f state.pile}
           | ModifyGameState f -> f state
           | AddGold n -> {state with gold = state.gold + n})
-         state item.effect)
+         state (item.effect state None))
        state
 
 let createGameState (rng: Random) : GameState =

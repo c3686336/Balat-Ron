@@ -16,3 +16,15 @@ let chooseRandom (rng: Random) count list =
     list
     |> List.sortBy (fun _ -> rng.Next())
     |> List.truncate count
+
+let rarityWeight (r: Rarity) =
+    match r with
+    | Common -> 60.0
+    | Uncommon -> 25.0
+    | Rare -> 10.0
+    | Legendary -> 5.0
+
+let chooseShopItems (rng: Random) count (items: Item list) =
+    items
+    |> List.sortByDescending (fun i -> Math.Pow(rng.NextDouble(), 1.0 / rarityWeight i.rarity))
+    |> List.truncate count

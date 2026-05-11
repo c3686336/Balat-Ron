@@ -15,9 +15,9 @@ let emptyState hand dora items = {
 let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
 let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
 let items1 = allItems @ [
-  { name = "Riichi"; description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw."; triggers = [YakuTrigger]; condition = Always; effect = [ItemEffect.Yaku 1u]; cost = 50 }
-  { name = "Kaitei"; description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round."; triggers = [YakuTrigger]; condition = Always; effect = [ItemEffect.Yaku 1u]; cost = 50 }
-  { name = "Ippatsu"; description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness."; triggers = [YakuTrigger]; condition = Always; effect = [ItemEffect.Yaku 1u]; cost = 50 }
+  { name = "Riichi"; description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw."; rarity = Common; triggers = [YakuTrigger]; condition = Always; effect = (fun _ _ -> [ItemEffect.Yaku 1u]); cost = 50 }
+  { name = "Kaitei"; description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round."; rarity = Common; triggers = [YakuTrigger]; condition = Always; effect = (fun _ _ -> [ItemEffect.Yaku 1u]); cost = 50 }
+  { name = "Ippatsu"; description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness."; rarity = Common; triggers = [YakuTrigger]; condition = Always; effect = (fun _ _ -> [ItemEffect.Yaku 1u]); cost = 50 }
 ]
 
 let dummyState1 = emptyState hand dora1 items1
@@ -135,7 +135,7 @@ let main argv =
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
 
       // Shop phase
-      let mutable shopItems = chooseRandom rng Config.numberOfShopItems gameState.itemsLeft
+      let mutable shopItems = chooseShopItems rng Config.numberOfShopItems gameState.itemsLeft
       let mutable inShop = true
 
       while inShop do

@@ -2,6 +2,19 @@ module Types
 
 open System
 
+type Rarity =
+  | Common
+  | Uncommon
+  | Rare
+  | Legendary
+
+  override this.ToString() =
+    match this with
+    | Common -> "Common"
+    | Uncommon -> "Uncommon"
+    | Rare -> "Rare"
+    | Legendary -> "Legendary"
+
 type Tile =
   | Tile of int
 
@@ -213,12 +226,13 @@ and ItemTrigger =
 and Item =
   { name: string
     description: string
+    rarity: Rarity
     triggers: ItemTrigger list
     condition: ItemCondition
-    effect: ItemEffect list
+    effect: GameState -> (ParsedHand * Machi * Tile) option -> ItemEffect list
     cost: int }
 
   override this.ToString(): string =
-    $"{this.name} ({this.cost} golds): {this.description}"
+    $"[{this.rarity}] {this.name} ({this.cost}G): {this.description}"
 
 // Example item: ("name", "Adds 1 han per every Kan", OnKan, Always, ExtraScore (1, 0))

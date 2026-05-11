@@ -177,7 +177,7 @@ let calculateScore (state: GameState) =
                          evaluateCondition item.condition state state.hand (Some parsedHand) (Some machi) tsumo
                      )
                      |> List.choose (fun item ->
-                         let effs = item.effect
+                         let effs = item.effect state (Some (parsedHand, machi, tsumo))
                          let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
                          if han > 0 then Some (int han, item.name) else None
                      )
