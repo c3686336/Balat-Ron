@@ -1,0 +1,28 @@
+* Balat-Ron Term Project Timeline
+** Due Date: June 1st (21 Days Remaining)
+
+* Phase 1: Deepening the Item Engine (May 11 - May 15)
+- [ ] **May 11 - May 12**: Add baseline Han and Fu properties to `GameState`. Refactor `Evaluator.fs` so base score calculations pull from these variables.
+- [ ] **May 13 - May 15**: Implement the full `ItemTrigger` lifecycle. 
+  - Ensure items can trigger `OnDiscard`, `OnKan`, and `OnScoreCalculation` (vital for Balatro-style multiplicative score scaling).
+  - Add logic to handle items modifying the state (e.g., adding flat scores, adding extra tsumos).
+
+* Phase 2: Content Creation & Balancing (May 16 - May 21)
+- [ ] **May 16 - May 18**: Brainstorm and implement 15-20 diverse new items/cards. 
+  - Examples: "Gain +1 Han for every terminal discarded", "x1.5 Final Score if hand contains Kantsu", "Gain +5 Tsumos".
+- [ ] **May 19 - May 21**: Playtesting and Balancing. 
+  - Adjust shop item costs.
+  - Tune the `goalScore` scaling between rounds (e.g., currently it just doubles `2I * state.goalScore`, which might escalate too quickly).
+  - Adjust Gold payout logic.
+
+* Phase 3: GUI Implementation (Optional but Recommended) (May 22 - May 27)
+- [ ] **May 22 - May 23**: Framework setup. Choose a UI library (e.g., Avalonia, Raylib-fs, or a terminal UI library like Terminal.Gui) and get a basic window rendering.
+- [ ] **May 24 - May 27**: Wire the `GameState` to the UI. 
+  - Render the 14-tile hand.
+  - Create interactive buttons for Discard, Kan, and Tsumo.
+  - Build the visual Shop screen.
+
+* Phase 4: Polish & Final Submission Prep (May 28 - May 31)
+- [ ] **May 28 - May 29**: Visual/UX polish. Add basic feedback (text colors, simple layout adjustments). Squash any remaining edge-case bugs in Mahjong logic.
+- [ ] **May 30**: Write the final project report/documentation. Document how the Balatro mechanics merge with Mahjong rules.
+- [ ] **May 31**: Final playtest, code cleanup, and prepare the submission package. Relax before June 1st!

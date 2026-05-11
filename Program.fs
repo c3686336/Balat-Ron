@@ -1,4 +1,5 @@
 open Types
+open Config
 open Utils
 open Evaluator
 open System
@@ -132,18 +133,18 @@ let main argv =
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
 
       // Shop phase
-      let items = chooseRandom rng 3 gameState.itemsLeft
+      let items = chooseRandom rng Config.numberOfShopItems gameState.itemsLeft
 
       items |> List.mapi (fun i x -> $"{i}. {x}\n") |> String.concat "" |> printf "%s"
 
       let rec Ask () =
-        printfn "0-2 to chose the item to buy. s to Skip"
+        printfn $"0-{Config.numberOfShopItems - 1} to chose the item to buy. s to Skip"
 
         match Console.ReadLine().Trim() with
           | "s" -> None
           | s ->
             match Int32.TryParse(s) with
-              | (true, x) when 0 <= x && x <= 2 && gameState.gold >= items.[x].cost ->
+              | (true, x) when 0 <= x && x < Config.numberOfShopItems && gameState.gold >= items.[x].cost ->
                 Some (items.[x]) 
               | _ -> Ask()
 

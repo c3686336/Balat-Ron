@@ -1,0 +1,3 @@
+* Gonna remove Chombo (wrong tsumo/kan penalty)
+* Gonna have yakus as item
+* Won't follow the implementation requirements as strictly
