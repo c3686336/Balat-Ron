@@ -195,7 +195,8 @@ type GameState =
     $"{hand}\n{dora}\nDiscard: {discardPile}"
 
 and Event =
-  | OnYakuCalc of ParsedHand * Machi * Tile
+  | OnYakuCalc of ParsedHand * Machi * Tile // Hypothetical substitutions
+  | OnScoreCalc of ParsedHand * Machi * Tile // Actual score calculation
   | OnDiscard of Tile
   | OnKan of Tile
   | OnRoundEnd
@@ -205,7 +206,6 @@ and Event =
 
 and ItemEffect =
   | ExtraScore of int * int
-  | Yaku of uint
   | AddTsumo of int
   | SubtractTargetScore of bigint
   | ModifyPile of Pile
@@ -213,6 +213,7 @@ and ItemEffect =
   | AddGold of int
   | UpdateItemState of ItemState
   | SelfDestruct
+  | PrintName
 
 and ItemState =
   | Integer of int

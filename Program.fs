@@ -6,52 +6,52 @@ open System
 open GameState
 open Items
 
-let emptyState hand dora items = {
-    rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
-    rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
-    isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0; gold = 0; itemsLeft = []; baseScore = (0, 0)
-}
+// let emptyState hand dora items = {
+//     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
+//     rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
+//     isTenhouApplicable = false; items = items; currentScore = 0; goalScore = 0; gold = 0; itemsLeft = []; baseScore = (0, 0)
+// }
 
-let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
-let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
-let items1 = allItems @ [
-  { name = "Riichi";
-    description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw.";
-    rarity = Common;
-    effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.Yaku 1u] | _ -> []);
-    cost = 50;
-    state = Nothing }
-  { name = "Kaitei";
-    description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round.";
-    rarity = Common;
-    effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.Yaku 1u] | _ -> []);
-    cost = 50;
-    state = Nothing }
-  { name = "Ippatsu";
-    description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness.";
-    rarity = Common;
-    effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.Yaku 1u] | _ -> []);
-    cost = 50;
-   state = Nothing}
-  ]
+// let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
+// let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
+// let items1 = allItems @ [
+//   { name = "Riichi";
+//     description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw.";
+//     rarity = Common;
+//     effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.ExtraScore (1, 0)] | _ -> []);
+//     cost = 50;
+//     state = Nothing }
+//   { name = "Kaitei";
+//     description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round.";
+//     rarity = Common;
+//     effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.ExtraScore (1, 0)] | _ -> []);
+//     cost = 50;
+//     state = Nothing }
+//   { name = "Ippatsu";
+//     description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness.";
+//     rarity = Common;
+//     effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.ExtraScore (1, 0)] | _ -> []);
+//     cost = 50;
+//    state = Nothing}
+//   ]
 
-let dummyState1 = emptyState hand dora1 items1
+// let dummyState1 = emptyState hand dora1 items1
 
-printfn $"{hand}"
+// printfn $"{hand}"
 
-let (Some (han, fuVal, scoreVal, names)) = calculateScore dummyState1
+// let (Some (han, fuVal, scoreVal, names)) = calculateScoreFromCanonical dummyState1
 
-List.map (fun x -> printfn $"{x}") names |> ignore
-printfn $"{han} {fuVal} {scoreVal}\n"
+// List.map (fun x -> printfn $"{x}") names |> ignore
+// printfn $"{han} {fuVal} {scoreVal}\n"
 
-let hand2 = Hand ([|0;1;1;2;3;2;1;1;0;2|], Tile 9, [])
-let dummyState2 = emptyState hand2 [||] allItems 
+// let hand2 = Hand ([|0;1;1;2;3;2;1;1;0;2|], Tile 9, [])
+// let dummyState2 = emptyState hand2 [||] allItems 
 
-printfn $"{hand2}"
-let (Some (han2, fu2, score2, names2)) = calculateScore dummyState2
+// printfn $"{hand2}"
+// let (Some (han2, fu2, score2, names2)) = calculateScoreFromCanonical dummyState2
 
-List.map (fun x -> printfn $"{x}") names2 |> ignore
-printfn $"{han2} {fu2} {score2}\n{names}"
+// List.map (fun x -> printfn $"{x}") names2 |> ignore
+// printfn $"{han2} {fu2} {score2}\n{names}"
 
 [<EntryPoint>]
 let main argv =
@@ -78,17 +78,17 @@ let main argv =
       let mutable pileEmpty = false
     
       while not (didTsumo || pileEmpty) do
-        let maybeScore = calculateScore gameState
+        let isDone = isComplete gameState
 
     
         printfn $"{gameState}"
         
-        match maybeScore with
-          | Some (_) ->
+        match isDone with
+          | true ->
             printfn "Tsumo available"
             // List.map (fun x -> printfn $"{x}") names |> ignore
             // printfn $"{han} {fu} {score}"
-          | None ->
+          | false ->
             ignore ()
   
         printfn $"{Array.length gameState.pile} tiles remaining" 
@@ -99,7 +99,7 @@ let main argv =
           match PlayerInput.TryParse(choice) with
             | Some(x) ->
               match x with
-                | Tsumo -> if maybeScore <> None then Tsumo else Ask ()
+                | Tsumo -> if isDone then Tsumo else Ask ()
                 | Kan(t) when gameState.hand.IsKanValid(t) -> Kan(t)
                 | _ when isPileEmpty gameState -> EmptyPile
                 | Discard(t) when gameState.hand.IsDiscardValid(t) -> Discard(t)
@@ -117,25 +117,16 @@ let main argv =
           | Discard(t) ->
             gameState <- Option.get (GameState.discard t gameState)
           | EmptyPile ->
-            gameState <- processItems gameState WhenPileEmpty gameState.items
-            pileEmpty <- true
+            gameState <- confirmEmptyPile gameState
+            pileEmpty <- isPileEmpty gameState
     
       if didTsumo then
         printfn $"{gameState}"
       
-        let maybeScore = calculateScore gameState
-      
-        match maybeScore with
-          | Some (han, fuVal, scoreVal, names) ->
-            let namesStr = names |> List.map (fun x -> x.ToString()) |> String.concat "\n"
-            printfn $"{namesStr}\n{han}판 {fuVal}부 {scoreVal}점"
-            gameState <- nextTsumoWithScore gameState scoreVal
-          | None ->
-            ()
+        gameState <- declareTsumo gameState
+
       else if pileEmpty then
         printfn "Pile empty!"
-        printfn $"{gameState.tsumoLeft}"
-        gameState <- nextTsumoWithScore gameState 0I
         printfn $"{gameState.tsumoLeft}"
   
       printfn $"Total score: {gameState.currentScore} / Goal score: {gameState.goalScore}"

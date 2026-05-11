@@ -6,6 +6,7 @@ open Utils
 open System
 open Evaluator
 open Items
+open Fu
 
 let addBaseScore (state: GameState) (han, fu) =
   {state with baseScore = (fst state.baseScore + han, snd state.baseScore + fu)}
@@ -21,7 +22,6 @@ let processItems (state: GameState) (event: Event) items =
          (fun state effect ->
           match effect with
           | ExtraScore (x, y) -> addBaseScore state (x, y)
-          | Yaku han -> addBaseScore state (int han, 0)
           | AddTsumo n -> addTsumoCount state n
           | SubtractTargetScore x -> {state with goalScore = state.goalScore - x}
           | ModifyPile p -> {state with pile = p}
@@ -31,7 +31,10 @@ let processItems (state: GameState) (event: Event) items =
             let newItems = state.items |> List.map (fun x -> if x.name = item.name then {x with state = itemState} else x)
             {state with items = newItems}
           | SelfDestruct ->
-            {state with items = state.items |> List.filter (fun x -> x.name <> item.name)})
+            {state with items = state.items |> List.filter (fun x -> x.name <> item.name)}
+          | PrintName ->
+            printfn "%s" item.name
+            state)
          state (item.effect state item event))
        state
 
@@ -127,12 +130,6 @@ let kan (t: Tile) (state: GameState) : GameState option =
 
 let isPileEmpty (state: GameState) = Array.isEmpty state.pile
 
-let declareTsumo (state: GameState) =
-    calculateScore state
-
-let isComplete (state: GameState) =
-    calculateScore state |> Option.isSome
-
 let resetPile (state: GameState) =
   let mutable pile = List.toArray allTiles
   state.rng.Shuffle(pile)
@@ -166,13 +163,49 @@ let resetPile (state: GameState) =
       isTenhouApplicable = true
   }
 
-let nextTsumoWithScore (state: GameState) (score: bigint) =
+let declareTsumo (state: GameState) =
+  let everyParsingResult = everyParsing state.hand
+  let nDora = calculateDora state.hand (Array.toList state.dora)
+
+
+  let (_, parse) =
+    everyParsingResult
+      |> List.map (fun parse ->
+                   let newState = processItems state (OnYakuCalc parse) state.items
+                   let (a, b, c) = parse
+                   let fu = fu a b c
+                   (score (fst newState.baseScore + nDora) (snd newState.baseScore + fu), parse))
+      |> List.maxBy (fun x -> fst x)
+
+  let calculation = processItems state (OnScoreCalc parse) state.items
+  let (a, b, c) = parse
+  let fu = fu a b c
+  let (han, yakuFu) = calculation.baseScore
+  let finalScore = score (han + nDora) (fu + yakuFu)
+  printfn $"도라 {nDora}"
+  printfn $"{han + nDora}판 {yakuFu + fu}부 {finalScore}점"
+
   {
-    (resetPile state) with
+    (resetPile calculation) with
       tsumoLeft = state.tsumoLeft - 1
-      currentScore = state.currentScore + score
+      currentScore = state.currentScore + finalScore
       baseScore = (0, 0)
   }
+
+let confirmEmptyPile (state: GameState) =
+  let newState = processItems state WhenPileEmpty state.items
+  
+  if isPileEmpty newState then
+    { (resetPile state) with
+        tsumoLeft = state.tsumoLeft - 1
+        currentScore = state.currentScore
+        baseScore = (0, 0)
+    }
+  else
+    newState
+
+let isComplete (state: GameState) =
+    parseHand state.hand |> List.isEmpty |> not
 
 let nextRound (state: GameState) =
   let stateAfterEnd = processItems state OnRoundEnd state.items

@@ -142,34 +142,61 @@ let calculateDora ((Hand (arrayHand, tsumo, kantsu)): Hand) doraIndicators =
 
   doraInPlayableHand + doraInKantsu + doraInTsumo
 
-let score han (fuVal: int) =
-  roundUpTo (6I * bigint fuVal * (pown 2I (han + 2))) 100I
-        
-let calculateScore (state: GameState) =
-  let nDora = calculateDora state.hand (Array.toList state.dora)
-  let (Hand (_, tsumo, _)) = state.hand
-  
-  let result =
-    parseHand state.hand
+let everyParsing hand =
+  let (Hand (_, tsumo, _)) = hand
+
+  parseHand hand
     |> List.map (fun x ->
                  parseMachi x tsumo
-                   |> List.map (fun y -> (x, y)))
+                   |> List.map (fun y -> (x, y, tsumo)))
     |> List.concat
-    |> List.map (fun (parsedHand, machi) ->
-                 let fuVal = fu parsedHand machi tsumo + snd state.baseScore
-                 let activeYakus =
-                     state.items
-                     |> List.choose (fun item ->
-                         let effs = item.effect state item (OnYakuCalc (parsedHand, machi, tsumo))
-                         let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
-                         if han > 0 then Some (int han, item.name) else None
-                     )
-                 let totalHan = activeYakus |> List.sumBy fst
-                 let names = activeYakus |> List.map snd
-                 let finalHan = nDora + totalHan + fst state.baseScore
 
-                 (finalHan, fuVal, score finalHan fuVal, $"Dora {nDora}" :: names))
+let score han (fuVal: int) =
+  roundUpTo (6I * bigint fuVal * (pown 2I (han + 2))) 100I
 
-  match result with
-    | [] -> None
-    | x -> Some(List.maxBy (fun (_, _, scoreVal, _) -> scoreVal) x)
+// let calculateCanonicalParsing (state: GameState) =
+//   let nDora = calculateDora state.hand (Array.toList state.dora)
+//   let (Hand (_, tsumo, _)) = state.hand
+  
+//   let result =
+//     parseHand state.hand
+//     |> List.map (fun x ->
+//                  parseMachi x tsumo
+//                    |> List.map (fun y -> (x, y)))
+//     |> List.concat
+//     |> List.map (fun (parsedHand, machi) ->
+//                  let fuVal = fu parsedHand machi tsumo + snd state.baseScore
+//                  let totalYakuHan =
+//                      state.items
+//                      |> List.sumBy (fun item ->
+//                          item.effect state item (OnYakuCalc (parsedHand, machi, tsumo))
+//                          |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
+//                      )
+//                  let finalHan = nDora + totalYakuHan + fst state.baseScore
+
+//                  (score finalHan fuVal, parsedHand, machi))
+
+//   match result with
+//     | [] -> None
+//     | x -> Some(List.maxBy (fun (score, _, _) -> score) x)
+
+// let calculateScoreFromCanonical (state: GameState) =
+//   match calculateCanonicalParsing state with
+//   | None -> None
+//   | Some (_, parsedHand, machi) ->
+//     let nDora = calculateDora state.hand (Array.toList state.dora)
+//     let (Hand (_, tsumo, _)) = state.hand
+//     let fuVal = fu parsedHand machi tsumo + snd state.baseScore
+//     let activeYakus =
+//         state.items
+//         |> List.choose (fun item ->
+//             let effs = item.effect state item (OnScoreCalc (parsedHand, machi, tsumo))
+//             let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
+//             let printed = effs |> List.exists (function | PrintName -> true | _ -> false)
+//             if printed || han > 0 then Some (int han, item.name) else None
+//         )
+//     let totalHan = activeYakus |> List.sumBy fst
+//     let names = activeYakus |> List.map snd
+//     let finalHan = nDora + totalHan + fst state.baseScore
+
+//     Some (finalHan, fuVal, score finalHan fuVal, $"Dora {nDora}" :: names)
