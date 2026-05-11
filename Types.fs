@@ -194,6 +194,13 @@ type GameState =
 
     $"{hand}\n{dora}\nDiscard: {discardPile}"
 
+and EventContext =
+  | YakuCalc of ParsedHand * Machi * Tile
+  | DiscardAction of Tile
+  | KanAction of Tile
+  | RoundEnd
+  | Passive
+
 and ItemEffect =
   | ExtraScore of int * int
 //   | MultiplicativeExtraScore of uint * uint
@@ -208,7 +215,7 @@ and ItemCondition =
   | Always
   | ByChance of float
   | ByGameState of (GameState -> bool)
-  | ByParsedHand of (ParsedHand -> Machi -> Tile -> bool)
+  | ByEvent of (EventContext -> bool)
   | ByRawHand of (Hand -> bool)
   | Or of (ItemCondition * ItemCondition)
   | And of (ItemCondition * ItemCondition)
@@ -229,7 +236,7 @@ and Item =
     rarity: Rarity
     triggers: ItemTrigger list
     condition: ItemCondition
-    effect: GameState -> (ParsedHand * Machi * Tile) option -> ItemEffect list
+    effect: GameState -> EventContext -> ItemEffect list
     cost: int }
 
   override this.ToString(): string =

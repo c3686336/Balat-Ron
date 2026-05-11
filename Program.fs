@@ -95,14 +95,14 @@ let main argv =
     
         match action with
           | Tsumo ->
-            gameState <- processItems gameState OnTsumo gameState.items
+            gameState <- processItems gameState OnTsumo Passive gameState.items
             didTsumo <- true
           | Kan(t) ->
             gameState <- Option.get (GameState.kan t gameState)
           | Discard(t) ->
             gameState <- Option.get (GameState.discard t gameState)
           | EmptyPile ->
-            gameState <- processItems gameState WhenPileEmpty gameState.items
+            gameState <- processItems gameState WhenPileEmpty Passive gameState.items
             pileEmpty <- true
     
       if didTsumo then

@@ -142,18 +142,15 @@ let calculateDora ((Hand (arrayHand, tsumo, kantsu)): Hand) doraIndicators =
 
   doraInPlayableHand + doraInKantsu + doraInTsumo
 
-let rec evaluateCondition cond state hand parsedHandOpt machiOpt tsumo =
+let rec evaluateCondition cond state hand eventContext =
   match cond with
   | Always -> true
   | ByChance r -> state.rng.NextDouble() < r
   | ByGameState f -> f state
-  | ByParsedHand f -> 
-      match parsedHandOpt, machiOpt with
-      | Some p, Some m -> f p m tsumo
-      | _ -> false
+  | ByEvent f -> f eventContext
   | ByRawHand f -> f hand
-  | Or (a, b) -> evaluateCondition a state hand parsedHandOpt machiOpt tsumo || evaluateCondition b state hand parsedHandOpt machiOpt tsumo
-  | And (a, b) -> evaluateCondition a state hand parsedHandOpt machiOpt tsumo && evaluateCondition b state hand parsedHandOpt machiOpt tsumo
+  | Or (a, b) -> evaluateCondition a state hand eventContext || evaluateCondition b state hand eventContext
+  | And (a, b) -> evaluateCondition a state hand eventContext && evaluateCondition b state hand eventContext
 
 let score han (fuVal: int) =
   roundUpTo (6I * bigint fuVal * (pown 2I (han + 2))) 100I
@@ -174,10 +171,10 @@ let calculateScore (state: GameState) =
                      state.items
                      |> List.filter (fun item ->
                          List.contains YakuTrigger item.triggers &&
-                         evaluateCondition item.condition state state.hand (Some parsedHand) (Some machi) tsumo
+                         evaluateCondition item.condition state state.hand (YakuCalc (parsedHand, machi, tsumo))
                      )
                      |> List.choose (fun item ->
-                         let effs = item.effect state (Some (parsedHand, machi, tsumo))
+                         let effs = item.effect state (YakuCalc (parsedHand, machi, tsumo))
                          let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
                          if han > 0 then Some (int han, item.name) else None
                      )

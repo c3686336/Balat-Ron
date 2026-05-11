@@ -17,16 +17,21 @@
   - [X] Implement secondary currency (earned via remaining tsumos, etc.)
 
 * TODO Polish & Expansion
-  - [ ] Add baseline han and fu to the GameState
-  - [ ] Add selling items
-  - [ ] Enforce the maximum number of items
-  - [ ] Execute items when applicable in more places (Add/multiply score modifying the baseline han/fu data)
+  - [X] Add baseline han and fu to the GameState
+  - [X] Add selling items
+  - [X] Enforce the maximum number of items
+  - [X] Execute items when applicable in more places (Add/multiply score modifying the baseline han/fu data)
   - [ ] Add more items / cards
     - Ideas
       - Make runs wrap around
       - Treat some tiles as terminal
       - *n score if it's the last tsumo
       - Force 4 of some tiles
+      - Builds
+        - Tanyao build
+          - +30 fu for each 1, 9 discard
+          - 
+        - Pon/Kan build
     - AI Ideas
 
 * TODO Implement graphics (optional)

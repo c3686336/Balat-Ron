@@ -13,19 +13,11 @@ let addBaseScore (state: GameState) (han, fu) =
 let addTsumoCount (state: GameState) amount =
   {state with tsumoLeft = state.tsumoLeft + amount}
 
-let processItems (state: GameState) (trigger: ItemTrigger) items =
-  let parsedHand = parseHand state.hand
-  let (Hand (_, tsumo, _)) = state.hand
-  let machi = List.map (fun x -> parseMachi x tsumo |> List.map (fun y -> (x, y)))  parsedHand |> List.concat
-
+let processItems (state: GameState) (trigger: ItemTrigger) (eventContext: EventContext) items =
   items
     |> List.filter (fun x ->
-                    if not (List.contains trigger x.triggers) then false
-                    else
-                        if machi.IsEmpty then
-                            evaluateCondition x.condition state state.hand None None tsumo
-                        else
-                            List.exists (fun (p, m) -> evaluateCondition x.condition state state.hand (Some p) (Some m) tsumo) machi)
+                    List.contains trigger x.triggers &&
+                    evaluateCondition x.condition state state.hand eventContext)
     |> List.fold
       (fun state item ->
        List.fold
@@ -38,7 +30,7 @@ let processItems (state: GameState) (trigger: ItemTrigger) items =
           | ModifyPile f -> {state with pile = f state.pile}
           | ModifyGameState f -> f state
           | AddGold n -> {state with gold = state.gold + n})
-         state (item.effect state None))
+         state (item.effect state eventContext))
        state
 
 let createGameState (rng: Random) : GameState =
@@ -98,7 +90,7 @@ let discard (t: Tile) (state: GameState) : GameState option =
                     tsumoLeft = state.tsumoLeft
                     isRinshanKaihouApplicable = false 
                     isTenhouApplicable = false }
-            Some (processItems nextState OnDiscard nextState.items)
+            Some (processItems nextState OnDiscard (DiscardAction t) nextState.items)
         else
             None // No tiles left to draw
     else
@@ -125,7 +117,7 @@ let kan (t: Tile) (state: GameState) : GameState option =
                     doraPile = newDoraPile
                     isRinshanKaihouApplicable = true
                     isTenhouApplicable = true }
-            Some (processItems nextState OnKan nextState.items)
+            Some (processItems nextState OnKan (KanAction t) nextState.items)
         else
             None
     else
@@ -181,7 +173,7 @@ let nextTsumoWithScore (state: GameState) (score: bigint) =
   }
 
 let nextRound (state: GameState) =
-  let stateAfterEnd = processItems state OnRoundEnd state.items
+  let stateAfterEnd = processItems state OnRoundEnd RoundEnd state.items
   let additionalGolds = Config.calculateGoldsEarned stateAfterEnd.tsumoLeft
   
   (additionalGolds, {
@@ -203,7 +195,7 @@ let buyItem (state: GameState) (item: Item) =
       items = item :: state.items
       gold = state.gold - item.cost
   }
-  processItems nextState WhenObtained [item]
+  processItems nextState WhenObtained Passive [item]
 
 let sellItem (state: GameState) (item: Item) =
   let newItems = List.filter (fun x -> x.name <> item.name) state.items
