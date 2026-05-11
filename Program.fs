@@ -117,17 +117,16 @@ let main argv =
           | Discard(t) ->
             gameState <- Option.get (GameState.discard t gameState)
           | EmptyPile ->
-            gameState <- confirmEmptyPile gameState
-            pileEmpty <- isPileEmpty gameState
+            let (newGameState, newPileEmpty) = confirmEmptyPile gameState
+            gameState <- newGameState
+            pileEmpty <- newPileEmpty
     
       if didTsumo then
         printfn $"{gameState}"
-      
         gameState <- declareTsumo gameState
 
       else if pileEmpty then
         printfn "Pile empty!"
-        printfn $"{gameState.tsumoLeft}"
   
       printfn $"Total score: {gameState.currentScore} / Goal score: {gameState.goalScore}"
       printfn $"{gameState.tsumoLeft} tsumo left"

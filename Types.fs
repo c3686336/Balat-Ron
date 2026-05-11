@@ -214,6 +214,7 @@ and ItemEffect =
   | UpdateItemState of ItemState
   | SelfDestruct
   | PrintName
+  | PrintStr of string
 
 and ItemState =
   | Integer of int

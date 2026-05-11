@@ -34,6 +34,9 @@ let processItems (state: GameState) (event: Event) items =
             {state with items = state.items |> List.filter (fun x -> x.name <> item.name)}
           | PrintName ->
             printfn "%s" item.name
+            state
+          | PrintStr s ->
+            printfn "%s" s
             state)
          state (item.effect state item event))
        state
@@ -108,20 +111,20 @@ let kan (t: Tile) (state: GameState) : GameState option =
             let newRinshang = Array.skip 1 state.rinshang
             let newHand = state.hand.Kan t newTsumo
 
-            let newDora, newDoraPile =
-                if state.doraPile.Length > 0 then
-                    (Array.append state.dora [| Array.head state.doraPile |], Array.skip 1 state.doraPile)
-                else
-                    (state.dora, state.doraPile)
+            // let newDora, newDoraPile =
+            //     if state.doraPile.Length > 0 then
+            //         (Array.append state.dora [| Array.head state.doraPile |], Array.skip 1 state.doraPile)
+            //     else
+            //         (state.dora, state.doraPile)
 
             let nextState =
                 { state with
                     hand = newHand
                     rinshang = newRinshang
-                    dora = newDora
-                    doraPile = newDoraPile
+                    // dora = newDora
+                    // doraPile = newDoraPile
                     isRinshanKaihouApplicable = true
-                    isTenhouApplicable = true }
+                    isTenhouApplicable = false }
             Some (processItems nextState (OnKan t) nextState.items)
         else
             None
@@ -196,13 +199,13 @@ let confirmEmptyPile (state: GameState) =
   let newState = processItems state WhenPileEmpty state.items
   
   if isPileEmpty newState then
-    { (resetPile state) with
-        tsumoLeft = state.tsumoLeft - 1
-        currentScore = state.currentScore
-        baseScore = (0, 0)
-    }
+    ({ (resetPile state) with
+         tsumoLeft = state.tsumoLeft - 1
+         currentScore = state.currentScore
+         baseScore = (0, 0)
+     }, true)
   else
-    newState
+    (newState, false)
 
 let isComplete (state: GameState) =
     parseHand state.hand |> List.isEmpty |> not

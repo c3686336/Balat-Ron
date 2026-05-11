@@ -94,6 +94,6 @@ let allItems : Item list = [
     description = "Gain +500 points whenever you discard a terminal tile (1 or 9).";
     rarity = Uncommon;
     cost = 100;
-    effect = fun state _ event -> match event with | OnDiscard t when t.IsTerminal() -> [ItemEffect.ModifyGameState { state with currentScore = state.currentScore + 500I }] | _ -> [];
+    effect = fun state _ event -> match event with | OnDiscard t when t.IsTerminal() -> [ItemEffect.ModifyGameState { state with currentScore = state.currentScore + 500I }; PrintStr "+500 from discarding 1/9"] | _ -> [];
     state = Nothing };
   ]
