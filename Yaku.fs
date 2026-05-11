@@ -54,7 +54,7 @@ let toitoihoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
 let sanankoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, _)) ->
-    kantsu.Length + kotsu.Length = 3
+    kantsu.Length + kotsu.Length >= 3
   | _ -> false
 
 let suuankoup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
@@ -71,7 +71,7 @@ let suuankouTankip (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
 
 let sankantsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
   match parsedHand with
-  | NormalHand (ParsedHand (kantsu, _, _, _)) -> kantsu.Length = 3
+  | NormalHand (ParsedHand (kantsu, _, _, _)) -> kantsu.Length >= 3
   | _ -> false
 
 let chitoitsup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
