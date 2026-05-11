@@ -15,9 +15,9 @@ let emptyState hand dora items = {
 let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
 let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
 let items1 = allItems @ [
-  { name = "Riichi"; description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw."; rarity = Common; triggers = [YakuTrigger]; condition = Always; effect = (fun _ _ -> [ItemEffect.Yaku 1u]); cost = 50 }
-  { name = "Kaitei"; description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round."; rarity = Common; triggers = [YakuTrigger]; condition = Always; effect = (fun _ _ -> [ItemEffect.Yaku 1u]); cost = 50 }
-  { name = "Ippatsu"; description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness."; rarity = Common; triggers = [YakuTrigger]; condition = Always; effect = (fun _ _ -> [ItemEffect.Yaku 1u]); cost = 50 }
+  { name = "Riichi"; description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw."; rarity = Common; effect = (fun _ e -> match e with | OnYakuCalc _ -> [ItemEffect.Yaku 1u] | _ -> []); cost = 50 }
+  { name = "Kaitei"; description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round."; rarity = Common; effect = (fun _ e -> match e with | OnYakuCalc _ -> [ItemEffect.Yaku 1u] | _ -> []); cost = 50 }
+  { name = "Ippatsu"; description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness."; rarity = Common; effect = (fun _ e -> match e with | OnYakuCalc _ -> [ItemEffect.Yaku 1u] | _ -> []); cost = 50 }
 ]
 
 let dummyState1 = emptyState hand dora1 items1
@@ -95,14 +95,14 @@ let main argv =
     
         match action with
           | Tsumo ->
-            gameState <- processItems gameState OnTsumo Passive gameState.items
+            gameState <- processItems gameState OnTsumo gameState.items
             didTsumo <- true
           | Kan(t) ->
             gameState <- Option.get (GameState.kan t gameState)
           | Discard(t) ->
             gameState <- Option.get (GameState.discard t gameState)
           | EmptyPile ->
-            gameState <- processItems gameState WhenPileEmpty Passive gameState.items
+            gameState <- processItems gameState WhenPileEmpty gameState.items
             pileEmpty <- true
     
       if didTsumo then

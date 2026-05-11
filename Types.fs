@@ -194,16 +194,17 @@ type GameState =
 
     $"{hand}\n{dora}\nDiscard: {discardPile}"
 
-and EventContext =
-  | YakuCalc of ParsedHand * Machi * Tile
-  | DiscardAction of Tile
-  | KanAction of Tile
-  | RoundEnd
-  | Passive
+and Event =
+  | OnYakuCalc of ParsedHand * Machi * Tile
+  | OnDiscard of Tile
+  | OnKan of Tile
+  | OnRoundEnd
+  | OnTsumo
+  | WhenObtained
+  | WhenPileEmpty
 
 and ItemEffect =
   | ExtraScore of int * int
-//   | MultiplicativeExtraScore of uint * uint
   | Yaku of uint
   | AddTsumo of int
   | SubtractTargetScore of bigint 
@@ -211,35 +212,12 @@ and ItemEffect =
   | ModifyGameState of (GameState -> GameState)
   | AddGold of int
 
-and ItemCondition =
-  | Always
-  | ByChance of float
-  | ByGameState of (GameState -> bool)
-  | ByEvent of (EventContext -> bool)
-  | ByRawHand of (Hand -> bool)
-  | Or of (ItemCondition * ItemCondition)
-  | And of (ItemCondition * ItemCondition)
-
-and ItemTrigger =
-  | OnTsumo // Before Yaku calculation
-  | OnDiscard
-  | OnKan
-  | OnRoundEnd
-  | WhenObtained
-  | PlayerTrigger
-  | WhenPileEmpty
-  | YakuTrigger
-
 and Item =
   { name: string
     description: string
     rarity: Rarity
-    triggers: ItemTrigger list
-    condition: ItemCondition
-    effect: GameState -> EventContext -> ItemEffect list
+    effect: GameState -> Event -> ItemEffect list
     cost: int }
 
   override this.ToString(): string =
     $"[{this.rarity}] {this.name} ({this.cost}G): {this.description}"
-
-// Example item: ("name", "Adds 1 han per every Kan", OnKan, Always, ExtraScore (1, 0))
