@@ -160,7 +160,7 @@ let calculateScore (state: GameState) =
                  let activeYakus =
                      state.items
                      |> List.choose (fun item ->
-                         let effs = item.effect state (OnYakuCalc (parsedHand, machi, tsumo))
+                         let effs = item.effect state item (OnYakuCalc (parsedHand, machi, tsumo))
                          let han = effs |> List.sumBy (function | ItemEffect.Yaku h -> int h | _ -> 0)
                          if han > 0 then Some (int han, item.name) else None
                      )

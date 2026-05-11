@@ -27,6 +27,8 @@
       - Treat some tiles as terminal
       - *n score if it's the last tsumo
       - Force 4 of some tiles
+      - Riichi: add score for every draw from now one
+      - Shuffle the discard once again
       - Builds
         - Tanyao build
           - +30 fu for each 1, 9 discard

@@ -207,16 +207,23 @@ and ItemEffect =
   | ExtraScore of int * int
   | Yaku of uint
   | AddTsumo of int
-  | SubtractTargetScore of bigint 
-  | ModifyPile of (Pile -> Pile)
-  | ModifyGameState of (GameState -> GameState)
+  | SubtractTargetScore of bigint
+  | ModifyPile of Pile
+  | ModifyGameState of GameState
   | AddGold of int
+  | UpdateItemState of ItemState
+  | SelfDestruct
+
+and ItemState =
+  | Integer of int
+  | Nothing
 
 and Item =
   { name: string
     description: string
     rarity: Rarity
-    effect: GameState -> Event -> ItemEffect list
+    effect: GameState -> Item -> Event -> ItemEffect list
+    state: ItemState
     cost: int }
 
   override this.ToString(): string =

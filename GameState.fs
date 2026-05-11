@@ -24,10 +24,15 @@ let processItems (state: GameState) (event: Event) items =
           | Yaku han -> addBaseScore state (int han, 0)
           | AddTsumo n -> addTsumoCount state n
           | SubtractTargetScore x -> {state with goalScore = state.goalScore - x}
-          | ModifyPile f -> {state with pile = f state.pile}
-          | ModifyGameState f -> f state
-          | AddGold n -> {state with gold = state.gold + n})
-         state (item.effect state event))
+          | ModifyPile p -> {state with pile = p}
+          | ModifyGameState s -> s
+          | AddGold n -> {state with gold = state.gold + n}
+          | UpdateItemState itemState ->
+            let newItems = state.items |> List.map (fun x -> if x.name = item.name then {x with state = itemState} else x)
+            {state with items = newItems}
+          | SelfDestruct ->
+            {state with items = state.items |> List.filter (fun x -> x.name <> item.name)})
+         state (item.effect state item event))
        state
 
 let createGameState (rng: Random) : GameState =
