@@ -39,10 +39,16 @@ let processItems (state: GameState) (event: Event) items =
               state
             | PrintStr s ->
               printfn "%s" s
-              state)
+              state
+            | DiscloseNMoreDora n ->
+              let doraToFlip = max (4 - Array.length state.dora) n
+              { state with
+                  dora = Array.sub state.doraPile 0 doraToFlip
+                  doraPile = Array.skip doraToFlip state.doraPile }
+            | DiscloseUraDora -> state)
            state itemEffects
-       (newState, effects @ [item, itemEffects]))
-      (state, [])
+       (newState, Map.add event ((item, itemEffects) :: (Map.tryFind event effects |> Option.defaultValue [])) effects))
+      (state, Map.empty)
 
 let createGameState (rng: Random) : GameState =
     let mutable pile = List.toArray allTiles
@@ -86,7 +92,7 @@ let createGameState (rng: Random) : GameState =
         baseScore = (0, 0)
     }
 
-let discard (t: Tile) (state: GameState) : (GameState * (Item * ItemEffect list) list) option =
+let discard (t: Tile) (state: GameState) : (GameState * ItemEffects) option =
     if state.hand.IsDiscardValid(t) then
         if state.pile.Length > 0 then
             let newTsumo = Array.head state.pile
@@ -106,7 +112,7 @@ let discard (t: Tile) (state: GameState) : (GameState * (Item * ItemEffect list)
     else
         None
 
-let kan (t: Tile) (state: GameState) : (GameState * (Item * ItemEffect list) list) option =
+let kan (t: Tile) (state: GameState) : (GameState * ItemEffects) option =
     if state.hand.IsKanValid(t) then
         if state.rinshang.Length > 0 then
             let newTsumo = Array.head state.rinshang
@@ -144,12 +150,12 @@ let resetPile (state: GameState) =
   // Rinshan has 4 tiles for up to 4 kans.
   let rinshang = take 4
   // Dora indicators (1 open, 4 hidden for kans)
-  let dora = take 1
+  let dora = take 1 
   let doraPile = take 9 // Including ura dora
 
   let remainingPile = Array.sub pile currentIdx (pile.Length - currentIdx)
 
-  {
+  processItems {
     state with
       hand = hand
       pile = remainingPile
@@ -158,7 +164,7 @@ let resetPile (state: GameState) =
       rinshang = rinshang
       isRinshanKaihouApplicable = false
       isTenhouApplicable = true
-  }
+  } PileReset state.items
 
 let declareTsumo (state: GameState) =
   let everyParsingResult = everyParsing state.hand
@@ -181,22 +187,27 @@ let declareTsumo (state: GameState) =
   printfn $"도라 {nDora}"
   printfn $"{han + nDora}판 {yakuFu + fu}부 {finalScore}점"
 
+  let (resetState, resetEffects) = resetPile calculation
+  let mergedEffects = [yakuEffects; scoreEffects; resetEffects] |> List.reduce (fun a b -> Map.fold (fun m k v -> Map.add k (v @ (Map.tryFind k m |> Option.defaultValue [])) m) a b)
+
   ({
-    (resetPile calculation) with
+    resetState with
       tsumoLeft = state.tsumoLeft - 1
       currentScore = state.currentScore + finalScore
       baseScore = (0, 0)
-  }, yakuEffects @ scoreEffects)
+  }, mergedEffects)
 
 let confirmEmptyPile (state: GameState) =
   let (newState, effects) = processItems state WhenPileEmpty state.items
   
   if isPileEmpty newState then
-    (({ (resetPile state) with
+    let (resetState, resetEffects) = resetPile state
+    let mergedEffects = Map.fold (fun m k v -> Map.add k (v @ (Map.tryFind k m |> Option.defaultValue [])) m) resetEffects effects
+    (({ resetState with
          tsumoLeft = state.tsumoLeft - 1
          currentScore = state.currentScore
          baseScore = (0, 0)
-     }, true), effects)
+     }, true), mergedEffects)
   else
     ((newState, false), effects)
 
@@ -206,16 +217,18 @@ let isComplete (state: GameState) =
 let nextRound (state: GameState) =
   let (stateAfterEnd, effects) = processItems state OnRoundEnd state.items
   let additionalGolds = Config.calculateGoldsEarned stateAfterEnd.tsumoLeft
-  
+  let (resetState, resetEffects) = resetPile stateAfterEnd
+  let mergedEffects = Map.fold (fun m k v -> Map.add k (v @ (Map.tryFind k m |> Option.defaultValue [])) m) resetEffects effects
+
   ((additionalGolds, {
-     (resetPile stateAfterEnd) with
+     resetState with
        tsumoLeft = Config.tsumoPerRound
        currentScore = 0I
        round = stateAfterEnd.round + 1
        goalScore = Config.nextGoalScore stateAfterEnd.goalScore
        gold = stateAfterEnd.gold + additionalGolds 
        baseScore = (0, 0)
-   }), effects)
+   }), mergedEffects)
 
 let buyItem (state: GameState) (item: Item) =
   let nextState = {
@@ -230,5 +243,5 @@ let sellItem (state: GameState) (item: Item) =
   {
     state with
       items = newItems
-      gold = state.gold + item.cost
+      gold = state.gold + item.cost * 9 / 10
   }

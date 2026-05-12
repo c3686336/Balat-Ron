@@ -114,9 +114,15 @@ let allItems : Item list = [
 
 
 
-  // { id = Guid.NewGuid(); name = "도라 +1"
-  //   description = "도라 1장 추가"
-  //   rarity = Uncommon;
-  //   cost = 200;
-  //   effect = fun state _ event ->}
+  { id = Guid.NewGuid(); name = "도라 +1"
+    description = "도라 1장 추가, 단 본장 3회 후 삭제"
+    rarity = Common;
+    cost = 100;
+    effect =
+      fun state item event ->
+        let (Integer n) = item.state
+        match event with
+          | PileReset -> if n = 1 then [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)] else [DiscloseNMoreDora 1; SelfDestruct]
+          | _ -> []
+    state = Integer 3}
   ]

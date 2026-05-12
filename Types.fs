@@ -216,8 +216,10 @@ and ItemEffect =
   | SelfDestruct
   | PrintName
   | PrintStr of string
-  | DiscloseOneMoreDora
+  | DiscloseNMoreDora of int
   | DiscloseUraDora
+
+and ItemEffects = Map<Event, (Item * ItemEffect list) list>
 
 and ItemState =
   | Integer of int
