@@ -185,7 +185,7 @@ type Pile =
   Tile array
 
 type GameState =
-  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; itemsLeft: Item list; baseScore: int * int }
+  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; baseScore: int * int }
 
   override this.ToString (): string =
     let hand = sprintf $"{this.hand}"
@@ -203,6 +203,7 @@ and Event =
   | OnTsumo
   | WhenObtained
   | WhenPileEmpty
+  | PileReset
 
 and ItemEffect =
   | ExtraScore of int * int
@@ -215,6 +216,8 @@ and ItemEffect =
   | SelfDestruct
   | PrintName
   | PrintStr of string
+  | DiscloseOneMoreDora
+  | DiscloseUraDora
 
 and ItemState =
   | Integer of int

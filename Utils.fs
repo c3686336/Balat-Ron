@@ -44,7 +44,7 @@ let chooseShopItems (rng: Random) count (items: Item list) =
                     current <- current + w
                     
                 let available = groups |> List.find (fun (r, _) -> r = chosenRarity) |> snd
-                let picked = available.[rng.Next(available.Length)]
+                let picked = { available.[rng.Next(available.Length)] with id = Guid.NewGuid() }
                 
                 // Remove the picked item from the local pool so it doesn't appear twice in the exact same shop
                 let newPool = pool |> List.filter (fun i -> i.name <> picked.name)

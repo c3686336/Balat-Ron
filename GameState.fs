@@ -17,29 +17,32 @@ let addTsumoCount (state: GameState) amount =
 let processItems (state: GameState) (event: Event) items =
   items
     |> List.fold
-      (fun state item ->
-       List.fold
-         (fun state effect ->
-          match effect with
-          | ExtraScore (x, y) -> addBaseScore state (x, y)
-          | AddTsumo n -> addTsumoCount state n
-          | SubtractTargetScore x -> {state with goalScore = state.goalScore - x}
-          | ModifyPile p -> {state with pile = p}
-          | ModifyGameState s -> s
-          | AddGold n -> {state with gold = state.gold + n}
-          | UpdateItemState itemState ->
-            let newItems = state.items |> List.map (fun x -> if x.id = item.id then {x with state = itemState} else x)
-            {state with items = newItems}
-          | SelfDestruct ->
-            {state with items = state.items |> List.filter (fun x -> x.id <> item.id)}
-          | PrintName ->
-            printfn "%s" item.name
-            state
-          | PrintStr s ->
-            printfn "%s" s
-            state)
-         state (item.effect state item event))
-       state
+      (fun (state, effects) item ->
+       let itemEffects = item.effect state item event
+       let newState =
+         List.fold
+           (fun state effect ->
+            match effect with
+            | ExtraScore (x, y) -> addBaseScore state (x, y)
+            | AddTsumo n -> addTsumoCount state n
+            | SubtractTargetScore x -> {state with goalScore = state.goalScore - x}
+            | ModifyPile p -> {state with pile = p}
+            | ModifyGameState s -> s
+            | AddGold n -> {state with gold = state.gold + n}
+            | UpdateItemState itemState ->
+              let newItems = state.items |> List.map (fun x -> if x.id = item.id then {x with state = itemState} else x)
+              {state with items = newItems}
+            | SelfDestruct ->
+              {state with items = state.items |> List.filter (fun x -> x.id <> item.id)}
+            | PrintName ->
+              printfn "%s" item.name
+              state
+            | PrintStr s ->
+              printfn "%s" s
+              state)
+           state itemEffects
+       (newState, effects @ [item, itemEffects]))
+      (state, [])
 
 let createGameState (rng: Random) : GameState =
     let mutable pile = List.toArray allTiles
@@ -80,11 +83,10 @@ let createGameState (rng: Random) : GameState =
         currentScore = 0I
         goalScore = Config.initialGoalScore
         gold = 0
-        itemsLeft = allItems
         baseScore = (0, 0)
     }
 
-let discard (t: Tile) (state: GameState) : GameState option =
+let discard (t: Tile) (state: GameState) : (GameState * (Item * ItemEffect list) list) option =
     if state.hand.IsDiscardValid(t) then
         if state.pile.Length > 0 then
             let newTsumo = Array.head state.pile
@@ -100,29 +102,21 @@ let discard (t: Tile) (state: GameState) : GameState option =
                     isTenhouApplicable = false }
             Some (processItems nextState (OnDiscard t) nextState.items)
         else
-            None // No tiles left to draw
+            None
     else
         None
 
-let kan (t: Tile) (state: GameState) : GameState option =
+let kan (t: Tile) (state: GameState) : (GameState * (Item * ItemEffect list) list) option =
     if state.hand.IsKanValid(t) then
         if state.rinshang.Length > 0 then
             let newTsumo = Array.head state.rinshang
             let newRinshang = Array.skip 1 state.rinshang
             let newHand = state.hand.Kan t newTsumo
 
-            // let newDora, newDoraPile =
-            //     if state.doraPile.Length > 0 then
-            //         (Array.append state.dora [| Array.head state.doraPile |], Array.skip 1 state.doraPile)
-            //     else
-            //         (state.dora, state.doraPile)
-
             let nextState =
                 { state with
                     hand = newHand
                     rinshang = newRinshang
-                    // dora = newDora
-                    // doraPile = newDoraPile
                     isRinshanKaihouApplicable = true
                     isTenhouApplicable = false }
             Some (processItems nextState (OnKan t) nextState.items)
@@ -170,17 +164,16 @@ let declareTsumo (state: GameState) =
   let everyParsingResult = everyParsing state.hand
   let nDora = calculateDora state.hand (Array.toList state.dora)
 
-
-  let (_, parse) =
+  let (_, parse, yakuEffects) =
     everyParsingResult
       |> List.map (fun parse ->
-                   let newState = processItems state (OnYakuCalc parse) state.items
+                   let (newState, effects) = processItems state (OnYakuCalc parse) state.items
                    let (a, b, c) = parse
                    let fu = fu a b c
-                   (score (fst newState.baseScore + nDora) (snd newState.baseScore + fu), parse))
-      |> List.maxBy (fun x -> fst x)
+                   (score (fst newState.baseScore + nDora) (snd newState.baseScore + fu), parse, effects))
+      |> List.maxBy (fun (s, _, _) -> s)
 
-  let calculation = processItems state (OnScoreCalc parse) state.items
+  let (calculation, scoreEffects) = processItems state (OnScoreCalc parse) state.items
   let (a, b, c) = parse
   let fu = fu a b c
   let (han, yakuFu) = calculation.baseScore
@@ -188,33 +181,33 @@ let declareTsumo (state: GameState) =
   printfn $"도라 {nDora}"
   printfn $"{han + nDora}판 {yakuFu + fu}부 {finalScore}점"
 
-  {
+  ({
     (resetPile calculation) with
       tsumoLeft = state.tsumoLeft - 1
       currentScore = state.currentScore + finalScore
       baseScore = (0, 0)
-  }
+  }, yakuEffects @ scoreEffects)
 
 let confirmEmptyPile (state: GameState) =
-  let newState = processItems state WhenPileEmpty state.items
+  let (newState, effects) = processItems state WhenPileEmpty state.items
   
   if isPileEmpty newState then
-    ({ (resetPile state) with
+    (({ (resetPile state) with
          tsumoLeft = state.tsumoLeft - 1
          currentScore = state.currentScore
          baseScore = (0, 0)
-     }, true)
+     }, true), effects)
   else
-    (newState, false)
+    ((newState, false), effects)
 
 let isComplete (state: GameState) =
     parseHand state.hand |> List.isEmpty |> not
 
 let nextRound (state: GameState) =
-  let stateAfterEnd = processItems state OnRoundEnd state.items
+  let (stateAfterEnd, effects) = processItems state OnRoundEnd state.items
   let additionalGolds = Config.calculateGoldsEarned stateAfterEnd.tsumoLeft
   
-  (additionalGolds, {
+  ((additionalGolds, {
      (resetPile stateAfterEnd) with
        tsumoLeft = Config.tsumoPerRound
        currentScore = 0I
@@ -222,14 +215,11 @@ let nextRound (state: GameState) =
        goalScore = Config.nextGoalScore stateAfterEnd.goalScore
        gold = stateAfterEnd.gold + additionalGolds 
        baseScore = (0, 0)
-   })
+   }), effects)
 
 let buyItem (state: GameState) (item: Item) =
-  let newItemsLeft = List.filter (fun x -> x.id <> item.id) state.itemsLeft
-
   let nextState = {
     state with
-      itemsLeft = newItemsLeft
       items = item :: state.items
       gold = state.gold - item.cost
   }
@@ -240,6 +230,5 @@ let sellItem (state: GameState) (item: Item) =
   {
     state with
       items = newItems
-      itemsLeft = item :: state.itemsLeft
       gold = state.gold + item.cost
   }

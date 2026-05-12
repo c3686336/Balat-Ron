@@ -128,20 +128,20 @@ let main argv =
     
         match action with
           | Tsumo ->
-            gameState <- processItems gameState OnTsumo gameState.items
+            gameState <- fst (processItems gameState OnTsumo gameState.items)
             didTsumo <- true
           | Kan(t) ->
-            gameState <- Option.get (GameState.kan t gameState)
+            gameState <- Option.get (GameState.kan t gameState) |> fst
           | Discard(t) ->
-            gameState <- Option.get (GameState.discard t gameState)
+            gameState <- Option.get (GameState.discard t gameState) |> fst
           | EmptyPile ->
-            let (newGameState, newPileEmpty) = confirmEmptyPile gameState
+            let ((newGameState, newPileEmpty), _) = confirmEmptyPile gameState
             gameState <- newGameState
             pileEmpty <- newPileEmpty
     
       if didTsumo then
         printfn $"{gameState}"
-        gameState <- declareTsumo gameState
+        gameState <- declareTsumo gameState |> fst
 
       else if pileEmpty then
         printfn "Pile empty!"
@@ -152,13 +152,13 @@ let main argv =
 
     if gameState.currentScore >= gameState.goalScore then
       printfn "Round clear!"
-      let (additionalGolds, newGameState) = nextRound gameState
+      let ((additionalGolds, newGameState), _) = nextRound gameState
       gameState <- newGameState
 
       printfn $"Earned {additionalGolds} golds. Total {gameState.gold} golds"
 
       // Shop phase
-      let mutable shopItems = chooseShopItems rng Config.numberOfShopItems gameState.itemsLeft
+      let mutable shopItems = chooseShopItems rng Config.numberOfShopItems allItems
       let mutable inShop = true
 
       while inShop do
@@ -192,7 +192,7 @@ let main argv =
             elif gameState.gold < itemToBuy.cost then
               printfn "Not enough gold!"
             else
-              gameState <- buyItem gameState itemToBuy
+              gameState <- buyItem gameState itemToBuy |> fst
               shopItems <- shopItems |> List.removeAt idx
               printfn $"Bought {itemToBuy.name}."
           | _ -> printfn "Invalid input."
