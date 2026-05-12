@@ -170,7 +170,7 @@ let main argv =
         
         printfn "\nYour Items (Sell):"
         if gameState.items.Length = 0 then printfn "  (None)"
-        else gameState.items |> List.iteri (fun i x -> printfn $"  s{i}. Sell {x.name} (+{x.cost * 9 / 10}G)")
+        else gameState.items |> List.iteri (fun i x -> printfn $"  s{i}. Sell {x.name} (+{discount x.cost}G)")
         
         printfn "\nEnter item number to buy, 's' followed by number to sell (e.g. s0), or 'q' to finish shopping."
         match Console.ReadLine().Trim() with
@@ -181,7 +181,7 @@ let main argv =
             let itemToSell = gameState.items.[idx]
             gameState <- sellItem gameState itemToSell
             shopItems <- itemToSell :: shopItems
-            printfn $"Sold {itemToSell.name} for {itemToSell.cost * 9 / 10}G."
+            printfn $"Sold {itemToSell.name} for {discount itemToSell.cost}G."
           | _ -> printfn "Invalid item to sell."
         | s ->
           match Int32.TryParse(s) with

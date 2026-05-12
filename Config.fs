@@ -13,3 +13,5 @@ let calculateGoldsEarned (tsumoLeft: int) =
 let numberOfShopItems = 4
 
 let maxItems = 5
+
+let discount x = x * 9 / 10

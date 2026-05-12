@@ -243,5 +243,5 @@ let sellItem (state: GameState) (item: Item) =
   {
     state with
       items = newItems
-      gold = state.gold + item.cost * 9 / 10
+      gold = state.gold + discount item.cost
   }
