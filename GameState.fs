@@ -28,10 +28,10 @@ let processItems (state: GameState) (event: Event) items =
           | ModifyGameState s -> s
           | AddGold n -> {state with gold = state.gold + n}
           | UpdateItemState itemState ->
-            let newItems = state.items |> List.map (fun x -> if x.name = item.name then {x with state = itemState} else x)
+            let newItems = state.items |> List.map (fun x -> if x.id = item.id then {x with state = itemState} else x)
             {state with items = newItems}
           | SelfDestruct ->
-            {state with items = state.items |> List.filter (fun x -> x.name <> item.name)}
+            {state with items = state.items |> List.filter (fun x -> x.id <> item.id)}
           | PrintName ->
             printfn "%s" item.name
             state
@@ -225,7 +225,7 @@ let nextRound (state: GameState) =
    })
 
 let buyItem (state: GameState) (item: Item) =
-  let newItemsLeft = List.filter (fun x -> x.name <> item.name) state.itemsLeft
+  let newItemsLeft = List.filter (fun x -> x.id <> item.id) state.itemsLeft
 
   let nextState = {
     state with
@@ -236,7 +236,7 @@ let buyItem (state: GameState) (item: Item) =
   processItems nextState WhenObtained [item]
 
 let sellItem (state: GameState) (item: Item) =
-  let newItems = List.filter (fun x -> x.name <> item.name) state.items
+  let newItems = List.filter (fun x -> x.id <> item.id) state.items
   {
     state with
       items = newItems

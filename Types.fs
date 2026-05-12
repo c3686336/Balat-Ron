@@ -221,7 +221,8 @@ and ItemState =
   | Nothing
 
 and Item =
-  { name: string
+  { id: Guid
+    name: string
     description: string
     rarity: Rarity
     effect: GameState -> Item -> Event -> ItemEffect list

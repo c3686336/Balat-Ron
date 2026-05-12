@@ -5,6 +5,7 @@ open Evaluator
 open System
 open GameState
 open Items
+open Yaku
 
 // let emptyState hand dora items = {
 //     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
@@ -15,19 +16,19 @@ open Items
 // let hand = Hand ([|0;0;0;0;1;0;0;0;0;0|], Tile 4, [Kantsu <| Tile 2; Kantsu <| Tile 3; Kantsu <| Tile 6; Kantsu <| Tile 8])
 // let dora1 = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 7; Tile 5; Tile 5; Tile 5; Tile 5; Tile 7|]
 // let items1 = allItems @ [
-//   { name = "Riichi";
+//   { id = Guid.NewGuid(); name = "Riichi";
 //     description = "Grants +1 Yaku (score multiplier) if you declare readiness to win before your final draw.";
 //     rarity = Common;
 //     effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.ExtraScore (1, 0)] | _ -> []);
 //     cost = 50;
 //     state = Nothing }
-//   { name = "Kaitei";
+//   { id = Guid.NewGuid(); name = "Kaitei";
 //     description = "Grants +1 Yaku (score multiplier) if you win on the very last tile drawn in the round.";
 //     rarity = Common;
 //     effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.ExtraScore (1, 0)] | _ -> []);
 //     cost = 50;
 //     state = Nothing }
-//   { name = "Ippatsu";
+//   { id = Guid.NewGuid(); name = "Ippatsu";
 //     description = "Grants +1 Yaku (score multiplier) if you win within the first turn after declaring readiness.";
 //     rarity = Common;
 //     effect = (fun _ _ e -> match e with | OnYakuCalc _ -> [ItemEffect.ExtraScore (1, 0)] | _ -> []);
@@ -41,7 +42,7 @@ open Items
 
 // let (Some (han, fuVal, scoreVal, names)) = calculateScoreFromCanonical dummyState1
 
-// List.map (fun x -> printfn $"{x}") names |> ignore
+// names |> List.iter (fun x -> printfn $"{x}")
 // printfn $"{han} {fuVal} {scoreVal}\n"
 
 // let hand2 = Hand ([|0;1;1;2;3;2;1;1;0;2|], Tile 9, [])
@@ -50,8 +51,25 @@ open Items
 // printfn $"{hand2}"
 // let (Some (han2, fu2, score2, names2)) = calculateScoreFromCanonical dummyState2
 
-// List.map (fun x -> printfn $"{x}") names2 |> ignore
+// names2 |> List.iter (fun x -> printfn $"{x}")
 // printfn $"{han2} {fu2} {score2}\n{names}"
+
+let ParseHand (handArray: int array, kantsu: Kantsu list) =
+    match handArray |> Array.tryFindIndex (fun x -> x > 0) with
+    | Some firstTile ->
+        let updatedArray = Array.updateAt firstTile (handArray[firstTile] - 1) handArray
+        parseHand (Hand (updatedArray, Tile firstTile, kantsu))
+    | None ->
+        parseHand (Hand (handArray, Tile 1, kantsu))
+
+let handArray = [|0; 0; 2; 2; 2; 2; 2; 2; 0; 2|]
+let result = ParseHand (handArray, [])
+
+List.map (fun x -> printfn $"{x}") result
+
+let machi = parseMachi result.[1] (Tile 7)
+List.map (fun x -> printfn $"{x}") machi 
+iipeikoup result.[0] machi.[0] (Tile 7) |> printfn "%A"
 
 [<EntryPoint>]
 let main argv =
@@ -86,7 +104,7 @@ let main argv =
         match isDone with
           | true ->
             printfn "Tsumo available"
-            // List.map (fun x -> printfn $"{x}") names |> ignore
+            // names |> List.iter (fun x -> printfn $"{x}")
             // printfn $"{han} {fu} {score}"
           | false ->
             ignore ()
@@ -168,7 +186,7 @@ let main argv =
         | s ->
           match Int32.TryParse(s) with
           | (true, idx) when 0 <= idx && idx < shopItems.Length ->
-            let itemToBuy = shopItems.[idx]
+            let itemToBuy = { shopItems.[idx] with id = Guid.NewGuid() }
             if gameState.items.Length >= Config.maxItems then
               printfn "You cannot hold any more items. Sell an item first."
             elif gameState.gold < itemToBuy.cost then

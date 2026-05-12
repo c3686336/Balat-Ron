@@ -25,6 +25,30 @@ let rarityWeight (r: Rarity) =
     | Legendary -> 10.0
 
 let chooseShopItems (rng: Random) count (items: Item list) =
-    items
-    |> List.sortByDescending (fun i -> Math.Pow(rng.NextDouble(), 1.0 / rarityWeight i.rarity))
-    |> List.truncate count
+    let rec gather acc pool needed =
+        if needed = 0 || List.isEmpty pool then acc
+        else
+            let groups = pool |> List.groupBy (fun i -> i.rarity)
+            let totalWeight = groups |> List.sumBy (fun (r, _) -> rarityWeight r)
+            
+            if totalWeight <= 0.0 then acc
+            else
+                let target = rng.NextDouble() * totalWeight
+                let mutable current = 0.0
+                let mutable chosenRarity = fst groups.Head
+                
+                for (r, _) in groups do
+                    let w = rarityWeight r
+                    if target >= current && target < current + w then
+                        chosenRarity <- r
+                    current <- current + w
+                    
+                let available = groups |> List.find (fun (r, _) -> r = chosenRarity) |> snd
+                let picked = available.[rng.Next(available.Length)]
+                
+                // Remove the picked item from the local pool so it doesn't appear twice in the exact same shop
+                let newPool = pool |> List.filter (fun i -> i.name <> picked.name)
+                
+                gather (picked :: acc) newPool (needed - 1)
+                
+    gather [] items count
