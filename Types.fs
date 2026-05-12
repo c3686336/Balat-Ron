@@ -204,6 +204,7 @@ and Event =
   | WhenObtained
   | WhenPileEmpty
   | PileReset
+  | Honba
 
 and ItemEffect =
   | ExtraScore of int * int

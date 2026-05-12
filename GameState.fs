@@ -41,9 +41,9 @@ let processItems (state: GameState) (event: Event) items =
               printfn "%s" s
               state
             | DiscloseNMoreDora n ->
-              let doraToFlip = max (4 - Array.length state.dora) n
+              let doraToFlip = min (5 - Array.length state.dora) n
               { state with
-                  dora = Array.sub state.doraPile 0 doraToFlip
+                  dora = Array.append (Array.sub state.doraPile 0 doraToFlip) state.dora
                   doraPile = Array.skip doraToFlip state.doraPile }
             | DiscloseUraDora -> state)
            state itemEffects
@@ -245,3 +245,6 @@ let sellItem (state: GameState) (item: Item) =
       items = newItems
       gold = state.gold + discount item.cost
   }
+
+let nextHonba (state: GameState) =
+  processItems state Honba state.items

@@ -94,6 +94,8 @@ let main argv =
       
       let mutable didTsumo = false
       let mutable pileEmpty = false
+
+      gameState <- fst <| nextHonba gameState
     
       while not (didTsumo || pileEmpty) do
         let isDone = isComplete gameState
@@ -196,7 +198,7 @@ let main argv =
               shopItems <- shopItems |> List.removeAt idx
               printfn $"Bought {itemToBuy.name}."
           | _ -> printfn "Invalid input."
-      
+
     else
       printfn "Game Over"
       isGameOver <- true

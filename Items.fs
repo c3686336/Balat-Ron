@@ -122,7 +122,7 @@ let allItems : Item list = [
       fun state item event ->
         let (Integer n) = item.state
         match event with
-          | PileReset -> if n = 1 then [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)] else [DiscloseNMoreDora 1; SelfDestruct]
+          | Honba -> if n <> 1 then [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)] else printfn "asdf"; [DiscloseNMoreDora 1; SelfDestruct]
           | _ -> []
     state = Integer 3}
   ]
