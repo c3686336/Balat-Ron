@@ -99,7 +99,7 @@ let allItems : Item list = [
     state = Nothing };
   
   { id = Guid.NewGuid(); name = "죽은 자의 소생";
-    description = "황패유국 시 버림패를 다시 섞어 패산으로 합니다. 이 아이템은 한 번 사용 후 다시 상점으로 돌아갑니다."
+    description = "황패유국 시 버림패와 사용하지 않은 영상패, 도라패를 다시 섞어 패산으로 합니다. 이 아이템은 한 번 사용 후 다시 상점으로 돌아갑니다."
     rarity = Uncommon;
     cost = 150;
     effect = fun state _ event -> match event with | WhenPileEmpty -> [ModifyGameState { state with pile = Array.randomShuffleWith state.rng state.discardPile; discardPile = [||] }; SelfDestruct ] | _ -> [];
@@ -111,8 +111,6 @@ let allItems : Item list = [
     cost = 150;
     effect = fun state _ event -> match event with | OnYakuCalc _ when state.tsumoLeft = 1 -> [ExtraScore (2, 0)] | OnScoreCalc _ when state.tsumoLeft = 1 -> [ExtraScore (2, 0); PrintName ] | _ -> [];
     state = Nothing }
-
-
 
   { id = Guid.NewGuid(); name = "도라 +1"
     description = "도라 1장 추가, 단 본장 3회 후 삭제"
