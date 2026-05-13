@@ -191,6 +191,14 @@ let allItems : Item list = [
     effect = fun state _ event -> match event with | OnYakuCalc _ when state.isTenhouApplicable -> [ExtraScore (1, 0)] | OnScoreCalc _ when state.isTenhouApplicable -> [ExtraScore (1, 0); PrintName ] | _ -> [];
     state = Nothing }
 
+  { id = Guid.NewGuid();
+    name = "모듈러"
+    description = "8-9-1이나 9-1-2 슌쯔 허용. 변짱대기 없음."
+    rarity = Uncommon;
+    cost = 150;
+    effect = fun state _ event -> match event with | Parsing -> [AllowWrapAroundShuntsu]
+    state = Nothing }
+
   // { id = Guid.NewGuid();
   //   name = "Riichi"
   //   description = "You can keep going after declaring tsumo" }
