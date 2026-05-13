@@ -27,10 +27,8 @@ let tryRemoveOne v (lst: (Tile * int) list) =
 
 let tryParseWrapShuntsuFromList (hand: (Tile * int) list): (Shuntsu * (Tile * int) list) option =
   let has v = hand |> List.exists (fun (Tile t, cnt) -> t = v && cnt > 0)
-  printfn "asdf"
   if has 1 && has 8 && has 9 then
     let removed = hand |> tryRemoveOne 1 |> tryRemoveOne 8 |> tryRemoveOne 9
-    printfn "asdf2"
     Some (Shuntsu (Tile 8, Tile 9, Tile 1), removed)
   elif has 1 && has 2 && has 9 then
     let removed = hand |> tryRemoveOne 1 |> tryRemoveOne 2 |> tryRemoveOne 9
@@ -55,9 +53,7 @@ let rec tryParseHeadlessHandAsMuch wrapAround (hand: ListHand) (parsedHand: Pars
     | ListHand [] -> [parsedHand]
     | hand ->
       let (ParsedHand (parsedKantsu, parsedShuntsu, parsedKotsu, parsedToitsu)) = parsedHand
-      printfn "%A" hand
       let shuntsu = tryParseShuntsu wrapAround hand
-      printfn "%A" shuntsu
       let kotsu = tryParseKotsu hand
       
       let shuntsuParsingResult =

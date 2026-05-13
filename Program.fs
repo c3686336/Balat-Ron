@@ -7,23 +7,6 @@ open GameState
 open Items
 open Yaku
 
-let asdf () =
-    // handWithTsumo: 1×3, 2, 3, 4, 5, 6, 7×3, 8×2, 9×2 = 14 tiles
-    // wrap=true: Kotsu(1)+Shuntsu(2,3,4)+Shuntsu(5,6,7)+Shuntsu(8,9,1)+Toitsu(7)
-    let handArray = [|0; 0; 0; 2; 0; 0; 0; 0; 1; 1|]
-    let kantsu = [Kantsu (Tile 4); Kantsu (Tile 5); Kantsu (Tile 6)]
-    let resultTrue = parseHand true (Hand (handArray, Tile 1, kantsu))
-    let resultFalse = parseHand false (Hand (handArray, Tile 1, kantsu))
-
-    let hasWrap =
-        resultTrue
-        |> List.collect (function NormalHand (ParsedHand (_, shun, _, _)) -> shun | _ -> [])
-        |> List.contains (Shuntsu (Tile 8, Tile 9, Tile 1))
-
-    resultTrue
-
-asdf () |> printfn "%A"
-
 // let emptyState hand dora items = {
 //     rng = Random(); hand = hand; pile = [||]; discardPile = [||]; doraPile = [||]; dora = dora;
 //     rinshang = [||]; round = 1; tsumoLeft = 0; isRinshanKaihouApplicable = false;
