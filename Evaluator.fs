@@ -22,31 +22,51 @@ let tryParseToitsu hand: (Toitsu * ListHand) option = tryParseNTile 2 hand |> Op
 
 let tryParseKotsu hand : (Kotsu * ListHand) option = tryParseNTile 3 hand |> Option.map (fun (a, b) -> (Kotsu a, b))
 
-let tryParseShuntsu (hand: ListHand): (Shuntsu * ListHand) option =
+let tryRemoveOne v (lst: (Tile * int) list) =
+  lst |> List.map (fun (Tile t, cnt) -> if t = v then (Tile t, cnt - 1) else (Tile t, cnt)) |> filterZero
+
+let tryParseWrapShuntsuFromList (hand: (Tile * int) list): (Shuntsu * (Tile * int) list) option =
+  let has v = hand |> List.exists (fun (Tile t, cnt) -> t = v && cnt > 0)
+  printfn "asdf"
+  if has 1 && has 8 && has 9 then
+    let removed = hand |> tryRemoveOne 1 |> tryRemoveOne 8 |> tryRemoveOne 9
+    printfn "asdf2"
+    Some (Shuntsu (Tile 8, Tile 9, Tile 1), removed)
+  elif has 1 && has 2 && has 9 then
+    let removed = hand |> tryRemoveOne 1 |> tryRemoveOne 2 |> tryRemoveOne 9
+    Some (Shuntsu (Tile 9, Tile 1, Tile 2), removed)
+  else
+    None
+
+let tryParseShuntsu wrapAround (hand: ListHand): (Shuntsu * ListHand) option =
   match hand with
     | ListHand ((Tile a, a1) :: (Tile b, a2) :: (Tile c, a3) :: xs) when a1 > 0 && a2 > 0 && a3 > 0 && b = a + 1 && c = a + 2 ->
       (Tile a, a1 - 1) :: (Tile b, a2 - 1) :: (Tile c, a3 - 1) :: xs
         |> filterZero
         |> fun x -> Shuntsu (Tile a, Tile b, Tile c), ListHand x
         |> Some
+    | ListHand ((Tile 1, cnt1) :: _) when wrapAround && cnt1 > 0 ->
+      let (ListHand inner) = hand
+      tryParseWrapShuntsuFromList inner |> Option.map (fun (s, lst) -> s, ListHand lst)
     | _ -> None
 
-let rec tryParseHeadlessHandAsMuch (hand: ListHand) (parsedHand: ParsedNormalHand): ParsedNormalHand list =
+let rec tryParseHeadlessHandAsMuch wrapAround (hand: ListHand) (parsedHand: ParsedNormalHand): ParsedNormalHand list =
   match hand with
     | ListHand [] -> [parsedHand]
     | hand ->
-      // Order of Shuntsu and Kotsu shoudn't matter
       let (ParsedHand (parsedKantsu, parsedShuntsu, parsedKotsu, parsedToitsu)) = parsedHand
-      let shuntsu = tryParseShuntsu hand
+      printfn "%A" hand
+      let shuntsu = tryParseShuntsu wrapAround hand
+      printfn "%A" shuntsu
       let kotsu = tryParseKotsu hand
       
       let shuntsuParsingResult =
         shuntsu
-        |> Option.map (fun (newShuntsu, hand) -> tryParseHeadlessHandAsMuch hand (ParsedHand (parsedKantsu, newShuntsu::parsedShuntsu, parsedKotsu, parsedToitsu)))
+        |> Option.map (fun (newShuntsu, hand) -> tryParseHeadlessHandAsMuch wrapAround hand (ParsedHand (parsedKantsu, newShuntsu::parsedShuntsu, parsedKotsu, parsedToitsu)))
         |> Option.defaultValue []
       let kotsuParsingResult =
         kotsu
-        |> Option.map (fun (newKotsu: Kotsu, hand) -> tryParseHeadlessHandAsMuch hand (ParsedHand (parsedKantsu, parsedShuntsu, newKotsu::parsedKotsu, parsedToitsu)))
+        |> Option.map (fun (newKotsu: Kotsu, hand) -> tryParseHeadlessHandAsMuch wrapAround hand (ParsedHand (parsedKantsu, parsedShuntsu, newKotsu::parsedKotsu, parsedToitsu)))
         |> Option.defaultValue []
 
       shuntsuParsingResult @ kotsuParsingResult |> List.distinct
@@ -54,15 +74,15 @@ let rec tryParseHeadlessHandAsMuch (hand: ListHand) (parsedHand: ParsedNormalHan
 let arraytoList (hand: ArrayHand): ListHand =
   List.fold (fun acc elem -> if hand[elem] <> 0 then (Tile elem, hand[elem])::acc else acc) [] [1..9] |> List.rev |> ListHand
 
-let tryParseHeadlessHand (hand: ArrayHand) (toitsu: Toitsu) (kantsu: Kantsu list): ParsedNormalHand list =
-  let result = tryParseHeadlessHandAsMuch (arraytoList hand) (ParsedHand (kantsu, [], [], toitsu))
+let tryParseHeadlessHand wrapAround (hand: ArrayHand) (toitsu: Toitsu) (kantsu: Kantsu list): ParsedNormalHand list =
+  let result = tryParseHeadlessHandAsMuch wrapAround (arraytoList hand) (ParsedHand (kantsu, [], [], toitsu))
   List.filter (fun (ParsedHand (kan: Kantsu list, shun: Shuntsu list, ko: Kotsu list, toi: Toitsu)) -> kan.Length + shun.Length + ko.Length = 4) result
 
-let tryParseNormalHand ((Hand (hand, tsumo, kantsu)): Hand): ParsedNormalHand list =
+let tryParseNormalHand wrapAround ((Hand (hand, tsumo, kantsu)): Hand): ParsedNormalHand list =
   let handWithTsumo = Array.updateAt (tsumo.Value ()) (hand[tsumo.Value ()] + 1) hand
   List.fold (fun acc elem ->
              if handWithTsumo[elem] >= 2 then
-               (tryParseHeadlessHand (Array.updateAt elem (handWithTsumo[elem] - 2) handWithTsumo) (Toitsu (Tile elem)) kantsu) :: acc
+               (tryParseHeadlessHand wrapAround (Array.updateAt elem (handWithTsumo[elem] - 2) handWithTsumo) (Toitsu (Tile elem)) kantsu) :: acc
              else
                acc) [] [1..9]
     |> List.filter ((<>) []) |> List.concat
@@ -119,8 +139,8 @@ let parseMachi hand tsumo =
     | Chitoitsu x -> [Tanki tsumo]
     | NormalHand hand -> parseMachiNormalHand hand tsumo
 
-let parseHand ((Hand (hand, tsumo, kantsu)): Hand): ParsedHand list =
-  let normalParses = tryParseNormalHand (Hand (hand, tsumo, kantsu)) |> List.map NormalHand
+let parseHand wrapAround ((Hand (hand, tsumo, kantsu)): Hand): ParsedHand list =
+  let normalParses = tryParseNormalHand wrapAround (Hand (hand, tsumo, kantsu)) |> List.map NormalHand
   let handWithTsumo = Array.updateAt (tsumo.Value ()) (hand[tsumo.Value ()] + 1) hand
   match tryParseChitoitsu handWithTsumo with
     | None ->
@@ -142,10 +162,10 @@ let calculateDora ((Hand (arrayHand, tsumo, kantsu)): Hand) doraIndicators =
 
   doraInPlayableHand + doraInKantsu + doraInTsumo
 
-let everyParsing hand =
+let everyParsing wrapAround hand =
   let (Hand (_, tsumo, _)) = hand
 
-  parseHand hand
+  parseHand wrapAround hand
     |> List.map (fun x ->
                  parseMachi x tsumo
                    |> List.map (fun y -> (x, y, tsumo)))

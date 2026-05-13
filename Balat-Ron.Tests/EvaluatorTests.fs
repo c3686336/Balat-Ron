@@ -8,9 +8,9 @@ let ParseHand (handArray: int array, kantsu: Kantsu list) =
     match handArray |> Array.tryFindIndex (fun x -> x > 0) with
     | Some firstTile ->
         let updatedArray = Array.updateAt firstTile (handArray[firstTile] - 1) handArray
-        parseHand (Hand (updatedArray, Tile firstTile, kantsu))
+        parseHand false (Hand (updatedArray, Tile firstTile, kantsu))
     | None ->
-        parseHand (Hand (handArray, Tile 1, kantsu))
+        parseHand false (Hand (handArray, Tile 1, kantsu))
 
 [<Fact>]
 let ``TryParse with standard winning hand`` () =
@@ -200,3 +200,59 @@ let ``Parse Chitoitsu with kantsu ignores Chitoitsu`` () =
     
     let isChitoitsu = result |> List.exists (function Chitoitsu _ -> true | _ -> false)
     Assert.False(isChitoitsu)
+
+[<Fact>]
+let ``Wrap-around shuntsu 8-9-1 parses only with wrapAround=true`` () =
+    // handWithTsumo: 1×3, 2, 3, 4, 5, 6, 7×3, 8×2, 9×2 = 14 tiles
+    // wrap=true: Kotsu(1)+Shuntsu(2,3,4)+Shuntsu(5,6,7)+Shuntsu(8,9,1)+Toitsu(7)
+    let handArray = [|0; 0; 0; 2; 0; 0; 0; 0; 1; 1|]
+    let kantsu = [Kantsu (Tile 4); Kantsu (Tile 5); Kantsu (Tile 6)]
+    let resultTrue = parseHand true (Hand (handArray, Tile 1, kantsu))
+    let resultFalse = parseHand false (Hand (handArray, Tile 1, kantsu))
+
+    Assert.True(resultTrue.Length > 0)
+    Assert.Empty(resultFalse)
+
+    let hasWrap =
+        resultTrue
+        |> List.collect (function NormalHand (ParsedHand (_, shun, _, _)) -> shun | _ -> [])
+        |> List.contains (Shuntsu (Tile 8, Tile 9, Tile 1))
+
+    Assert.True(hasWrap)
+
+[<Fact>]
+let ``Wrap-around shuntsu 9-1-2 parses only with wrapAround=true`` () =
+    // handWithTsumo: 1×2, 2×2, 3, 4, 5, 6, 7, 8×4, 9×2 = 14 tiles
+    // wrap=true: Kotsu(8)+Shuntsu(3,4,5)+Shuntsu(6,7,8)+Shuntsu(9,1,2)+Toitsu(9)
+    let handArray = [|0; 0; 1; 0; 2; 0; 0; 0; 0; 1|]
+    let kantsu = [Kantsu (Tile 3); Kantsu (Tile 5); Kantsu (Tile 6)]
+    let resultTrue = parseHand true (Hand (handArray, Tile 1, kantsu))
+    let resultFalse = parseHand false (Hand (handArray, Tile 1, kantsu))
+
+    Assert.True(resultTrue.Length > 0)
+    Assert.Empty(resultFalse)
+
+    let hasWrap =
+        resultTrue
+        |> List.collect (function NormalHand (ParsedHand (_, shun, _, _)) -> shun | _ -> [])
+        |> List.contains (Shuntsu (Tile 9, Tile 1, Tile 2))
+
+    Assert.True(hasWrap)
+
+[<Fact>]
+let ``Normal hand parses correctly with wrapAround=false`` () =
+    let handArray = [|0; 3; 1; 1; 2; 1; 1; 1; 1; 3|]
+    let result = ParseHand (handArray, [])
+
+    Assert.Single(result) |> ignore
+    let (ParsedHand (_, shuntsu, kotsu, toitsu)) =
+        match result.Head with
+        | NormalHand n -> n
+        | _ -> failwith "Expected NormalHand"
+
+    let expected = [ Shuntsu (Tile 7, Tile 8, Tile 9)
+                     Shuntsu (Tile 4, Tile 5, Tile 6)
+                     Shuntsu (Tile 2, Tile 3, Tile 4) ]
+    Assert.Equivalent(expected, shuntsu)
+    Assert.Equal<seq<Kotsu>>([Kotsu (Tile 1)], kotsu)
+    Assert.Equal(Toitsu (Tile 9), toitsu)

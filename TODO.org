@@ -29,6 +29,8 @@
       - Force 4 of some tiles
       - Riichi: add score for every draw from now on
       - Shuffle the discard once again
+      - 아스트랄 프로젝션: 사용시 패산에서 랜덤으로 1매 공개
+      - 극한의 이득: 영상패를 패산에 추가
       - 중복 카드 버릴시 점수 추가 (깡, 퐁 간접너프 아이템)
       - Builds
         - Tanyao build

@@ -40,6 +40,7 @@ let processItems (state: GameState) (event: Event) items =
             | PrintStr s ->
               printfn "%s" s
               state
+            | AllowWrapAroundShuntsu -> state
             | DiscloseNMoreDora n ->
               let doraToFlip = min (5 - Array.length state.dora) n
               { state with
@@ -166,8 +167,16 @@ let resetPile (state: GameState) =
       isTenhouApplicable = true
   } PileReset state.items
 
+let getWrapAround (effects: ItemEffects) =
+    effects.TryFind(Parsing)
+    |> Option.defaultValue []
+    |> List.collect snd
+    |> List.exists (function AllowWrapAroundShuntsu -> true | _ -> false)
+
 let declareTsumo (state: GameState) =
-  let everyParsingResult = everyParsing state.hand
+  let (_, parseEffects) = processItems state Parsing state.items
+  let wrapAround = getWrapAround parseEffects
+  let everyParsingResult = everyParsing wrapAround state.hand
   let nDora = calculateDora state.hand (Array.toList state.dora)
 
   let (_, parse, yakuEffects) =
@@ -212,7 +221,8 @@ let confirmEmptyPile (state: GameState) =
     ((newState, false), effects)
 
 let isComplete (state: GameState) =
-    parseHand state.hand |> List.isEmpty |> not
+    let (_, effects) = processItems state Parsing state.items
+    parseHand (getWrapAround effects) state.hand |> List.isEmpty |> not
 
 let nextRound (state: GameState) =
   let (stateAfterEnd, effects) = processItems state OnRoundEnd state.items
