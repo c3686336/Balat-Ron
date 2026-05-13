@@ -36,6 +36,9 @@ type Tile =
   member this.IsTerminal () =
     this.Value () = 1 || this.Value () = 9
 
+  member this.NextTile (wrapAround: bool) =
+    if wrapAround then Some (this.DoraTile ()) else if this.Value () = 9 then None else Some (Tile (1 + this.Value ()))
+
 type Kantsu =
   | Kantsu of Tile
 
@@ -195,8 +198,8 @@ type GameState =
     $"{hand}\n{dora}\nDiscard: {discardPile}"
 
 and Event =
-  | OnYakuCalc of ParsedHand * Machi * Tile // Hypothetical substitutions
-  | OnScoreCalc of ParsedHand * Machi * Tile // Actual score calculation
+  | OnYakuCalc of ParsedHand * Machi * Tile * Hand // Hypothetical substitutions
+  | OnScoreCalc of ParsedHand * Machi * Tile * Hand // Actual score calculation
   | OnDiscard of Tile
   | OnKan of Tile
   | OnRoundEnd
@@ -205,6 +208,7 @@ and Event =
   | WhenPileEmpty
   | PileReset
   | Honba
+  | Parsing
 
 and ItemEffect =
   | ExtraScore of int * int
@@ -219,6 +223,7 @@ and ItemEffect =
   | PrintStr of string
   | DiscloseNMoreDora of int
   | DiscloseUraDora
+  | AllowWrapAroundShuntsu
 
 and ItemEffects = Map<Event, (Item * ItemEffect list) list>
 

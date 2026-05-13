@@ -27,7 +27,7 @@
       - Treat some tiles as terminal
       - *n score if it's the last tsumo
       - Force 4 of some tiles
-      - Riichi: add score for every draw from now one
+      - Riichi: add score for every draw from now on
       - Shuffle the discard once again
       - 중복 카드 버릴시 점수 추가 (깡, 퐁 간접너프 아이템)
       - Builds
@@ -52,4 +52,4 @@
 
 - 역만 기본 포함?
 
-- 확률 정상화
+- 확률 정상화 - 완

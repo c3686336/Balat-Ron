@@ -173,14 +173,14 @@ let declareTsumo (state: GameState) =
   let (_, parse, yakuEffects) =
     everyParsingResult
       |> List.map (fun parse ->
-                   let (newState, effects) = processItems state (OnYakuCalc parse) state.items
                    let (a, b, c) = parse
+                   let (newState, effects) = processItems state (OnYakuCalc (a, b, c, state.hand)) state.items
                    let fu = fu a b c
                    (score (fst newState.baseScore + nDora) (snd newState.baseScore + fu), parse, effects))
       |> List.maxBy (fun (s, _, _) -> s)
 
-  let (calculation, scoreEffects) = processItems state (OnScoreCalc parse) state.items
   let (a, b, c) = parse
+  let (calculation, scoreEffects) = processItems state (OnScoreCalc (a, b, c, state.hand)) state.items
   let fu = fu a b c
   let (han, yakuFu) = calculation.baseScore
   let finalScore = score (han + nDora) (fu + yakuFu)
