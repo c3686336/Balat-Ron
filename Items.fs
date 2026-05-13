@@ -49,7 +49,7 @@ let allItems : Item list = [
     state = Nothing };
 
   { id = Guid.NewGuid(); name = "Sankantsu";
-    description = "Grants +2 Yaku (score multipliers) if your hand contains three quads (four of a kind).";
+    description = "Grants +4 Yaku (score multipliers) if your hand contains three quads (four of a kind).";
     rarity = Uncommon;
     cost = 150;
     effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sankantsup p m t -> [ItemEffect.ExtraScore (2, 0)] | OnScoreCalc (p, m, t, _) when sankantsup p m t -> [ItemEffect.ExtraScore (2, 0); PrintName] | _ -> [];
@@ -73,7 +73,7 @@ let allItems : Item list = [
     state = Nothing };
 
   { id = Guid.NewGuid(); name = "Sukantsu";
-    description = "Grants +6 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
+    description = "Grants +8 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
     rarity = Rare;
     cost = 100;
     effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (6, 0)] | OnScoreCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (6, 0); PrintName] | _ -> [];
@@ -83,10 +83,10 @@ let allItems : Item list = [
 //     { id = Guid.NewGuid(); name = "Ryuuiisou"; description = "Grants +13 Yaku (massive score multiplier) if your hand is composed entirely of 2, 3, 4, 6, and 8 tiles."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc _ when ryuuiisoupRaw state.hand -> [ItemEffect.ExtraScore (13, 0)] | _ -> [] }
 //     { id = Guid.NewGuid(); name = "ChuurenPoutou"; description = "Grants +13 Yaku (massive score multiplier) if your hand consists of three 1s, three 9s, and one of every other number (1112345678999) plus one extra tile."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when chuurenPoutoup p m t -> [ItemEffect.ExtraScore (13, 0)] | _ -> [] }
   { id = Guid.NewGuid(); name = "SuuankouTanki";
-    description = "Grants +26 Yaku (colossal score multiplier) if you complete four concealed triplets by drawing the final tile to form the pair.";
+    description = "Grants +12 Yaku (colossal score multiplier) if you complete four concealed triplets by drawing the final tile to form the pair.";
     rarity = Legendary;
-    cost = 600;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankouTankip p m t -> [ItemEffect.ExtraScore (26, 0)] | OnScoreCalc (p, m, t, _) when suuankouTankip p m t -> [ItemEffect.ExtraScore (26, 0); PrintName] | _ -> [];
+    cost = 100;
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankouTankip p m t -> [ItemEffect.ExtraScore (12, 0)] | OnScoreCalc (p, m, t, _) when suuankouTankip p m t -> [ItemEffect.ExtraScore (12, 0); PrintName] | _ -> [];
     state = Nothing };
   
 //     { id = Guid.NewGuid(); name = "JunseiChuurenPoutou"; description = "Grants +26 Yaku (colossal score multiplier) if you complete the exact 1112345678999 hand by drawing a matching tile."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when junseiChuurenPoutoup p m t -> [ItemEffect.ExtraScore (26, 0)] | _ -> [] }
