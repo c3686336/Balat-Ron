@@ -66,17 +66,17 @@ let allItems : Item list = [
 //     { id = Guid.NewGuid(); name = "Junchan"; description = "Grants +3 Yaku (score multipliers) if every set and the pair in your hand contains at least one terminal (1 or 9) tile."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when junchanp p m t -> [ItemEffect.ExtraScore (3, 0)] | _ -> [] }
 //     { id = Guid.NewGuid(); name = "Chinitsu"; description = "Grants +6 Yaku (score multipliers) unconditionally since all tiles in this game belong to the same suit."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc _ -> [ItemEffect.ExtraScore (6, 0)] | _ -> [] }
   { id = Guid.NewGuid(); name = "Suuankou";
-    description = "Grants +13 Yaku (massive score multiplier) if your hand contains four concealed triplets (drawn by yourself).";
+    description = "Grants +6 Yaku (massive score multiplier) if your hand contains four concealed triplets (drawn by yourself).";
     rarity = Rare;
-    cost = 300;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankoup p m t -> [ItemEffect.ExtraScore (13, 0)] | OnScoreCalc (p, m, t, _) when suuankoup p m t -> [ItemEffect.ExtraScore (13, 0); PrintName] | _ -> [];
+    cost = 100;
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankoup p m t -> [ItemEffect.ExtraScore (6, 0)] | OnScoreCalc (p, m, t, _) when suuankoup p m t -> [ItemEffect.ExtraScore (6, 0); PrintName] | _ -> [];
     state = Nothing };
 
   { id = Guid.NewGuid(); name = "Sukantsu";
-    description = "Grants +13 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
+    description = "Grants +6 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
     rarity = Rare;
-    cost = 300;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (13, 0)] | OnScoreCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (13, 0); PrintName] | _ -> [];
+    cost = 100;
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (6, 0)] | OnScoreCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (6, 0); PrintName] | _ -> [];
     state = Nothing };
   
 //     { id = Guid.NewGuid(); name = "Chinroutou"; description = "Grants +13 Yaku (massive score multiplier) if your hand is composed entirely of 1s and 9s."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc _ when chinroutoupRaw state.hand -> [ItemEffect.ExtraScore (13, 0)] | _ -> [] }
@@ -201,5 +201,5 @@ let allItems : Item list = [
 
   // { id = Guid.NewGuid();
   //   name = "Riichi"
-  //   description = "You can keep going after declaring tsumo" }
+  //   description = "Declaring tsumo does not progress the honba and does not decrease the tsumoLeft. The honba is progressed only when the pile is empty, at which tsumoleft should be decremented." }
   ]
