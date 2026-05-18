@@ -76,8 +76,7 @@ let arrayHandToString (arrayHand: ArrayHand): string =
   arrayHand
         |> Array.mapi (fun i x -> String.replicate x $"{Tile i}") |> String.concat ""
 
-
-type PlayerInput =
+type CliInput =
   | Tsumo
   | Kan of Tile
   | Discard of Tile
@@ -187,8 +186,20 @@ type DoraIndicator =
 type Pile =
   Tile array
 
+type GamePhase =
+  | GameStarting
+  | InGame
+  | ScorePresentation
+  | Shop
+  | GameOver
+
+type ShuffleScope =
+  | Everything
+  | DiscardToDrawPile
+  | UnrevaledTilesOnly
+
 type GameState =
-  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; tsumoLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; baseScore: int * int }
+  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; honbaLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; baseScore: int * int; phase: GamePhase; shopItems: Item list }
 
   override this.ToString (): string =
     let hand = sprintf $"{this.hand}"
@@ -197,35 +208,34 @@ type GameState =
 
     $"{hand}\n{dora}\nDiscard: {discardPile}"
 
-and Event =
+and ItemEvent =
   | OnYakuCalc of ParsedHand * Machi * Tile * Hand // Hypothetical substitutions
-  | OnScoreCalc of ParsedHand * Machi * Tile * Hand // Actual score calculation
+  | OnScoreCalc of ParsedHand * Machi * Tile * Hand // Actual score calculation, Deprecated. Just use OnYakuCalc
   | OnDiscard of Tile
   | OnKan of Tile
   | OnRoundEnd
   | OnTsumo
   | WhenObtained
-  | WhenPileEmpty
-  | PileReset
+  | WhenSold
+  | WhenPileEmpty // Deprecated; manually detect empty pile
+  | PileReset // Deprecated for now
   | Honba
   | Parsing
 
 and ItemEffect =
   | ExtraScore of int * int
-  | AddTsumo of int
-  | SubtractTargetScore of bigint
-  | ModifyPile of Pile
-  | ModifyGameState of GameState
+  | AddHonba of int
   | AddGold of int
   | UpdateItemState of ItemState
   | SelfDestruct
-  | PrintName
-  | PrintStr of string
+  | PrintName // Deprecated
+  | PrintStr of string // Deprecated
   | DiscloseNMoreDora of int
   | DiscloseUraDora
   | AllowWrapAroundShuntsu
+  | ShufflePile of ShuffleScope
 
-and ItemEffects = Map<Event, (Item * ItemEffect list) list>
+and ItemEffects = Map<ItemEvent, (Item * ItemEffect list) list>
 
 and ItemState =
   | Integer of int
@@ -236,9 +246,62 @@ and Item =
     name: string
     description: string
     rarity: Rarity
-    effect: GameState -> Item -> Event -> ItemEffect list
+    effect: GameState -> Item -> ItemEvent -> ItemEffect list
     state: ItemState
     cost: int }
 
   override this.ToString(): string =
     $"[{this.rarity}] {this.name} ({this.cost}G): {this.description}"
+
+type ScoreReason =
+  | Dora
+  | BaseFu
+  | ItemEffect of Item
+
+type GameEvents =
+  | GameStarted
+  | TileDiscarded of Tile
+  | TileDrawn of Tile
+  | RinshangDrawn of Tile
+  | PileEmpty // Only when the Pile is really empty
+  | Kan of Tile
+  | Scored of int * int * bigint
+  | EarnedExtraScore of int * int * ScoreReason
+  | EarnedExtraHonba of int
+  | ScoringStarted
+  | EffectTriggered of ItemEvent * Item * ItemEffect list
+  | ShopEntered
+  | PresentedItem of Item list
+  | Bought of Item
+  | Sold of Item
+  | EarnedGold of int
+  | ShuffledPile of ShuffleScope
+  | DrawnHand of Hand
+  | RevealedDora of Tile list
+  | RevealedUraDora of Tile list
+  | TransitionedPhaseTo of GamePhase
+  | NotEnoughGold
+  | InventoryFull
+  | ShopItemNotFound
+  | ItemTriggered of Item
+  | UpdatedItemState of Item * ItemState
+  | ItemDestroyed of Item
+  | NextRound of int
+  | PeekDrawPile of int * Tile // Index, tile
+  | PeekRinshang of int * Tile
+  | GameOverEvent
+
+type PlayerInput =
+  // GameStarting
+  | Start
+  // InGame
+  | Discard of Tile
+  | DeclareKan of Tile
+  | DeclareTsumo
+  | ConfirmPileEmpty
+  // Shop
+  | Buy of Item
+  | Sell of Item
+  | ExitShop
+  // Score Presentation
+  | ConfirmScore
