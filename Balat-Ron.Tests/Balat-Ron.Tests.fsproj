@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Balat-Ron.fsproj" />
+    <ProjectReference Include="..\backend\Balat-Ron-Backend.fsproj" />
   </ItemGroup>
 
 </Project>

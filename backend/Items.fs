@@ -52,7 +52,7 @@ let allItems : Item list = [
     description = "Grants +4 Yaku (score multipliers) if your hand contains three quads (four of a kind).";
     rarity = Uncommon;
     cost = 150;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sankantsup p m t -> [ItemEffect.ExtraScore (2, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sankantsup p m t -> [ItemEffect.ExtraScore (4, 0)] | _ -> [];
     state = Nothing };
 
   { id = Guid.NewGuid(); name = "Chitoitsu";
@@ -76,7 +76,7 @@ let allItems : Item list = [
     description = "Grants +8 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
     rarity = Rare;
     cost = 100;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (6, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (8, 0)] | _ -> [];
     state = Nothing };
   
 //     { id = Guid.NewGuid(); name = "Chinroutou"; description = "Grants +13 Yaku (massive score multiplier) if your hand is composed entirely of 1s and 9s."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc _ when chinroutoupRaw state.hand -> [ItemEffect.ExtraScore (13, 0)] | _ -> [] }
@@ -118,9 +118,12 @@ let allItems : Item list = [
     cost = 100;
     effect =
       fun state item event ->
-        let (Integer n) = item.state
         match event with
-          | Honba -> if n <> 1 then [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)] else [DiscloseNMoreDora 1; SelfDestruct]
+          | Honba ->
+            match item.state with
+              | Integer n when n <> 1 -> [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)]
+              | Integer _ -> [DiscloseNMoreDora 1; SelfDestruct]
+              | Nothing -> []
           | _ -> []
     state = Integer 3}
 
@@ -134,7 +137,7 @@ let allItems : Item list = [
         match event with
           | OnYakuCalc (_, _, _, Hand (h, t, k)) ->
             let evenCount =
-              if t.Value() % 2 = 0 then 1 else 0
+              (if t.Value() % 2 = 0 then 1 else 0)
               + (Array.sum <| Array.mapi (fun i x -> if i % 2 = 0 then x else 0) h)
               + 4 * (List.length <| List.filter (fun (Kantsu (Tile x)) -> x % 2 = 0) k)
             [ ExtraScore (0, evenCount * 10) ]
@@ -151,7 +154,7 @@ let allItems : Item list = [
         match event with
           | OnYakuCalc (_, _, _, Hand (h, t, k)) ->
             let evenCount =
-              if t.Value() % 2 = 1 then 1 else 0
+              (if t.Value() % 2 = 1 then 1 else 0)
               + (Array.sum <| Array.mapi (fun i x -> if i % 2 = 1 then x else 0) h)
               + 4 * (List.length <| List.filter (fun (Kantsu (Tile x)) -> x % 2 = 1) k)
             [ ExtraScore (0, evenCount * 10) ]
@@ -167,11 +170,11 @@ let allItems : Item list = [
       fun state item event ->
         match event with
           | OnYakuCalc (_, _, _, Hand (h, t, k)) ->
-            let evenCount =
-              if t.IsTerminal() then 1 else 0
-              + (Array.sum <| Array.mapi (fun i x -> if i % 2 = 1 then x else 0) h)
-              + 4 * (List.length <| List.filter (fun (Kantsu (Tile x)) -> x % 2 = 1) k)
-            [ ExtraScore (0, evenCount * 10) ]
+            let terminalCount =
+              (if t.IsTerminal() then 1 else 0)
+              + (Array.sum <| Array.mapi (fun i x -> if i = 1 || i = 9 then x else 0) h)
+              + 4 * (List.length <| List.filter (fun (Kantsu t) -> t.IsTerminal()) k)
+            [ ExtraScore (0, terminalCount * 10) ]
           | _ -> []
     state = Nothing; };
 
@@ -188,7 +191,7 @@ let allItems : Item list = [
     description = "+5 han if won by the first draw"
     rarity = Uncommon;
     cost = 150;
-    effect = fun state _ event -> match event with | OnYakuCalc _ when state.isTenhouApplicable -> [ExtraScore (1, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc _ when state.isTenhouApplicable -> [ExtraScore (5, 0)] | _ -> [];
     state = Nothing }
 
   { id = Guid.NewGuid();

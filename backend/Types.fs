@@ -166,8 +166,9 @@ type ParsedChitoitsu =
   | ParsedChitoitsu of Tile list
 
   override this.ToString (): string =
-    let (ParsedChitoitsu (a::b::c::d::e::f::g)) = this
-    $"Chitoitsu: {a}{a}{b}{b}{c}{c}{d}{d}{e}{e}{f}{f}{g}{g}"
+    let (ParsedChitoitsu tiles) = this
+    let body = tiles |> List.map (fun t -> $"{t}{t}") |> String.concat ""
+    $"Chitoitsu: {body}"
 
 type Machi =
   | Tanki of Tile

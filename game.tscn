@@ -422,6 +422,10 @@ texture_normal = ExtResource("4_7jktm")
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
+[node name="TextureButton29" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=671927170]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
 [node name="TopRow" type="HBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer" unique_id=1709554512]
 layout_direction = 2
 layout_mode = 2
@@ -472,6 +476,10 @@ layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
 [node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=1257697493]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton29" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=2111054335]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
@@ -709,7 +717,7 @@ layout_mode = 2
 
 [node name="FinalScoreLabel" type="Label" parent="ScorePresentation/ScorePanel" unique_id=285320094]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "0 points"
 horizontal_alignment = 1
 
@@ -759,7 +767,7 @@ horizontal_alignment = 1
 
 [node name="ShopItemsLabel" type="Label" parent="Shop/ShopPanel" unique_id=1861630620]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "Available to buy:"
 
 [node name="ShopItemList" type="VBoxContainer" parent="Shop/ShopPanel" unique_id=361540840]
@@ -771,7 +779,7 @@ layout_mode = 2
 
 [node name="PlayerItemsLabel" type="Label" parent="Shop/ShopPanel" unique_id=2143709207]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "Your items:"
 
 [node name="PlayerItemList" type="VBoxContainer" parent="Shop/ShopPanel" unique_id=1411399625]
@@ -820,7 +828,7 @@ alignment = 1
 
 [node name="GameOverLabel" type="Label" parent="GameOver/PanelContainer/MarginContainer/GameOverPanel" unique_id=1501100870]
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 text = "GAME OVER"
 horizontal_alignment = 1
 

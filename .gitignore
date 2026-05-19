@@ -1,3 +1,14 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# .NET build output
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Local editor/OS files
+.DS_Store
+*.user
+*.suo

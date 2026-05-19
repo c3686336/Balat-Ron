@@ -16,6 +16,7 @@ let applyItemEffects (state: GameState) (event: ItemEvent) items log =
     |> List.fold
       (fun (state, log) item ->
        let itemEffects = item.effect state item event
+       let log = if List.isEmpty itemEffects then log else log @ [ItemTriggered item]
        List.fold
          (fun (state, log) itemEffect ->
           match itemEffect with
@@ -34,19 +35,25 @@ let applyItemEffects (state: GameState) (event: ItemEvent) items log =
               (log @ [ItemDestroyed item])
             | DiscloseNMoreDora n ->
               let doraToFlip = min (5 - Array.length state.dora) n
-              let newDoras = Array.sub state.doraPile 0 doraToFlip
-              let events = RevealedDora (Array.toList <| newDoras)
-              { state with
-                  dora = Array.append newDoras state.dora
-                  doraPile = Array.skip doraToFlip state.doraPile }, (events :: log)
+              if doraToFlip <= 0 then
+                state, log
+              else
+                let newDoras = Array.sub state.doraPile 0 doraToFlip
+                let events = RevealedDora (Array.toList <| newDoras)
+                { state with
+                    dora = Array.append state.dora newDoras
+                    doraPile = Array.skip doraToFlip state.doraPile }, (log @ [events])
             | ShufflePile scope ->
               match scope with
               | DiscardToDrawPile ->
                 let newPile = Array.copy state.discardPile
                 state.rng.Shuffle(newPile)
                 { state with pile = newPile; discardPile = [||] }, (log @ [ShuffledPile scope])
+              | Everything
+              | UnrevaledTilesOnly ->
+                state, log
             | _ -> state, log)
-         (state, log @ [ItemTriggered item])
+         (state, log)
          itemEffects)
        (state, log)
 
@@ -96,6 +103,7 @@ let createGameState (rng: Random) : GameState =
 
 let canDiscard (t: Tile) (state: GameState) = state.hand.IsDiscardValid(t) && state.pile.Length >= 1
 let canKan (t: Tile) (state: GameState) = state.hand.IsKanValid(t) && state.rinshang.Length > 0
+let canAnyKan (state: GameState) = [1..9] |> List.exists (fun v -> canKan (Tile v) state)
 let isPileEmpty (state: GameState) = Array.isEmpty state.pile
 
 let isWrapAroundEnabled (state: GameState) =
@@ -218,7 +226,7 @@ let update (state: GameState) (input: PlayerInput) =
 
           let (state, log) = applyItemEffects nextState (OnKan t) nextState.items [Kan t ; RinshangDrawn newTsumo]
 
-          if state.pile.Length = 0 then state, (log @ [PileEmpty]) else state, log
+          state, log
 
         | DeclareTsumo when canTsumo state ->
           // Transition to the score presentation

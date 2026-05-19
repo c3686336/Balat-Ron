@@ -2,6 +2,8 @@
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balat-Ron", "Balat-Ron.csproj", "{86E185C0-BCB7-49B5-BAB2-E43641264EE3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Balat-Ron.Tests", "Balat-Ron.Tests\Balat-Ron.Tests.fsproj", "{1D386298-2FB1-471A-9373-8D8F7FE573D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 	Debug|Any CPU = Debug|Any CPU
@@ -15,5 +17,11 @@ Global
 		{86E185C0-BCB7-49B5-BAB2-E43641264EE3}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{86E185C0-BCB7-49B5-BAB2-E43641264EE3}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{86E185C0-BCB7-49B5-BAB2-E43641264EE3}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{1D386298-2FB1-471A-9373-8D8F7FE573D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D386298-2FB1-471A-9373-8D8F7FE573D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D386298-2FB1-471A-9373-8D8F7FE573D8}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D386298-2FB1-471A-9373-8D8F7FE573D8}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{1D386298-2FB1-471A-9373-8D8F7FE573D8}.ExportRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{1D386298-2FB1-471A-9373-8D8F7FE573D8}.ExportRelease|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
