@@ -3,6 +3,7 @@
 [ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://space-worm-theme/space_worm_theme.tres" id="1_theme"]
 [ext_resource type="Texture2D" uid="uid://qnb1eit8grff" path="res://mahjong_tiles/Bamboo1.png" id="2_bamboo1"]
 [ext_resource type="LabelSettings" uid="uid://dh6fn5e0hcm2p" path="res://title_label.tres" id="2_feb5d"]
+[ext_resource type="Script" uid="uid://0w0esuorjuf5" path="res://Main.cs" id="2_ryrav"]
 [ext_resource type="Texture2D" uid="uid://b1l1py6s8ooyh" path="res://mahjong_tiles/Bamboo2.png" id="3_bamboo2"]
 [ext_resource type="Texture2D" uid="uid://bu2l8y31vivoq" path="res://Ura.png" id="4_7jktm"]
 
@@ -23,6 +24,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+script = ExtResource("2_ryrav")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1774116955]
 layout_mode = 1

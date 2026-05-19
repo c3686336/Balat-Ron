@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>Balat_Ron</RootNamespace>
+    <RootNamespace>Balat_Ron_Backend</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
