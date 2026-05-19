@@ -83,6 +83,7 @@ layout_mode = 2
 text = "OPTIONS"
 
 [node name="InGame" type="Control" parent="." unique_id=168467896]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -777,7 +778,6 @@ size_flags_horizontal = 4
 text = "CONFIRM"
 
 [node name="Shop" type="Control" parent="." unique_id=2006210611]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -831,8 +831,12 @@ text = "Your items:"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ExitShopButton" type="Button" parent="Shop/ShopPanel" unique_id=2144035605]
-layout_mode = 2
+[node name="ExitShopButton" type="Button" parent="Shop" unique_id=2144035605]
+layout_mode = 0
+offset_left = 458.0
+offset_top = 28.0
+offset_right = 530.0
+offset_bottom = 58.0
 size_flags_horizontal = 4
 text = "CONTINUE"
 

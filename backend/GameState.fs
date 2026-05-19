@@ -157,6 +157,7 @@ let transitionTo (state: GameState) (phase: GamePhase) log =
       { state with
           honbaLeft = state.honbaLeft - 1;
           phase = InGame;
+          currentScore = 0I;
           baseScore = (0, 0) }, log
     | Shop ->
       let (state, log) = applyItemEffects state OnRoundEnd state.items log

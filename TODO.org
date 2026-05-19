@@ -39,7 +39,8 @@
         - Pon/Kan build
     - AI Ideas
 
-* TODO Implement graphics (optional)
+* DONE Implement graphics (optional)
+CLOSED: [2026-05-20 Wed 00:55]
 
 * Balance notes
 - 역만이나 이상한역 다 없애고 (아니면 후반에 나오게 하고) 만들기 쉬운것들만 초반에 남기기
@@ -55,3 +56,8 @@
 - 역만 기본 포함?
 
 - 확률 정상화 - 완
+
+* Bugs
+- The next button disappears if you buy 5 items in the shop
+- There's no description for items in the shop
+- Score does not reset (At least visually)
