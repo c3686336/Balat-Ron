@@ -47,7 +47,7 @@ let rec wireHandClicks () =
                     kanMode <- false
                     View.setKanModeHint false
                     View.setNextKanAnimationSources (Tile v) b
-                    View.captureCurrentTsumoForDrawAnimation state.hand None
+                    View.captureSortingMovesForDrawAnimation
                     let (_, log) = doStep (DeclareKan(Tile v))
                     afterLog log (fun () -> View.refreshInGame state; wireHandClicks())
                 elif kanMode then

@@ -304,7 +304,7 @@ let private handTileTopLeft (tile: Types.Tile) =
 
 let mutable private nextHandSource: (Vector2 * Control option) option = None
 let mutable private nextKanSources: (Vector2 * Control option) list = []
-let mutable private previousTsumoSource: (Types.Tile * Vector2 * Vector2 * (Types.Tile * Vector2 * Vector2 * Control) list) option = None
+let mutable private previousSortSource: (Types.Tile * Vector2 * Vector2 * Control) list option = None
 let private flyingTiles = ResizeArray<Control>()
 let private handInsertedTileWidth = tileBtnSize.X - 2.0f
 
@@ -323,18 +323,18 @@ let private collapseHandControl (c: Control) =
     t.TweenProperty(c, "custom_minimum_size:x", 0.0, 0.34) |> ignore
     t.TweenCallback(Callable.From(Action(fun () -> c.Hide()))) |> ignore
 
-let private makeCollapsingSlot (source: Control) =
+let private hideAndReturn (source: Control) =
     let pos = controlTileTopLeft source
     source.CustomMinimumSize <- tileBtnSize
     source.Modulate <- Color(1f, 1f, 1f, 0f)
     pos, Some source
 
 let setNextHandAnimationSource (source: Control) =
-    nextHandSource <- Some(makeCollapsingSlot source)
+    nextHandSource <- Some(hideAndReturn source)
 
 let private takePreviousTsumo () =
-    let value = previousTsumoSource
-    previousTsumoSource <- None
+    let value = previousSortSource
+    previousSortSource <- None
     value
 
 let setNextKanAnimationSources (tile: Types.Tile) (source: Control) =
@@ -353,7 +353,19 @@ let setNextKanAnimationSources (tile: Types.Tile) (source: Control) =
             source :: (withoutSource |> List.map (fun b -> b :> Control)) |> List.truncate 4
 
     let sourcePos = controlTileTopLeft source
-    let positions = selected |> List.map makeCollapsingSlot
+    let positions =
+        selected
+            |> List.map
+                (fun s ->
+                 let empty = new Control()
+                 let topLeft = controlTileTopLeft s
+                 empty.Position <- s.Position
+                 empty.CustomMinimumSize <- s.Size
+                 s.ReplaceBy(empty)
+                 topLeft, Some(empty))
+
+    // Hide them and 
+    
     let padded =
         if positions.Length >= 4 then positions
         else positions @ List.replicate (4 - positions.Length) (sourcePos, None)
@@ -372,8 +384,8 @@ let private takeKanSources fallback =
     | [] -> List.replicate 4 fallback
     | sources ->
         nextKanSources <- []
-        for (_, source) in sources do
-            source |> Option.iter collapseHandControl
+        // for (_, source) in sources do
+        //     source |> Option.iter collapseHandControl
         let positions = sources |> List.map fst
         if positions.Length >= 4 then positions
         else positions @ List.replicate (4 - positions.Length) fallback
@@ -391,12 +403,35 @@ let private currentDiscardSourceControl () =
     | Some (_, source) -> source
     | None -> None
 
+let captureSortingMovesForDrawAnimation =
+    let buttons =
+        textureButtonsAt "InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer"
+        // |> fun a -> Option.fold (fun s v -> Array.insertAt 0 v s) a (lastHandTileControl())
+        |> Array.sortBy (fun b -> b.GlobalPosition.X)
+    let firstPos =
+        buttons
+            |> Array.tryHead
+            |> Option.map controlTileTopLeft
+            |> Option.defaultValue (Vector2(143.0f, 356.0f))
+    // let firstPos = Vector2(143.0f, 356.0f)
+
+    previousSortSource <-
+      buttons
+          |> Array.sortBy (fun b -> b.GetMeta("tile_value").AsInt32())
+          |> Array.mapi (fun i x ->
+                         let tile = Types.Tile (x.GetMeta("tile_value").AsInt32())
+                         let fromPos = controlTileTopLeft x |> fun x -> Vector2(x.X, 356.f)
+                         let toPos = firstPos + Vector2((float32 i) * (tileBtnSize.X + 2.0f), 0f)
+                         (tile, fromPos, toPos, x :> Control))
+          |> Array.toList
+          |> Some
+
 let captureCurrentTsumoForDrawAnimation (hand: Types.Hand) (discarded: Types.Tile option) =
     let (Types.Hand (arr, tsumo, _)) = hand
     let isTsumoGiri = currentDiscardSourceControl() |> Option.exists(fun s -> lastHandTileControl() |> Option.exists(fun b -> Object.ReferenceEquals(s, b)))
     match discarded, lastHandTileControl() with
     | Some discardedTile, _ when discardedTile = tsumo && isTsumoGiri ->
-        previousTsumoSource <- None
+        previousSortSource <- None
     | _, Some tsumoControl ->
         let pos = controlTileTopLeft tsumoControl
         let sourceControl = currentDiscardSourceControl()
@@ -447,8 +482,8 @@ let captureCurrentTsumoForDrawAnimation (hand: Types.Hand) (discarded: Types.Til
             moves
             |> List.tryPick (fun (_, _, toPos, c) -> if Object.ReferenceEquals(c, tsumoControl) then Some toPos else None)
             |> Option.defaultValue pos
-        previousTsumoSource <- Some(tsumo, pos, tsumoToPos, moves)
-    | _, None -> previousTsumoSource <- None
+        previousSortSource <- Some(moves)
+    | _, None -> previousSortSource <- None
 
 let private sortedHandSlotTopLeft (tile: Types.Tile) (oldArr: int array) =
     let before =
@@ -683,6 +718,24 @@ let private openSortedHandGap (slotIndex: int) =
         None
     | _ -> None
 
+let private closeHandAfterKan () =
+    let buttons =
+        textureButtonsAt "InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer"
+        // |> fun a -> Option.fold (fun s v -> Array.insertAt 0 v s) a (lastHandTileControl())
+        |> Array.sortBy (fun b -> b.GlobalPosition.X)
+    let firstPos = Vector2(143.0f, 356.0f) // TODO: Remove this magic value
+    // let firstPos = Vector2(143.0f, 356.0f)
+
+    buttons
+        |> Array.sortBy (fun b -> b.GetMeta("tile_value").AsInt32())
+        |> Array.mapi (fun i x ->
+                       let tile = Types.Tile (x.GetMeta("tile_value").AsInt32())
+                       let fromPos = controlTileTopLeft x |> fun x -> Vector2(x.X, 356.f)
+                       let toPos = firstPos + Vector2((float32 i) * (tileBtnSize.X + 2.0f), 0f)
+                       x.Modulate <- Color(1f, 1f, 1f, 0f)
+                       animateTileFly tile fromPos toPos)
+        |> ignore
+
 let private openKanAsideSlots () =
     match tryControl "InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" with
     | Some (:? HBoxContainer as kc) ->
@@ -690,12 +743,14 @@ let private openKanAsideSlots () =
             let groupGap = new Control()
             groupGap.CustomMinimumSize <- Vector2(0f, 0f)
             kc.AddChild(groupGap)
+            kc.MoveChild(groupGap, 0)
             animateMinWidth groupGap 8.0 0.34
 
         [ for _ in 1 .. 4 ->
             let slot = new Control()
             slot.CustomMinimumSize <- Vector2(0f, 0f)
             kc.AddChild(slot)
+            kc.MoveChild(slot, 0)
             let pos = slot.GlobalPosition
             animateMinWidth slot (float tileBtnSize.X) 0.34
             pos ]
@@ -703,12 +758,11 @@ let private openKanAsideSlots () =
 
 let private animateTsumoIntoSortedSlot fallback =
     match takePreviousTsumo() with
-    | Some (_, _, tsumoToPos, moves) ->
+    | Some (moves) ->
         for (tile, fromPos, toPos, liveControl) in moves do
             liveControl.Modulate <- Color(1f, 1f, 1f, 0f)
             animateTileFly tile fromPos toPos
-        Some tsumoToPos
-    | None -> None
+    | None -> ()
 
 let private fadeFlyingTiles () =
     for c in flyingTiles do
@@ -768,27 +822,16 @@ let animateGameEvent (event: Types.GameEvents): float =
         1.15
     | Types.TileDrawn t ->
         let movedOldTsumo = animateTsumoIntoSortedSlot handTopLeft
-        let delay =
-            match movedOldTsumo with
-            | Some _ -> 0.32
-            | None -> 0.0
-        let newTsumoTopLeft =
-            match movedOldTsumo with
-            | Some _ -> handTopLeft // + Vector2(18f, 0f)
-            | None -> handTopLeft
+        let delay = 0.32
+        let newTsumoTopLeft = handTopLeft
+
         let fromPos = hideSourceDelayedAndGetTopLeft (liveWallSource()) pileTopLeft delay
         animateTileFlyDelayed t fromPos newTsumoTopLeft delay
         0.85
     | Types.RinshangDrawn t ->
-        let movedOldTsumo = animateTsumoIntoSortedSlot handTopLeft
-        let delay =
-            match movedOldTsumo with
-            | Some _ -> 0.32
-            | None -> 0.0
-        let newTsumoTopLeft =
-            match movedOldTsumo with
-            | Some _ -> handTopLeft + Vector2(18f, 0f)
-            | None -> handTopLeft
+        let delay = 0.0
+        let newTsumoTopLeft = handTopLeft - Vector2(tileBtnSize.X * 3f - 1f, 0f)
+
         let fromPos = hideSourceDelayedAndGetTopLeft (rinshangSource()) rinshangTopLeft delay
         animateTileFlyDelayed t fromPos newTsumoTopLeft delay
         0.85
@@ -799,6 +842,8 @@ let animateGameEvent (event: Types.GameEvents): float =
     | Types.GameEvents.Kan t ->
         let fallback = handTileTopLeft t |> Option.defaultValue handTopLeft
         let sources = takeKanSources fallback
+
+        closeHandAfterKan()
         openKanAsideSlots() |> ignore
         let destinations = shiftedKanDestinationTopLefts (kantsuCount()) sources.Length (handTopLeft + Vector2(48f, 0f))
         List.zip sources destinations

@@ -67,7 +67,8 @@ let createGameState (rng: Random) : GameState =
         currentIdx <- currentIdx + n
         res
 
-    let handTiles = take 13
+    // take 13
+    let handTiles = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 2; Tile 2; Tile 2; Tile 2; Tile 3; Tile 3; Tile 3; Tile 3; Tile 4;|]
     let firstTsumo = take 1 |> Array.head
     let hand = Hand (tileArrayToHand handTiles, firstTsumo, [])
 
@@ -127,7 +128,8 @@ let shufflePile (state: GameState) =
     currentIdx <- currentIdx + n
     res
 
-  let handTiles = take 13
+  // let handTiles = take 13
+  let handTiles = [|Tile 1; Tile 1; Tile 1; Tile 1; Tile 2; Tile 2; Tile 2; Tile 2; Tile 3; Tile 3; Tile 3; Tile 3; Tile 4;|]
   let firstTsumo = take 1 |> Array.head
   let hand = Hand (tileArrayToHand handTiles, firstTsumo, [])
 
