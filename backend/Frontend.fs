@@ -141,7 +141,7 @@ let init (r: Control) =
                 | GameOver -> View.showPhase "GameOver"
                 | _ -> ()))
 
-    r.GetNode<Button>("Shop/ShopPanel/ExitShopButton").add_Pressed(fun () ->
+    r.GetNode<Button>("Shop/ExitShopButton").add_Pressed(fun () ->
         if not inputLocked then
             let (s, log) = doStep ExitShop
             afterLog log (fun () -> View.showPhase "InGame"; View.refreshInGame s; wireHandClicks()))
