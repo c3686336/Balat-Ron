@@ -15,7 +15,12 @@
     <Compile Include="Evaluator.fs" />
     <Compile Include="Items.fs" />
     <Compile Include="GameState.fs" />
+    <Compile Include="View.fs" />
+    <Compile Include="Frontend.fs" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="GodotSharp" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

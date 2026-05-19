@@ -68,7 +68,7 @@ let createGameState (rng: Random) : GameState =
     let rinshang = take 4
     // Dora indicators (1 open, 4 hidden for kans)
     let dora = take 1
-    let doraPile = take 7 // Including ura dora
+    let doraPile = take 9 // Including ura dora
 
     let remainingPile = Array.sub pile currentIdx (pile.Length - currentIdx)
 
@@ -90,7 +90,7 @@ let createGameState (rng: Random) : GameState =
         goalScore = Config.initialGoalScore
         gold = 0
         baseScore = (0, 0)
-        phase = InGame
+        phase = GameStarting
         shopItems = []
     }
 

@@ -12,12 +12,6 @@ config_version=5
 
 config/name="Balat-Ron"
 run/main_scene="uid://fv6wlutce1cu"
-config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
-config/icon="res://icon.svg"
-
-[autoload]
-
-GameController="*res://GameController.cs"
 
 [display]
 

@@ -99,7 +99,7 @@ offset_bottom = 399.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="InGame/Discard" unique_id=631125931]
+[node name="DiscardContainer" type="GridContainer" parent="InGame/Discard" unique_id=631125931]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -116,63 +116,63 @@ theme_override_constants/h_separation = 2
 theme_override_constants/v_separation = -1
 columns = 6
 
-[node name="TextureRect" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=701682242]
+[node name="TextureRect" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=701682242]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect2" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=2108427676]
+[node name="TextureRect2" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=2108427676]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect3" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=807115396]
+[node name="TextureRect3" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=807115396]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect4" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1297743751]
+[node name="TextureRect4" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=1297743751]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect5" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=916656984]
+[node name="TextureRect5" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=916656984]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect6" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1231513044]
+[node name="TextureRect6" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=1231513044]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect7" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1966608176]
+[node name="TextureRect7" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=1966608176]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect8" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=938984354]
+[node name="TextureRect8" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=938984354]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect9" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=9889410]
+[node name="TextureRect9" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=9889410]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect10" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=960781015]
+[node name="TextureRect10" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=960781015]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect11" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1664323724]
+[node name="TextureRect11" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=1664323724]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect12" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=146806978]
+[node name="TextureRect12" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=146806978]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect13" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=53200064]
+[node name="TextureRect13" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=53200064]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect14" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=435245231]
+[node name="TextureRect14" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=435245231]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
-[node name="TextureRect15" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1341953429]
+[node name="TextureRect15" type="TextureRect" parent="InGame/Discard/DiscardContainer" unique_id=1341953429]
 layout_mode = 2
 texture = ExtResource("2_bamboo1")
 
@@ -185,39 +185,39 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="InGame/VBoxContainer" unique_id=1027849112]
+[node name="ScorePanel" type="PanelContainer" parent="InGame/VBoxContainer" unique_id=1027849112]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/PanelContainer" unique_id=741027311]
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/ScorePanel" unique_id=741027311]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/PanelContainer/MarginContainer" unique_id=537568163]
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/ScorePanel/MarginContainer" unique_id=537568163]
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="InGame/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=992251708]
+[node name="ScoreLabel" type="Label" parent="InGame/VBoxContainer/ScorePanel/MarginContainer/HBoxContainer" unique_id=992251708]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Score: 3928472E27 / 2928383E28"
 label_settings = ExtResource("2_feb5d")
 horizontal_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="InGame/VBoxContainer" unique_id=891458857]
+[node name="ItemsContainer" type="HBoxContainer" parent="InGame/VBoxContainer" unique_id=891458857]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/HBoxContainer2" unique_id=88676972]
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/ItemsContainer" unique_id=88676972]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 
-[node name="PanelContainer" type="Panel" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer" unique_id=351191234]
+[node name="PanelContainer" type="Panel" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer" unique_id=351191234]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer" unique_id=1847020961]
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer" unique_id=1847020961]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -229,133 +229,133 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer" unique_id=1604230947]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer" unique_id=1604230947]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=95909589]
+[node name="Label" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=95909589]
 layout_mode = 2
 text = "ITEMS"
 label_settings = SubResource("LabelSettings_7jktm")
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=484205027]
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=484205027]
 layout_mode = 2
 
-[node name="VScrollBar" type="ScrollContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2039410922]
+[node name="ItemScroll" type="ScrollContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2039410922]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar" unique_id=71816813]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll" unique_id=71816813]
 layout_mode = 2
 
-[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1773945400]
+[node name="Item1" type="PanelContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer" unique_id=1773945400]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n" unique_id=383761298]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item1" unique_id=383761298]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n/VBoxContainer" unique_id=35670824]
+[node name="Label" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item1/VBoxContainer" unique_id=35670824]
 layout_mode = 2
 text = "TANYAO"
 label_settings = SubResource("LabelSettings_ryrav")
 
-[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n/VBoxContainer" unique_id=503949847]
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item1/VBoxContainer" unique_id=503949847]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n/VBoxContainer" unique_id=537068782]
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item1/VBoxContainer" unique_id=537068782]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet,"
 autowrap_mode = 3
 
-[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1346266305]
+[node name="Item2" type="PanelContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer" unique_id=1346266305]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2" unique_id=726213353]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item2" unique_id=726213353]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2/VBoxContainer" unique_id=848554064]
+[node name="Label" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item2/VBoxContainer" unique_id=848554064]
 layout_mode = 2
 text = "TANYAO"
 label_settings = SubResource("LabelSettings_ryrav")
 
-[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2/VBoxContainer" unique_id=72138121]
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item2/VBoxContainer" unique_id=72138121]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2/VBoxContainer" unique_id=276229670]
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item2/VBoxContainer" unique_id=276229670]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet,"
 autowrap_mode = 3
 
-[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1341589919]
+[node name="Item3" type="PanelContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer" unique_id=1341589919]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3" unique_id=1058375844]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item3" unique_id=1058375844]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3/VBoxContainer" unique_id=1577738501]
+[node name="Label" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item3/VBoxContainer" unique_id=1577738501]
 layout_mode = 2
 text = "TANYAO"
 label_settings = SubResource("LabelSettings_ryrav")
 
-[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3/VBoxContainer" unique_id=725165663]
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item3/VBoxContainer" unique_id=725165663]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3/VBoxContainer" unique_id=627045834]
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item3/VBoxContainer" unique_id=627045834]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet,"
 autowrap_mode = 3
 
-[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1297028944]
+[node name="Item4" type="PanelContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer" unique_id=1297028944]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4" unique_id=1865381784]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item4" unique_id=1865381784]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4/VBoxContainer" unique_id=2056869461]
+[node name="Label" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item4/VBoxContainer" unique_id=2056869461]
 layout_mode = 2
 text = "TANYAO"
 label_settings = SubResource("LabelSettings_ryrav")
 
-[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4/VBoxContainer" unique_id=636022712]
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item4/VBoxContainer" unique_id=636022712]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4/VBoxContainer" unique_id=1299087528]
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item4/VBoxContainer" unique_id=1299087528]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet,"
 autowrap_mode = 3
 
-[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1750945308]
+[node name="Item5" type="PanelContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer" unique_id=1750945308]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5" unique_id=91607725]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item5" unique_id=91607725]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5/VBoxContainer" unique_id=1168012103]
+[node name="Label" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item5/VBoxContainer" unique_id=1168012103]
 layout_mode = 2
 text = "TANYAO"
 label_settings = SubResource("LabelSettings_ryrav")
 
-[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5/VBoxContainer" unique_id=763161167]
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item5/VBoxContainer" unique_id=763161167]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5/VBoxContainer" unique_id=623148083]
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer/Item5/VBoxContainer" unique_id=623148083]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "Lorem ipsum dolor sit amet,"
 autowrap_mode = 3
 
-[node name="Pile" type="Control" parent="InGame/VBoxContainer/HBoxContainer2" unique_id=2043175882]
+[node name="Pile" type="Control" parent="InGame/VBoxContainer/ItemsContainer" unique_id=2043175882]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile" unique_id=231743412]
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/ItemsContainer/Pile" unique_id=231743412]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -365,113 +365,113 @@ theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer" unique_id=1815841120]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer" unique_id=1815841120]
 layout_mode = 2
 theme_override_constants/separation = -32
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer" unique_id=1324621266]
+[node name="BottomRow" type="HBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer" unique_id=1324621266]
 layout_direction = 2
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1559524434]
+[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1559524434]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=63073758]
+[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=63073758]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1149968199]
+[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1149968199]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=491243967]
+[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=491243967]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1400552816]
+[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1400552816]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="Control" type="Control" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1168085800]
+[node name="DoraSeparater" type="Control" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1168085800]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureButton23" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=126509567]
+[node name="TextureButton23" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=126509567]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton24" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1848052509]
+[node name="TextureButton24" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1848052509]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton25" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1711047904]
+[node name="TextureButton25" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1711047904]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton26" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1539500354]
+[node name="TextureButton26" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1539500354]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton27" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1742291688]
+[node name="TextureButton27" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=1742291688]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2021043348]
+[node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/BottomRow" unique_id=2021043348]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer" unique_id=1709554512]
+[node name="TopRow" type="HBoxContainer" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer" unique_id=1709554512]
 layout_direction = 2
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=707414796]
+[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=707414796]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=118304753]
+[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=118304753]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1340305951]
+[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=1340305951]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1325820558]
+[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=1325820558]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=604800585]
+[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=604800585]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="Control" type="Control" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1223297520]
+[node name="DoraSeparater" type="Control" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=1223297520]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureButton23" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=123689740]
+[node name="TextureButton23" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=123689740]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton24" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=269217432]
+[node name="TextureButton24" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=269217432]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton25" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2134904646]
+[node name="TextureButton25" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=2134904646]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton26" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=915044907]
+[node name="TextureButton26" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=915044907]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton27" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=996612469]
+[node name="TextureButton27" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=996612469]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
-[node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1257697493]
+[node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/ItemsContainer/Pile/MarginContainer/VBoxContainer/TopRow" unique_id=1257697493]
 layout_mode = 2
 texture_normal = ExtResource("4_7jktm")
 
@@ -499,67 +499,43 @@ theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer" unique_id=404872362]
+[node name="HandContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer" unique_id=404872362]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="TextureButton" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2087426625]
+[node name="TextureButton" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=2087426625]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=126830184]
+[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=126830184]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=634417558]
+[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=634417558]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2107495206]
+[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=2107495206]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=903755393]
+[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=903755393]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1316678315]
+[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=1316678315]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton7" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1582980967]
+[node name="TextureButton7" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=1582980967]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
-[node name="TextureButton8" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=337857609]
-layout_mode = 2
-texture_normal = ExtResource("2_bamboo1")
-
-[node name="TextureButton9" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2054764789]
-layout_mode = 2
-texture_normal = ExtResource("2_bamboo1")
-
-[node name="TextureButton10" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1892857718]
-layout_mode = 2
-texture_normal = ExtResource("2_bamboo1")
-
-[node name="TextureButton11" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=89674097]
-layout_mode = 2
-texture_normal = ExtResource("2_bamboo1")
-
-[node name="TextureButton12" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1101786613]
-layout_mode = 2
-texture_normal = ExtResource("2_bamboo1")
-
-[node name="TextureButton13" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1775457264]
-layout_mode = 2
-texture_normal = ExtResource("2_bamboo1")
-
-[node name="Spacer" type="Control" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1130081822]
+[node name="TsumoPaiSeparater" type="Control" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=1130081822]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="TextureButton14" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1608764482]
+[node name="TextureButton14" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HandContainer" unique_id=1608764482]
 layout_mode = 2
 texture_normal = ExtResource("2_bamboo1")
 
@@ -574,31 +550,55 @@ offset_bottom = 40.0
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer" unique_id=1064597946]
+[node name="KanContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer" unique_id=1064597946]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="TextureRect" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=1872318002]
+[node name="TextureRect" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=1872318002]
 layout_mode = 2
 texture = ExtResource("3_bamboo2")
 stretch_mode = 2
 
-[node name="TextureRect2" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=356123049]
+[node name="TextureRect2" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=356123049]
+layout_mode = 2
+texture = ExtResource("4_7jktm")
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=1197984598]
+layout_mode = 2
+texture = ExtResource("4_7jktm")
+stretch_mode = 2
+
+[node name="TextureRect4" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=1165080630]
 layout_mode = 2
 texture = ExtResource("3_bamboo2")
 stretch_mode = 2
 
-[node name="TextureRect3" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=1197984598]
+[node name="KanSeparater" type="Control" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=762643206]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="TextureRect5" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=1995527708]
 layout_mode = 2
 texture = ExtResource("3_bamboo2")
 stretch_mode = 2
 
-[node name="TextureRect4" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=1165080630]
+[node name="TextureRect6" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=713181230]
+layout_mode = 2
+texture = ExtResource("4_7jktm")
+stretch_mode = 2
+
+[node name="TextureRect7" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=1020587993]
+layout_mode = 2
+texture = ExtResource("4_7jktm")
+stretch_mode = 2
+
+[node name="TextureRect8" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" unique_id=1499165685]
 layout_mode = 2
 texture = ExtResource("3_bamboo2")
 stretch_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InGame" unique_id=91664649]
+[node name="ButtonContainer" type="HBoxContainer" parent="InGame" unique_id=91664649]
 layout_mode = 0
 offset_left = 421.0
 offset_top = 296.0
@@ -606,17 +606,17 @@ offset_right = 547.0
 offset_bottom = 326.0
 theme_override_constants/separation = 16
 
-[node name="KanButton" type="Button" parent="InGame/HBoxContainer" unique_id=684682291]
+[node name="KanButton" type="Button" parent="InGame/ButtonContainer" unique_id=684682291]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 text = "KAN"
 
-[node name="TsumoButton" type="Button" parent="InGame/HBoxContainer" unique_id=2006353992]
+[node name="TsumoButton" type="Button" parent="InGame/ButtonContainer" unique_id=2006353992]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 text = "TSUMO"
 
-[node name="PanelContainer" type="PanelContainer" parent="InGame" unique_id=2022906826]
+[node name="InfoContainer" type="PanelContainer" parent="InGame" unique_id=2022906826]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -629,7 +629,7 @@ offset_bottom = 74.5
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="InGame/PanelContainer" unique_id=1718555573]
+[node name="MarginContainer" type="MarginContainer" parent="InGame/InfoContainer" unique_id=1718555573]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 8
@@ -637,24 +637,24 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InGame/PanelContainer/MarginContainer" unique_id=504382323]
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/InfoContainer/MarginContainer" unique_id=504382323]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=2087805088]
+[node name="RoundLabel" type="Label" parent="InGame/InfoContainer/MarginContainer/VBoxContainer" unique_id=2087805088]
 layout_mode = 2
 size_flags_vertical = 0
 text = "-- ROUND 3 --"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=1237467725]
+[node name="GoldLabel" type="Label" parent="InGame/InfoContainer/MarginContainer/VBoxContainer" unique_id=1237467725]
 layout_mode = 2
 text = "Gold: 3284"
 
-[node name="Label3" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=486437377]
+[node name="TsumoLabel" type="Label" parent="InGame/InfoContainer/MarginContainer/VBoxContainer" unique_id=486437377]
 layout_mode = 2
 text = "3 tsumo left."
 
-[node name="Label4" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=910984050]
+[node name="ExtraScoreLabel" type="Label" parent="InGame/InfoContainer/MarginContainer/VBoxContainer" unique_id=910984050]
 layout_mode = 2
 text = "+ 30 han 
 + 109 fu"

@@ -1,6 +1,9 @@
 using Godot;
-using System;
 
-public partial class NewScript : Node
+public partial class Main : Control
 {
+    public override void _Ready()
+    {
+        Frontend.init(this);
+    }
 }
