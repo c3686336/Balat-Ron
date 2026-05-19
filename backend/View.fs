@@ -810,7 +810,7 @@ let animateGameEvent (event: Types.GameEvents): float =
         0.85
     | Types.RinshangDrawn t ->
         let delay = 0.0
-        let newTsumoTopLeft = handTopLeft + Vector2(tileBtnSize.X * 1f + 2f, 0f)
+        let newTsumoTopLeft = handTopLeft + Vector2(tileBtnSize.X * 2f + 0f, 0f)
 
         let fromPos = hideSourceDelayedAndGetTopLeft (rinshangSource()) rinshangTopLeft delay
         animateTileFlyDelayed t fromPos newTsumoTopLeft delay
