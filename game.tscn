@@ -36,7 +36,6 @@ grow_vertical = 2
 color = Color(0.48235294, 0.5647059, 0.70980394, 1)
 
 [node name="MainMenu" type="Control" parent="." unique_id=637089056]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -778,6 +777,7 @@ size_flags_horizontal = 4
 text = "CONFIRM"
 
 [node name="Shop" type="Control" parent="." unique_id=2006210611]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

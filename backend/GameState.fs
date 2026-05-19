@@ -157,7 +157,6 @@ let transitionTo (state: GameState) (phase: GamePhase) log =
       { state with
           honbaLeft = state.honbaLeft - 1;
           phase = InGame;
-          currentScore = 0I;
           baseScore = (0, 0) }, log
     | Shop ->
       let (state, log) = applyItemEffects state OnRoundEnd state.items log
@@ -167,6 +166,7 @@ let transitionTo (state: GameState) (phase: GamePhase) log =
       { state with
           gold = state.gold + earnedGold;
           round = state.round + 1;
+          currentScore = 0I;
           goalScore = Config.nextGoalScore state.goalScore;
           honbaLeft = Config.tsumoPerRound;
           phase = Shop;
