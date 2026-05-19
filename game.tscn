@@ -1,0 +1,869 @@
+[gd_scene format=3 uid="uid://fv6wlutce1cu"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://space-worm-theme/space_worm_theme.tres" id="1_theme"]
+[ext_resource type="Texture2D" uid="uid://qnb1eit8grff" path="res://mahjong_tiles/Bamboo1.png" id="2_bamboo1"]
+[ext_resource type="LabelSettings" uid="uid://dh6fn5e0hcm2p" path="res://title_label.tres" id="2_feb5d"]
+[ext_resource type="Texture2D" uid="uid://b1l1py6s8ooyh" path="res://mahjong_tiles/Bamboo2.png" id="3_bamboo2"]
+[ext_resource type="Texture2D" uid="uid://bu2l8y31vivoq" path="res://Ura.png" id="4_7jktm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_7jktm"]
+font_size = 32
+stacked_shadow_count = 1
+stacked_shadow_0/offset = Vector2(1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ryrav"]
+stacked_shadow_count = 1
+stacked_shadow_0/offset = Vector2(1, 1)
+
+[node name="Control" type="Control" unique_id=1198561215]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1774116955]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.48235294, 0.5647059, 0.70980394, 1)
+
+[node name="MainMenu" type="Control" parent="." unique_id=637089056]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu" unique_id=721165006]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -100.0
+offset_right = 120.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="MainMenu/VBoxContainer" unique_id=2077380767]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "BALAT-RON"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=2055709364]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "START GAME"
+
+[node name="SeedLineEdit" type="LineEdit" parent="MainMenu/VBoxContainer" unique_id=1675986244]
+layout_mode = 2
+placeholder_text = "SEED (optional)"
+
+[node name="HowToPlayButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=465653661]
+layout_mode = 2
+text = "HOW TO PLAY"
+
+[node name="OptionsButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=1751343529]
+layout_mode = 2
+text = "OPTIONS"
+
+[node name="InGame" type="Control" parent="." unique_id=168467896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Discard" type="Control" parent="InGame" unique_id=106341973]
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 35.0
+offset_right = 600.0
+offset_bottom = 399.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="InGame/Discard" unique_id=631125931]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.5
+offset_top = -40.0
+offset_right = 62.5
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = -1
+columns = 6
+
+[node name="TextureRect" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=701682242]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect2" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=2108427676]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect3" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=807115396]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect4" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1297743751]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect5" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=916656984]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect6" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1231513044]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect7" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1966608176]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect8" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=938984354]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect9" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=9889410]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect10" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=960781015]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect11" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1664323724]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect12" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=146806978]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect13" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=53200064]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect14" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=435245231]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="TextureRect15" type="TextureRect" parent="InGame/Discard/GridContainer" unique_id=1341953429]
+layout_mode = 2
+texture = ExtResource("2_bamboo1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame" unique_id=1892083371]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="InGame/VBoxContainer" unique_id=1027849112]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/PanelContainer" unique_id=741027311]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/PanelContainer/MarginContainer" unique_id=537568163]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="InGame/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=992251708]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Score: 3928472E27 / 2928383E28"
+label_settings = ExtResource("2_feb5d")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="InGame/VBoxContainer" unique_id=891458857]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/HBoxContainer2" unique_id=88676972]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+
+[node name="PanelContainer" type="Panel" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer" unique_id=351191234]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer" unique_id=1847020961]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer" unique_id=1604230947]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=95909589]
+layout_mode = 2
+text = "ITEMS"
+label_settings = SubResource("LabelSettings_7jktm")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=484205027]
+layout_mode = 2
+
+[node name="VScrollBar" type="ScrollContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2039410922]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar" unique_id=71816813]
+layout_mode = 2
+
+[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1773945400]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n" unique_id=383761298]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n/VBoxContainer" unique_id=35670824]
+layout_mode = 2
+text = "TANYAO"
+label_settings = SubResource("LabelSettings_ryrav")
+
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n/VBoxContainer" unique_id=503949847]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n/VBoxContainer" unique_id=537068782]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+text = "Lorem ipsum dolor sit amet,"
+autowrap_mode = 3
+
+[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1346266305]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2" unique_id=726213353]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2/VBoxContainer" unique_id=848554064]
+layout_mode = 2
+text = "TANYAO"
+label_settings = SubResource("LabelSettings_ryrav")
+
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2/VBoxContainer" unique_id=72138121]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n2/VBoxContainer" unique_id=276229670]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+text = "Lorem ipsum dolor sit amet,"
+autowrap_mode = 3
+
+[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1341589919]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3" unique_id=1058375844]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3/VBoxContainer" unique_id=1577738501]
+layout_mode = 2
+text = "TANYAO"
+label_settings = SubResource("LabelSettings_ryrav")
+
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3/VBoxContainer" unique_id=725165663]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n3/VBoxContainer" unique_id=627045834]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+text = "Lorem ipsum dolor sit amet,"
+autowrap_mode = 3
+
+[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1297028944]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4" unique_id=1865381784]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4/VBoxContainer" unique_id=2056869461]
+layout_mode = 2
+text = "TANYAO"
+label_settings = SubResource("LabelSettings_ryrav")
+
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4/VBoxContainer" unique_id=636022712]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n4/VBoxContainer" unique_id=1299087528]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+text = "Lorem ipsum dolor sit amet,"
+autowrap_mode = 3
+
+[node name="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5" type="PanelContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer" unique_id=1750945308]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5" unique_id=91607725]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5/VBoxContainer" unique_id=1168012103]
+layout_mode = 2
+text = "TANYAO"
+label_settings = SubResource("LabelSettings_ryrav")
+
+[node name="HSeparator" type="HSeparator" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5/VBoxContainer" unique_id=763161167]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="InGame/VBoxContainer/HBoxContainer2/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/VScrollBar/VBoxContainer/Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua_ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n5/VBoxContainer" unique_id=623148083]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+text = "Lorem ipsum dolor sit amet,"
+autowrap_mode = 3
+
+[node name="Pile" type="Control" parent="InGame/VBoxContainer/HBoxContainer2" unique_id=2043175882]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile" unique_id=231743412]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 24.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer" unique_id=1815841120]
+layout_mode = 2
+theme_override_constants/separation = -32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer" unique_id=1324621266]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1559524434]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=63073758]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1149968199]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=491243967]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1400552816]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="Control" type="Control" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1168085800]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureButton23" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=126509567]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton24" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1848052509]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton25" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1711047904]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton26" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1539500354]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton27" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1742291688]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2021043348]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer" unique_id=1709554512]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=707414796]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=118304753]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1340305951]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1325820558]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=604800585]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="Control" type="Control" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1223297520]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureButton23" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=123689740]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton24" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=269217432]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton25" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2134904646]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton26" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=915044907]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton27" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=996612469]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="TextureButton28" type="TextureButton" parent="InGame/VBoxContainer/HBoxContainer2/Pile/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1257697493]
+layout_mode = 2
+texture_normal = ExtResource("4_7jktm")
+
+[node name="Hand" type="Control" parent="InGame/VBoxContainer" unique_id=405146329]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand" unique_id=2020944808]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -173.0
+offset_top = -44.0
+offset_right = 173.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer" unique_id=842805291]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer" unique_id=404872362]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureButton" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2087426625]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton2" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=126830184]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton3" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=634417558]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton4" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2107495206]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton5" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=903755393]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton6" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1316678315]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton7" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1582980967]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton8" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=337857609]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton9" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2054764789]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton10" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1892857718]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton11" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=89674097]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton12" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1101786613]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="TextureButton13" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1775457264]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="Spacer" type="Control" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1130081822]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureButton14" type="TextureButton" parent="InGame/VBoxContainer/Hand/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1608764482]
+layout_mode = 2
+texture_normal = ExtResource("2_bamboo1")
+
+[node name="Kans" type="Control" parent="InGame/VBoxContainer/Hand/HBoxContainer" unique_id=2146031625]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans" unique_id=1110283890]
+layout_mode = 0
+offset_top = 8.0
+offset_right = 96.0
+offset_bottom = 40.0
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer" unique_id=1064597946]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=1872318002]
+layout_mode = 2
+texture = ExtResource("3_bamboo2")
+stretch_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=356123049]
+layout_mode = 2
+texture = ExtResource("3_bamboo2")
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=1197984598]
+layout_mode = 2
+texture = ExtResource("3_bamboo2")
+stretch_mode = 2
+
+[node name="TextureRect4" type="TextureRect" parent="InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/HBoxContainer" unique_id=1165080630]
+layout_mode = 2
+texture = ExtResource("3_bamboo2")
+stretch_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InGame" unique_id=91664649]
+layout_mode = 0
+offset_left = 421.0
+offset_top = 296.0
+offset_right = 547.0
+offset_bottom = 326.0
+theme_override_constants/separation = 16
+
+[node name="KanButton" type="Button" parent="InGame/HBoxContainer" unique_id=684682291]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "KAN"
+
+[node name="TsumoButton" type="Button" parent="InGame/HBoxContainer" unique_id=2006353992]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "TSUMO"
+
+[node name="PanelContainer" type="PanelContainer" parent="InGame" unique_id=2022906826]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -119.0
+offset_top = -36.0
+offset_bottom = 74.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/PanelContainer" unique_id=1718555573]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/PanelContainer/MarginContainer" unique_id=504382323]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=2087805088]
+layout_mode = 2
+size_flags_vertical = 0
+text = "-- ROUND 3 --"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=1237467725]
+layout_mode = 2
+text = "Gold: 3284"
+
+[node name="Label3" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=486437377]
+layout_mode = 2
+text = "3 tsumo left."
+
+[node name="Label4" type="Label" parent="InGame/PanelContainer/MarginContainer/VBoxContainer" unique_id=910984050]
+layout_mode = 2
+text = "+ 30 han 
++ 109 fu"
+
+[node name="ScorePresentation" type="Control" parent="." unique_id=1654028404]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScorePanel" type="VBoxContainer" parent="ScorePresentation" unique_id=86069238]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -120.0
+offset_right = 160.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ScoringTitle" type="Label" parent="ScorePresentation/ScorePanel" unique_id=261561448]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "TSUMO!"
+horizontal_alignment = 1
+
+[node name="ScoreBreakdown" type="VBoxContainer" parent="ScorePresentation/ScorePanel" unique_id=99400176]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HanFuLabel" type="Label" parent="ScorePresentation/ScorePanel/ScoreBreakdown" unique_id=580631466]
+layout_mode = 2
+text = "0 han  ·  0 fu"
+horizontal_alignment = 1
+
+[node name="DoraLabel" type="Label" parent="ScorePresentation/ScorePanel/ScoreBreakdown" unique_id=1104525238]
+layout_mode = 2
+text = "Dora: +0"
+horizontal_alignment = 1
+
+[node name="ExtraScoreList" type="VBoxContainer" parent="ScorePresentation/ScorePanel/ScoreBreakdown" unique_id=1305160123]
+layout_mode = 2
+
+[node name="FinalScoreLabel" type="Label" parent="ScorePresentation/ScorePanel" unique_id=285320094]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0 points"
+horizontal_alignment = 1
+
+[node name="GoalProgress" type="Label" parent="ScorePresentation/ScorePanel" unique_id=185435794]
+layout_mode = 2
+text = "0 / 4000"
+horizontal_alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="ScorePresentation/ScorePanel" unique_id=2076132945]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "CONFIRM"
+
+[node name="Shop" type="Control" parent="." unique_id=2006210611]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ShopPanel" type="VBoxContainer" parent="Shop" unique_id=1541312053]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="ShopTitle" type="Label" parent="Shop/ShopPanel" unique_id=1629858315]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SHOP"
+horizontal_alignment = 1
+
+[node name="GoldLabel" type="Label" parent="Shop/ShopPanel" unique_id=1049392458]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Gold: 0  ·  Items: 0/5"
+horizontal_alignment = 1
+
+[node name="ShopItemsLabel" type="Label" parent="Shop/ShopPanel" unique_id=1861630620]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Available to buy:"
+
+[node name="ShopItemList" type="VBoxContainer" parent="Shop/ShopPanel" unique_id=361540840]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Separator" type="HSeparator" parent="Shop/ShopPanel" unique_id=1014884098]
+layout_mode = 2
+
+[node name="PlayerItemsLabel" type="Label" parent="Shop/ShopPanel" unique_id=2143709207]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Your items:"
+
+[node name="PlayerItemList" type="VBoxContainer" parent="Shop/ShopPanel" unique_id=1411399625]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ExitShopButton" type="Button" parent="Shop/ShopPanel" unique_id=2144035605]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "CONTINUE"
+
+[node name="GameOver" type="Control" parent="." unique_id=1400165214]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GameOver" unique_id=442732050]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -59.0
+offset_right = 77.0
+offset_bottom = 59.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GameOver/PanelContainer" unique_id=1157350906]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 15
+
+[node name="GameOverPanel" type="VBoxContainer" parent="GameOver/PanelContainer/MarginContainer" unique_id=490148996]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="GameOver/PanelContainer/MarginContainer/GameOverPanel" unique_id=1501100870]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="FinalRoundLabel" type="Label" parent="GameOver/PanelContainer/MarginContainer/GameOverPanel" unique_id=867757041]
+layout_mode = 2
+text = "Reached round 0"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="GameOver/PanelContainer/MarginContainer/GameOverPanel" unique_id=1701719739]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "PLAY AGAIN"
+
+[node name="Options" type="Control" parent="." unique_id=948846065]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HowToPlay" type="Control" parent="." unique_id=1231966414]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EventLog" type="RichTextLabel" parent="." unique_id=617017987]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+fit_content = true
+scroll_following = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=995270604]
