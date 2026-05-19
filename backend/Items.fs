@@ -121,8 +121,8 @@ let allItems : Item list = [
         match event with
           | Honba ->
             match item.state with
-              | Integer n when n <> 1 -> [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)]
-              | Integer _ -> [DiscloseNMoreDora 1; SelfDestruct]
+              | Integer n when n <> 0 -> [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)]
+              | Integer _ -> [SelfDestruct]
               | Nothing -> []
           | _ -> []
     state = Integer 3}
