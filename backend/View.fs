@@ -364,8 +364,6 @@ let setNextKanAnimationSources (tile: Types.Tile) (source: Control) =
                  s.ReplaceBy(empty)
                  topLeft, Some(empty))
 
-    // Hide them and 
-    
     let padded =
         if positions.Length >= 4 then positions
         else positions @ List.replicate (4 - positions.Length) (sourcePos, None)
@@ -384,8 +382,8 @@ let private takeKanSources fallback =
     | [] -> List.replicate 4 fallback
     | sources ->
         nextKanSources <- []
-        // for (_, source) in sources do
-        //     source |> Option.iter collapseHandControl
+        for (_, source) in sources do
+            source |> Option.iter collapseHandControl
         let positions = sources |> List.map fst
         if positions.Length >= 4 then positions
         else positions @ List.replicate (4 - positions.Length) fallback
@@ -830,7 +828,7 @@ let animateGameEvent (event: Types.GameEvents): float =
         0.85
     | Types.RinshangDrawn t ->
         let delay = 0.0
-        let newTsumoTopLeft = handTopLeft - Vector2(tileBtnSize.X * 3f - 1f, 0f)
+        let newTsumoTopLeft = handTopLeft + Vector2(tileBtnSize.X * 1f + 2f, 0f)
 
         let fromPos = hideSourceDelayedAndGetTopLeft (rinshangSource()) rinshangTopLeft delay
         animateTileFlyDelayed t fromPos newTsumoTopLeft delay
