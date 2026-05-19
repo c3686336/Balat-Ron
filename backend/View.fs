@@ -79,10 +79,10 @@ let refreshHand (hand: Types.Hand) =
     hc.AddChild(tb)
 
     // Kans
-    let kc = root.GetNode<HBoxContainer>("InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer")
+    let kc = root.GetNode<HBoxContainer>("InGame/Kans/MarginContainer/KanContainer")
     clear kc
     let u = ura()
-    for (Types.Kantsu (Types.Tile v)) in kantsu do
+    for (Types.Kantsu (Types.Tile v)) in List.rev kantsu do
         kc.AddChild(mkTexRect (tex v))
         for _ in 1..2 do kc.AddChild(mkTexRect u)
         kc.AddChild(mkTexRect (tex v))
@@ -536,25 +536,15 @@ let private hideSourceDelayedAndGetTopLeft (source: TextureButton option) fallba
         pos
     | None -> fallback
 
-let private kanDestinationTopLeft () =
-    match tryControl "InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" with
-    | Some c -> Some(c.GlobalPosition + Vector2(8f, 0f))
-    | None -> None
-
-let private kanDestinationTopLefts (kantsuCount: int) fallback =
-    let basePos = kanDestinationTopLeft() |> Option.defaultValue fallback
-    let groupOffset = float32 kantsuCount * 96.0f
-    let start = basePos + Vector2(groupOffset, 0f)
+let private kanDestinationTopLefts fallback =
+    let start =
+        match tryControl "InGame/Kans/MarginContainer/KanContainer" with
+        | Some c -> c.GlobalPosition
+        | None -> fallback
     [ start
       start + Vector2(22f, 0f)
       start + Vector2(44f, 0f)
       start + Vector2(66f, 0f) ]
-
-let private shiftedKanDestinationTopLefts (kantsuCount: int) (collapsedSlots: int) fallback =
-    let handSlotsRemovedBeforeAside = max 0 (collapsedSlots - 1)
-    let collapseOffset = float32 handSlotsRemovedBeforeAside * (tileBtnSize.X + 2.0f) + 1.0f
-    kanDestinationTopLefts kantsuCount fallback
-    |> List.map (fun pos -> pos - Vector2(collapseOffset, 0f))
 
 let private nextDiscardSlotTopLeft () =
     match tryControl "InGame/Discard/DiscardContainer" with
@@ -734,25 +724,17 @@ let private closeHandAfterKan () =
                        animateTileFly tile fromPos toPos)
         |> ignore
 
-let private openKanAsideSlots () =
-    match tryControl "InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" with
-    | Some (:? HBoxContainer as kc) ->
-        if kc.GetChildCount() > 0 then
-            let groupGap = new Control()
-            groupGap.CustomMinimumSize <- Vector2(0f, 0f)
-            kc.AddChild(groupGap)
-            kc.MoveChild(groupGap, 0)
-            animateMinWidth groupGap 8.0 0.34
-
-        [ for _ in 1 .. 4 ->
-            let slot = new Control()
-            slot.CustomMinimumSize <- Vector2(0f, 0f)
-            kc.AddChild(slot)
-            kc.MoveChild(slot, 0)
-            let pos = slot.GlobalPosition
-            animateMinWidth slot (float tileBtnSize.X) 0.34
-            pos ]
-    | _ -> []
+// let private openKanAsideSlots () =
+//     match tryControl "InGame/Kans/MarginContainer/KanContainer" with
+//     | Some (:? HBoxContainer as kc) ->
+//         let newGroupWidth = tileBtnSize.X * 4.0f + 2.0f * 3.0f
+//         let group = new Control()
+//         group.CustomMinimumSize <- Vector2(0f, 0f)
+//         kc.AddChild(group)
+//         kc.MoveChild(group, 0)
+//         animateMinWidth group (float newGroupWidth) 0.34
+//         kanDestinationTopLefts kc.GlobalPosition
+//     | _ -> []
 
 let private animateTsumoIntoSortedSlot fallback =
     match takePreviousTsumo() with
@@ -777,7 +759,7 @@ let private tilesText tiles =
     tiles |> List.map string |> String.concat ""
 
 let private kantsuCount () =
-    match tryControl "InGame/VBoxContainer/Hand/HBoxContainer/Kans/MarginContainer/KanContainer" with
+    match tryControl "InGame/Kans/MarginContainer/KanContainer" with
     | Some c ->
         c.GetChildren()
         |> Seq.filter (fun child -> match child with :? TextureRect -> true | _ -> false)
@@ -842,9 +824,14 @@ let animateGameEvent (event: Types.GameEvents): float =
         let sources = takeKanSources fallback
 
         closeHandAfterKan()
-        openKanAsideSlots() |> ignore
-        let destinations = shiftedKanDestinationTopLefts (kantsuCount()) sources.Length (handTopLeft + Vector2(48f, 0f))
-        List.zip sources destinations
+
+        let kc = root.GetNode<HBoxContainer>("InGame/Kans/MarginContainer/KanContainer")
+        let kcTopLeft = kc.GlobalPosition + Vector2(kc.Size.X - 20f, 0f)
+        let nk = float32 <| kantsuCount()
+        let kcTopRight = kcTopLeft - Vector2(nk * 98.0f, 0f)
+        let offset = Vector2(2f + 20f, 0f)
+
+        List.zip sources [kcTopRight - 3f * offset; kcTopRight - 2f * offset; kcTopRight - offset; kcTopRight]
         |> List.iteri (fun i (fromPos, toPos) ->
             let finalTexture = if i = 1 || i = 2 then Some(ura()) else None
             animateTileFlyWithTextureDelayed t finalTexture fromPos toPos 0.0)
