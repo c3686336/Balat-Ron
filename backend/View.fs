@@ -519,7 +519,7 @@ let private kanDestinationTopLefts (kantsuCount: int) fallback =
 
 let private shiftedKanDestinationTopLefts (kantsuCount: int) (collapsedSlots: int) fallback =
     let handSlotsRemovedBeforeAside = max 0 (collapsedSlots - 1)
-    let collapseOffset = float32 handSlotsRemovedBeforeAside * (tileBtnSize.X + 2.0f) + 2.0f
+    let collapseOffset = float32 handSlotsRemovedBeforeAside * (tileBtnSize.X + 2.0f) + 1.0f
     kanDestinationTopLefts kantsuCount fallback
     |> List.map (fun pos -> pos - Vector2(collapseOffset, 0f))
 
