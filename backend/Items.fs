@@ -207,5 +207,6 @@ let allItems : Item list = [
     description = "Declaring tsumo does not progress the honba and does not decrease the tsumoLeft. The honba is progressed only when the pile is empty, at which tsumoleft should be decremented."
     rarity = Rare;
     cost = 200;
-    effect = fun state _ event -> match event with | OnTsumo -> [SuppressHonba]}
+    effect = fun state _ event -> match event with | OnTsumo -> [SuppressHonba];
+    state = Nothing}
   ]

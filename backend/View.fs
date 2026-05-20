@@ -2,6 +2,7 @@ module View
 
 open Godot
 open System
+open System.Globalization
 open System.Collections.Generic
 
 let mutable private root: Control = null
@@ -31,6 +32,14 @@ let clear (parent: Node) =
     for c in parent.GetChildren() do parent.RemoveChild(c); c.QueueFree()
 
 let tileBtnSize = Vector2(20f, 28f)
+
+let private scoreScientificThreshold = 1000000000I
+
+let private formatScore (score: bigint) =
+    if score >= scoreScientificThreshold then
+        (float score).ToString("0.###e+0", CultureInfo.InvariantCulture)
+    else
+        score.ToString()
 
 let mkTexBtn tileValue =
     let b = new TextureButton()
@@ -213,8 +222,12 @@ let refreshScore (score: bigint) (goal: bigint) =
 let refreshButtonStates (state: Types.GameState) =
     let kanBtn = root.GetNode<Button>("InGame/ButtonContainer/KanButton")
     let tsumoBtn = root.GetNode<Button>("InGame/ButtonContainer/TsumoButton")
+    let confirmPileEmptyBtn = root.GetNode<Button>("InGame/ButtonContainer/ConfirmPileEmptyButton")
+    let pileEmpty = GameState.isPileEmpty state
     kanBtn.Disabled <- not (GameState.canAnyKan state)
     tsumoBtn.Disabled <- not (GameState.canTsumo state)
+    confirmPileEmptyBtn.Visible <- pileEmpty
+    confirmPileEmptyBtn.Disabled <- not pileEmpty
 
 // ── Full InGame refresh ──
 let refreshInGame (state: Types.GameState) =
@@ -246,6 +259,9 @@ let refreshShop (state: Types.GameState) =
         b.Text <- $"[{i}] Sell {item.name} (+{Config.discount item.cost}G)"
         sl.AddChild(b)
 
+let refreshGameOver (state: Types.GameState) =
+    root.GetNode<Label>("GameOver/PanelContainer/MarginContainer/GameOverPanel/FinalRoundLabel").Text <- $"Reached round {state.round}"
+
 // ── Score breakdown ──
 let showScoreBreakdown (log: Types.GameEvents list) (state: Types.GameState) (isEmptyPileEnd: bool) =
     let el = root.GetNode<VBoxContainer>("ScorePresentation/ScorePanel/ScoreBreakdown/ExtraScoreList")
@@ -255,9 +271,13 @@ let showScoreBreakdown (log: Types.GameEvents list) (state: Types.GameState) (is
     clear el
     dl.Text <- "Dora: +0"
     let (han, fu) = state.baseScore
+    let addedScore =
+        log
+        |> List.tryPick (function | Types.Scored (_, _, score) -> Some score | _ -> None)
+        |> Option.defaultValue 0I
     root.GetNode<Label>("ScorePresentation/ScorePanel/ScoreBreakdown/HanFuLabel").Text <- $"{han} han  ·  {fu} fu"
-    root.GetNode<Label>("ScorePresentation/ScorePanel/FinalScoreLabel").Text <- $"{state.currentScore} points"
-    root.GetNode<Label>("ScorePresentation/ScorePanel/GoalProgress").Text <- $"{state.currentScore} / {state.goalScore}"
+    root.GetNode<Label>("ScorePresentation/ScorePanel/FinalScoreLabel").Text <- $"+{formatScore addedScore} points"
+    root.GetNode<Label>("ScorePresentation/ScorePanel/GoalProgress").Text <- $"{formatScore state.currentScore} / {formatScore state.goalScore}"
     for e in log do
         match e with
         | Types.EarnedExtraScore (h, f, Types.Dora) -> dl.Text <- $"Dora: +{h}"

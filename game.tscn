@@ -36,6 +36,7 @@ grow_vertical = 2
 color = Color(0.48235294, 0.5647059, 0.70980394, 1)
 
 [node name="MainMenu" type="Control" parent="." unique_id=637089056]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -82,7 +83,6 @@ layout_mode = 2
 text = "OPTIONS"
 
 [node name="InGame" type="Control" parent="." unique_id=168467896]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -653,11 +653,16 @@ layout_mode = 2
 
 [node name="ButtonContainer" type="HBoxContainer" parent="InGame" unique_id=91664649]
 layout_mode = 0
-offset_left = 421.0
+offset_left = 344.0
 offset_top = 296.0
-offset_right = 547.0
+offset_right = 600.0
 offset_bottom = 326.0
 theme_override_constants/separation = 16
+
+[node name="ConfirmPileEmptyButton" type="Button" parent="InGame/ButtonContainer" unique_id=1113018394]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+text = "END ROUND"
 
 [node name="KanButton" type="Button" parent="InGame/ButtonContainer" unique_id=684682291]
 custom_minimum_size = Vector2(64, 0)

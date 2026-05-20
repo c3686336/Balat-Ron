@@ -53,12 +53,6 @@ let rec wireHandClicks () =
                 elif kanMode then
                     View.animateFloat "Cannot kan" (Color(1f, 0.3f, 0.3f))
                     View.refreshInGame state; wireHandClicks()
-                elif GameState.isPileEmpty state then
-                    let (s, log) = doStep ConfirmPileEmpty
-                    afterLog log (fun () ->
-                        match s.phase with
-                        | ScorePresentation -> View.showPhase "ScorePresentation"; View.showScoreBreakdown log s true
-                        | _ -> View.refreshInGame state; wireHandClicks())
                 elif GameState.canDiscard (Tile v) state then
                     View.setNextHandAnimationSource b
                     View.captureCurrentTsumoForDrawAnimation state.hand (Some(Tile v))
@@ -85,6 +79,15 @@ let wireActionButtons () =
             elif GameState.canAnyKan state then
                 kanMode <- true
                 View.setKanModeHint true)
+
+    let confirmPileEmptyBtn = root.GetNode<Button>("InGame/ButtonContainer/ConfirmPileEmptyButton")
+    confirmPileEmptyBtn.add_Pressed(fun () ->
+        if not inputLocked && GameState.isPileEmpty state then
+            let (s, log) = doStep ConfirmPileEmpty
+            afterLog log (fun () ->
+                match s.phase with
+                | ScorePresentation -> View.showPhase "ScorePresentation"; View.showScoreBreakdown log s true
+                | _ -> View.refreshInGame state; wireHandClicks()))
 
 let rec wireShopButtons () =
     let bl = root.GetNode<VBoxContainer>("Shop/ShopPanel/ShopItemList")
@@ -138,7 +141,7 @@ let init (r: Control) =
                 match s.phase with
                 | Shop -> View.showPhase "Shop"; View.refreshShop s; wireShopButtons()
                 | InGame -> View.showPhase "InGame"; View.refreshInGame s; wireHandClicks()
-                | GameOver -> View.showPhase "GameOver"
+                | GameOver -> View.refreshGameOver s; View.showPhase "GameOver"
                 | _ -> ()))
 
     r.GetNode<Button>("Shop/ExitShopButton").add_Pressed(fun () ->
@@ -149,6 +152,7 @@ let init (r: Control) =
     r.GetNode<Button>("GameOver/PanelContainer/MarginContainer/GameOverPanel/RestartButton").add_Pressed(fun () ->
         if not inputLocked then
             state <- createStateFromSeedText()
-            View.showPhase "InGame"; View.refreshInGame state; wireHandClicks())
+            kanMode <- false
+            View.showPhase "MainMenu")
 
     View.showPhase "MainMenu"
