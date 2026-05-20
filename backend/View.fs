@@ -259,8 +259,9 @@ let refreshShop (state: Types.GameState) =
         b.Text <- $"[{i}] Sell {item.name} (+{Config.discount item.cost}G)"
         sl.AddChild(b)
 
-let refreshGameOver (state: Types.GameState) =
+let refreshGameOver (state: Types.GameState) (seed: string) =
     root.GetNode<Label>("GameOver/PanelContainer/MarginContainer/GameOverPanel/FinalRoundLabel").Text <- $"Reached round {state.round}"
+    root.GetNode<Label>("GameOver/PanelContainer/MarginContainer/GameOverPanel/SeedLabel").Text <- $"Seed: {seed}"
 
 // ── Score breakdown ──
 let showScoreBreakdown (log: Types.GameEvents list) (state: Types.GameState) (isEmptyPileEnd: bool) =

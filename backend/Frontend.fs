@@ -10,14 +10,16 @@ let mutable private root: Control = null
 
 let mutable private kanMode = false
 let mutable private inputLocked = false
+let mutable private currentSeed = ""
 
 let private createStateFromSeedText () =
     let seedText = root.GetNode<LineEdit>("MainMenu/VBoxContainer/SeedLineEdit").Text.Trim()
-    let rng =
+    let seed =
         match Int32.TryParse seedText with
-        | true, seed -> Random(seed)
-        | false, _ -> Random()
-    createGameState rng
+        | true, seed -> seed
+        | false, _ -> Random().Next()
+    currentSeed <- string seed
+    createGameState (Random(seed))
 
 let renderLog log onFinished =
     View.animateGameEvents log onFinished
@@ -141,7 +143,7 @@ let init (r: Control) =
                 match s.phase with
                 | Shop -> View.showPhase "Shop"; View.refreshShop s; wireShopButtons()
                 | InGame -> View.showPhase "InGame"; View.refreshInGame s; wireHandClicks()
-                | GameOver -> View.refreshGameOver s; View.showPhase "GameOver"
+                | GameOver -> View.refreshGameOver s currentSeed; View.showPhase "GameOver"
                 | _ -> ()))
 
     r.GetNode<Button>("Shop/ExitShopButton").add_Pressed(fun () ->
