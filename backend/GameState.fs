@@ -106,11 +106,17 @@ let canKan (t: Tile) (state: GameState) = state.hand.IsKanValid(t) && state.rins
 let canAnyKan (state: GameState) = [1..9] |> List.exists (fun v -> canKan (Tile v) state)
 let isPileEmpty (state: GameState) = Array.isEmpty state.pile
 
-let isWrapAroundEnabled (state: GameState) =
+let queryItems  (effect: ItemEffect) (event: ItemEvent) (state: GameState) =
     state.items
     |> List.exists (fun item -> 
-        item.effect state item Parsing 
-        |> List.contains AllowWrapAroundShuntsu)
+        item.effect state item event 
+        |> List.contains effect)
+
+let isWrapAroundEnabled =
+    queryItems AllowWrapAroundShuntsu Parsing 
+
+let isHonbaSuppressed =
+    queryItems SuppressHonba OnTsumo
 
 let canTsumo (state: GameState) =
     parseHand (isWrapAroundEnabled state) state.hand |> List.isEmpty |> not
@@ -244,7 +250,10 @@ let update (state: GameState) (input: PlayerInput) =
               |> List.maxBy (fun (state, _) ->
                              let (han, fu) = state.baseScore
                              score han fu)
-          transitionTo newState ScorePresentation log
+          if not (isHonbaSuppressed newState) then
+            transitionTo newState ScorePresentation log
+          else
+            newState, log
 
         | ConfirmPileEmpty ->
           let (state, log) = applyItemEffects state WhenPileEmpty state.items []

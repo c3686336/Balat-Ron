@@ -99,7 +99,7 @@ let allItems : Item list = [
     state = Nothing };
   
   { id = Guid.NewGuid(); name = "죽은 자의 소생";
-    description = "황패유국 시 버림패와 사용하지 않은 영상패, 도라패를 다시 섞어 패산으로 합니다. 이 아이템은 한 번 사용 후 다시 상점으로 돌아갑니다."
+    description = "황패유국 시 버림패를 다시 섞어 패산으로 합니다. 이 아이템은 한 번 사용 후 다시 상점으로 돌아갑니다."
     rarity = Uncommon;
     cost = 150;
     effect = fun state _ event -> match event with | WhenPileEmpty -> [ShufflePile DiscardToDrawPile; SelfDestruct ] | _ -> [];
@@ -114,8 +114,8 @@ let allItems : Item list = [
 
   { id = Guid.NewGuid(); name = "도라 +1"
     description = "도라 1장 추가, 단 본장 3회 후 삭제"
-    rarity = Common;
-    cost = 100;
+    rarity = Uncommon;
+    cost = 200;
     effect =
       fun state item event ->
         match event with
@@ -163,7 +163,7 @@ let allItems : Item list = [
 
   { id = Guid.NewGuid();
     name = "건강박수";
-    description = "1 혹은 9 패 하나당 +10부"
+    description = "1 혹은 9 패 하나당 +20부"
     rarity = Uncommon;
     cost = 200;
     effect =
@@ -174,24 +174,24 @@ let allItems : Item list = [
               (if t.IsTerminal() then 1 else 0)
               + (Array.sum <| Array.mapi (fun i x -> if i = 1 || i = 9 then x else 0) h)
               + 4 * (List.length <| List.filter (fun (Kantsu t) -> t.IsTerminal()) k)
-            [ ExtraScore (0, terminalCount * 10) ]
+            [ ExtraScore (0, terminalCount * 20) ]
           | _ -> []
     state = Nothing; };
 
   { id = Guid.NewGuid();
     name = "Rinshankaihou"
-    description = "+1 han if won immediately after declaring kan"
+    description = "+3 han if won immediately after declaring kan"
     rarity = Uncommon;
     cost = 150;
-    effect = fun state _ event -> match event with | OnYakuCalc _ when state.isRinshanKaihouApplicable -> [ExtraScore (1, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc _ when state.isRinshanKaihouApplicable -> [ExtraScore (3, 0)] | _ -> [];
     state = Nothing }
 
   { id = Guid.NewGuid();
     name = "Tenhou"
-    description = "+5 han if won by the first draw"
+    description = "+3 han if won by the first draw"
     rarity = Uncommon;
     cost = 150;
-    effect = fun state _ event -> match event with | OnYakuCalc _ when state.isTenhouApplicable -> [ExtraScore (5, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc _ when state.isTenhouApplicable -> [ExtraScore (3, 0)] | _ -> [];
     state = Nothing }
 
   { id = Guid.NewGuid();
@@ -202,7 +202,10 @@ let allItems : Item list = [
     effect = fun state _ event -> match event with | Parsing -> [AllowWrapAroundShuntsu] | _ -> []
     state = Nothing }
 
-  // { id = Guid.NewGuid();
-  //   name = "Riichi"
-  //   description = "Declaring tsumo does not progress the honba and does not decrease the tsumoLeft. The honba is progressed only when the pile is empty, at which tsumoleft should be decremented." }
+  { id = Guid.NewGuid();
+    name = "Riichi"
+    description = "Declaring tsumo does not progress the honba and does not decrease the tsumoLeft. The honba is progressed only when the pile is empty, at which tsumoleft should be decremented."
+    rarity = Rare;
+    cost = 200;
+    effect = fun state _ event -> match event with | OnTsumo -> [SuppressHonba]}
   ]

@@ -23,6 +23,7 @@ let rarityWeight (r: Rarity) =
     | Uncommon -> 50.0
     | Rare -> 30.0
     | Legendary -> 10.0
+    | Mythical -> 5.0
 
 let chooseShopItems (rng: Random) count (items: Item list) =
     let rec gather acc pool needed =

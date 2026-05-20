@@ -7,6 +7,7 @@ type Rarity =
   | Uncommon
   | Rare
   | Legendary
+  | Mythical
 
   override this.ToString() =
     match this with
@@ -14,6 +15,7 @@ type Rarity =
     | Uncommon -> "Uncommon"
     | Rare -> "Rare"
     | Legendary -> "Legendary"
+    | Mythical -> "Mythical"
 
 type Tile =
   | Tile of int
@@ -235,6 +237,7 @@ and ItemEffect =
   | DiscloseUraDora
   | AllowWrapAroundShuntsu
   | ShufflePile of ShuffleScope
+  | SuppressHonba
 
 and ItemEffects = Map<ItemEvent, (Item * ItemEffect list) list>
 
