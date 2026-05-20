@@ -35,6 +35,7 @@ let renderLog log =
         | NotEnoughGold -> printfn "Not enough gold."
         | InventoryFull -> printfn "Inventory full."
         | ShopItemNotFound -> printfn "Item not available."
+        | ItemAlreadyOwned -> printfn "You already own that item."
         | ShuffledPile s -> printfn $"Pile shuffled ({s})"
         | RevealedDora tiles ->
             let doraStr = tiles |> List.map string |> String.concat ""
@@ -56,7 +57,7 @@ let rec askInGame (state: GameState): PlayerInput =
     | _ -> askInGame state
 
 let rec askShop (state: GameState): PlayerInput =
-    printfn $"Gold: {state.gold} | Items: {state.items.Length}/{Config.maxItems}"
+    printfn $"Gold: {state.gold} | Items: {state.items.Length}/{state.maxItems}"
     printfn "\nYour items (sell):"
     if state.items.IsEmpty then printfn "  (None)"
     else
@@ -118,7 +119,7 @@ let main argv =
                 let (newState, log) = step state (askShop state)
                 state <- newState
                 let isTransaction =
-                    log |> List.exists (function Bought _ | Sold _ | NotEnoughGold | InventoryFull | ShopItemNotFound -> true | _ -> false)
+                    log |> List.exists (function Bought _ | Sold _ | NotEnoughGold | InventoryFull | ShopItemNotFound | ItemAlreadyOwned -> true | _ -> false)
                 if not isTransaction && state.phase = Shop then inShop <- false
 
         | _ -> ()

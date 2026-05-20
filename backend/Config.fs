@@ -1,6 +1,6 @@
 module Config
 
-let tsumoPerRound = 5
+let tsumoPerRound = 6
 
 let initialGoalScore = 4000I // - 3000I
 

@@ -26,6 +26,8 @@ let applyItemEffects (state: GameState) (event: ItemEvent) items log =
               { state with honbaLeft = state.honbaLeft + n }, (log @ [EarnedExtraHonba n])
             | AddGold n ->
               { state with gold = state.gold + n }, (log @ [EarnedGold n])
+            | AddMaxItems n ->
+              { state with maxItems = max Config.maxItems (state.maxItems + n) }, log
             | UpdateItemState itemState ->
               let newItems = state.items |> List.map (fun x -> if x.id = item.id then {x with state = itemState} else x)
               { state with items = newItems },
@@ -94,6 +96,7 @@ let createGameState (rng: Random) : GameState =
         canDeclareTsumo = true
         // items = Yaku.yakuItems
         items = []
+        maxItems = Config.maxItems
         currentScore = 0I
         goalScore = Config.initialGoalScore
         gold = 0
@@ -122,7 +125,17 @@ let isHonbaSuppressed =
 let canTsumo (state: GameState) =
     state.canDeclareTsumo && (parseHand (isWrapAroundEnabled state) state.hand |> List.isEmpty |> not)
 
-let canBuy (item: Item) (state: GameState) = state.gold >= item.cost && state.items.Length < Config.maxItems
+let private itemIncreasesMaxItems (state: GameState) (item: Item) =
+    item.effect state item WhenObtained
+    |> List.exists (function | AddMaxItems n when n > 0 -> true | _ -> false)
+
+let alreadyOwnsItem (item: Item) (state: GameState) =
+    state.items |> List.exists (fun x -> x.name = item.name)
+
+let canBuy (item: Item) (state: GameState) =
+    state.gold >= item.cost
+    && not (alreadyOwnsItem item state)
+    && (state.items.Length < state.maxItems || itemIncreasesMaxItems state item)
 
 let shufflePile (state: GameState) =
   let mutable pile = List.toArray allTiles
@@ -285,7 +298,10 @@ let update (state: GameState) (input: PlayerInput) =
           | Buy item when not (state.shopItems |> List.exists (fun x -> x.name = item.name)) ->
             state, [ShopItemNotFound]
 
-          | Buy item when state.items.Length >= Config.maxItems ->
+          | Buy item when alreadyOwnsItem item state ->
+            state, [ItemAlreadyOwned]
+
+          | Buy item when state.items.Length >= state.maxItems && not (itemIncreasesMaxItems state item) ->
             state, [InventoryFull]
 
           | Buy item when state.gold >= item.cost ->
@@ -306,7 +322,7 @@ let update (state: GameState) (input: PlayerInput) =
             let state = { state with
                             items = newItems
                             gold = state.gold + discount item.cost
-                            shopItems = returnedItem :: state.shopItems }
+                            shopItems = returnedItem :: (state.shopItems |> List.filter (fun x -> x.name <> item.name)) }
             let log = [Sold item; PresentedItem state.shopItems]
 
             applyItemEffects state WhenSold [item] log

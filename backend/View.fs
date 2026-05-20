@@ -253,16 +253,17 @@ let refreshInGame (state: Types.GameState) =
 
 // ── Shop ──
 let refreshShop (state: Types.GameState) =
-    root.GetNode<Label>("Shop/ShopPanel/GoldLabel").Text <- $"Gold: {state.gold}  ·  Items: {state.items.Length}/{Config.maxItems}"
+    root.GetNode<Label>("Shop/ShopPanel/GoldLabel").Text <- $"Gold: {state.gold}  ·  Items: {state.items.Length}/{state.maxItems}"
     setShopItemDetail "Hover an item" "Item descriptions appear here."
     let bl = root.GetNode<VBoxContainer>("Shop/ShopPanel/ShopItemList")
     clear bl
     for i in 0 .. state.shopItems.Length - 1 do
         let item = state.shopItems[i]
+        let owned = state.items |> List.exists (fun x -> x.name = item.name)
         let b = new Button()
         b.SetMeta("item_idx", i)
-        b.Text <- $"BUY {item.name} ({item.cost}G)"
-        b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle $"BUY {item.cost}G" item) item.description)
+        b.Text <- if owned then $"OWNED {item.name}" else $"BUY {item.name} ({item.cost}G)"
+        b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle (if owned then "OWNED" else $"BUY {item.cost}G") item) item.description)
         bl.AddChild(b)
     let sl = root.GetNode<VBoxContainer>("Shop/ShopPanel/PlayerItemList")
     clear sl
@@ -910,6 +911,9 @@ let animateGameEvent (event: Types.GameEvents): float =
         0.05
     | Types.ShopItemNotFound ->
         0.05
+    | Types.ItemAlreadyOwned ->
+        animateFloat "ALREADY OWNED" (Color(1f, 0.85f, 0.3f))
+        1.5
     | Types.ItemTriggered item ->
         0.05
     | Types.UpdatedItemState (item, _) ->
@@ -945,6 +949,7 @@ let private gameEventDuration event =
     | Types.EarnedExtraHonba _
     | Types.ItemDestroyed _
     | Types.NextRound _
+    | Types.ItemAlreadyOwned
     | Types.GameOverEvent -> 1.5
     | _ -> 0.05
 
