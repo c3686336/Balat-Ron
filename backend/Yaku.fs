@@ -60,7 +60,7 @@ let sanankoup (parsedHand: ParsedHand) (_: Machi) (_: Tile) =
 let suuankoup (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
   match parsedHand with
   | NormalHand (ParsedHand (kantsu, _, kotsu, Toitsu tToi)) ->
-    kantsu.Length + kotsu.Length = 4 && tToi <> tsumo
+    kantsu.Length + kotsu.Length = 4
   | _ -> false
 
 let suuankouTankip (parsedHand: ParsedHand) (_: Machi) (tsumo: Tile) =
