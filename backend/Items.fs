@@ -42,14 +42,14 @@ let allItems : Item list = [
 
 //     { id = Guid.NewGuid(); name = "Toitoihou"; description = "Grants +2 Yaku (score multipliers) if your hand consists entirely of four triplets (or quads) and a pair, with no sequences."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when toitoihoup p m t -> [ItemEffect.ExtraScore (2, 0)] | _ -> [] }
   { id = Guid.NewGuid(); name = "Sanankou";
-    description = "Grants +2 Yaku (score multipliers) if your hand contains three concealed triplets (drawn by yourself, not stolen).";
+    description = "Grants +1 Yaku (score multipliers) if your hand contains three concealed triplets (drawn by yourself, not stolen).";
     rarity = Uncommon;
     cost = 150;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sanankoup p m t -> [ItemEffect.ExtraScore (2, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sanankoup p m t -> [ItemEffect.ExtraScore (1, 0)] | _ -> [];
     state = Nothing };
 
   { id = Guid.NewGuid(); name = "Sankantsu";
-    description = "Grants +4 Yaku (score multipliers) if your hand contains three quads (four of a kind).";
+    description = "Grants +3 Yaku (score multipliers) if your hand contains three quads (four of a kind).";
     rarity = Uncommon;
     cost = 150;
     effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sankantsup p m t -> [ItemEffect.ExtraScore (4, 0)] | _ -> [];
@@ -66,16 +66,16 @@ let allItems : Item list = [
 //     { id = Guid.NewGuid(); name = "Junchan"; description = "Grants +3 Yaku (score multipliers) if every set and the pair in your hand contains at least one terminal (1 or 9) tile."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when junchanp p m t -> [ItemEffect.ExtraScore (3, 0)] | _ -> [] }
 //     { id = Guid.NewGuid(); name = "Chinitsu"; description = "Grants +6 Yaku (score multipliers) unconditionally since all tiles in this game belong to the same suit."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc _ -> [ItemEffect.ExtraScore (6, 0)] | _ -> [] }
   { id = Guid.NewGuid(); name = "Suuankou";
-    description = "Grants +6 Yaku (massive score multiplier) if your hand contains four concealed triplets (drawn by yourself).";
-    rarity = Rare;
-    cost = 100;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankoup p m t -> [ItemEffect.ExtraScore (6, 0)] | _ -> [];
+    description = "Grants +1 Yaku if your hand contains four concealed triplets (drawn by yourself).";
+    rarity = Common;
+    cost = 200;
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankoup p m t -> [ItemEffect.ExtraScore (1, 0)] | _ -> [];
     state = Nothing };
 
   { id = Guid.NewGuid(); name = "Sukantsu";
-    description = "Grants +8 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
-    rarity = Rare;
-    cost = 100;
+    description = "Grants +13 Yaku (massive score multiplier) if your hand contains four quads (four of a kind).";
+    rarity = Legendary;
+    cost = 500;
     effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when sukantsup p m t -> [ItemEffect.ExtraScore (8, 0)] | _ -> [];
     state = Nothing };
   
@@ -83,10 +83,10 @@ let allItems : Item list = [
 //     { id = Guid.NewGuid(); name = "Ryuuiisou"; description = "Grants +13 Yaku (massive score multiplier) if your hand is composed entirely of 2, 3, 4, 6, and 8 tiles."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc _ when ryuuiisoupRaw state.hand -> [ItemEffect.ExtraScore (13, 0)] | _ -> [] }
 //     { id = Guid.NewGuid(); name = "ChuurenPoutou"; description = "Grants +13 Yaku (massive score multiplier) if your hand consists of three 1s, three 9s, and one of every other number (1112345678999) plus one extra tile."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when chuurenPoutoup p m t -> [ItemEffect.ExtraScore (13, 0)] | _ -> [] }
   { id = Guid.NewGuid(); name = "SuuankouTanki";
-    description = "Grants +12 Yaku (colossal score multiplier) if you complete four concealed triplets by drawing the final tile to form the pair.";
-    rarity = Legendary;
-    cost = 100;
-    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankouTankip p m t -> [ItemEffect.ExtraScore (12, 0)] | _ -> [];
+    description = "Grants +18 Yaku if you complete four concealed triplets by drawing the final tile to form the pair.";
+    rarity = Mythical;
+    cost = 800;
+    effect = fun state _ event -> match event with | OnYakuCalc (p, m, t, _) when suuankouTankip p m t -> [ItemEffect.ExtraScore (6, 0)] | _ -> [];
     state = Nothing };
   
 //     { id = Guid.NewGuid(); name = "JunseiChuurenPoutou"; description = "Grants +26 Yaku (colossal score multiplier) if you complete the exact 1112345678999 hand by drawing a matching tile."; rarity = Common; cost = 50; effect = fun state event -> match event with | OnYakuCalc (p, m, t) when junseiChuurenPoutoup p m t -> [ItemEffect.ExtraScore (26, 0)] | _ -> [] }
@@ -121,8 +121,8 @@ let allItems : Item list = [
         match event with
           | Honba ->
             match item.state with
-              | Integer n when n <> 0 -> [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)]
-              | Integer _ -> [SelfDestruct]
+              | Integer n when n <> 1 -> [DiscloseNMoreDora 1; UpdateItemState <| Integer (n - 1)]
+              | Integer _ -> [DiscloseNMoreDora 1; SelfDestruct]
               | Nothing -> []
           | _ -> []
     state = Integer 3}
@@ -207,6 +207,6 @@ let allItems : Item list = [
     description = "Declaring tsumo does not progress the honba and does not decrease the tsumoLeft. The honba is progressed only when the pile is empty, at which tsumoleft should be decremented."
     rarity = Rare;
     cost = 200;
-    effect = fun state _ event -> match event with | OnTsumo -> [SuppressHonba];
+    effect = fun state _ event -> match event with | OnTsumo -> [SuppressHonba] | _ -> [];
     state = Nothing}
   ]

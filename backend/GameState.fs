@@ -90,7 +90,8 @@ let createGameState (rng: Random) : GameState =
         round = 1
         honbaLeft = Config.tsumoPerRound
         isRinshanKaihouApplicable = false
-        isTenhouApplicable = true 
+        isTenhouApplicable = true
+        canDeclareTsumo = true
         // items = Yaku.yakuItems
         items = []
         currentScore = 0I
@@ -119,7 +120,7 @@ let isHonbaSuppressed =
     queryItems SuppressHonba OnTsumo
 
 let canTsumo (state: GameState) =
-    parseHand (isWrapAroundEnabled state) state.hand |> List.isEmpty |> not
+    state.canDeclareTsumo && (parseHand (isWrapAroundEnabled state) state.hand |> List.isEmpty |> not)
 
 let canBuy (item: Item) (state: GameState) = state.gold >= item.cost && state.items.Length < Config.maxItems
 
@@ -151,7 +152,8 @@ let shufflePile (state: GameState) =
       doraPile = doraPile
       rinshang = rinshang
       isRinshanKaihouApplicable = false
-      isTenhouApplicable = true }
+      isTenhouApplicable = true
+      canDeclareTsumo = true }
 
 let transitionTo (state: GameState) (phase: GamePhase) log =
   match phase with
@@ -214,7 +216,8 @@ let update (state: GameState) (input: PlayerInput) =
                 pile = newPile
                 discardPile = Array.append state.discardPile [| t |]
                 isRinshanKaihouApplicable = false
-                isTenhouApplicable = false } 
+                isTenhouApplicable = false
+                canDeclareTsumo = true } 
 
           applyItemEffects nextState (OnDiscard t) nextState.items [TileDiscarded t; TileDrawn newTsumo]
 
@@ -229,7 +232,8 @@ let update (state: GameState) (input: PlayerInput) =
                 hand = newHand
                 rinshang = newRinshang
                 isRinshanKaihouApplicable = true
-                isTenhouApplicable = false }
+                isTenhouApplicable = false
+                canDeclareTsumo = true }
 
           let (state, log) = applyItemEffects nextState (OnKan t) nextState.items [Kan t ; RinshangDrawn newTsumo]
 
@@ -253,7 +257,7 @@ let update (state: GameState) (input: PlayerInput) =
           if not (isHonbaSuppressed newState) then
             transitionTo newState ScorePresentation log
           else
-            newState, log
+            { newState with canDeclareTsumo = false }, log
 
         | ConfirmPileEmpty ->
           let (state, log) = applyItemEffects state WhenPileEmpty state.items []

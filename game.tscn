@@ -652,17 +652,12 @@ custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
 [node name="ButtonContainer" type="HBoxContainer" parent="InGame" unique_id=91664649]
+layout_direction = 3
 layout_mode = 0
-offset_left = 344.0
-offset_top = 296.0
-offset_right = 600.0
-offset_bottom = 326.0
+offset_top = 300.0
+offset_right = 256.0
+offset_bottom = 330.0
 theme_override_constants/separation = 16
-
-[node name="ConfirmPileEmptyButton" type="Button" parent="InGame/ButtonContainer" unique_id=1113018394]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-text = "END ROUND"
 
 [node name="KanButton" type="Button" parent="InGame/ButtonContainer" unique_id=684682291]
 custom_minimum_size = Vector2(64, 0)
@@ -673,6 +668,11 @@ text = "KAN"
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 text = "TSUMO"
+
+[node name="ConfirmPileEmptyButton" type="Button" parent="InGame/ButtonContainer" unique_id=1113018394]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+text = "END ROUND"
 
 [node name="InfoContainer" type="PanelContainer" parent="InGame" unique_id=2022906826]
 layout_mode = 1

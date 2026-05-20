@@ -202,7 +202,7 @@ type ShuffleScope =
   | UnrevaledTilesOnly
 
 type GameState =
-  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; honbaLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; baseScore: int * int; phase: GamePhase; shopItems: Item list }
+  {rng: Random; hand: Hand; pile: Pile; discardPile: Pile; doraPile: Pile; dora: Pile; rinshang: Pile; round: int; honbaLeft: int; isRinshanKaihouApplicable: bool; isTenhouApplicable: bool; canDeclareTsumo: bool; items: Item list; currentScore: bigint; goalScore: bigint; gold: int; baseScore: int * int; phase: GamePhase; shopItems: Item list }
 
   override this.ToString (): string =
     let hand = sprintf $"{this.hand}"
