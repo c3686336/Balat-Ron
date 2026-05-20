@@ -187,24 +187,36 @@ let refreshDiscard (tiles: Types.Tile array) =
         g.AddChild(mkTexRect (tex (t.Value())))
 
 // ── Items ──
+let private itemDetailTitle (item: Types.Item) =
+    $"{item.name}  [{item.rarity}]"
+
+let private itemShopDetailTitle (action: string) (item: Types.Item) =
+    $"{action} {item.name}  [{item.rarity}]"
+
+let private showInGameItemDetail (item: Types.Item) =
+    let panel = root.GetNode<Control>("InGame/ItemDetailPanel")
+    panel.Visible <- true
+    root.GetNode<Label>("InGame/ItemDetailPanel/MarginContainer/VBoxContainer/ItemDetailTitle").Text <- itemDetailTitle item
+    root.GetNode<Label>("InGame/ItemDetailPanel/MarginContainer/VBoxContainer/ItemDetailDescription").Text <- item.description
+
+let private hideInGameItemDetail () =
+    root.GetNode<Control>("InGame/ItemDetailPanel").Visible <- false
+
+let private setShopItemDetail (title: string) (description: string) =
+    root.GetNode<Label>("Shop/ShopPanel/ShopDetailPanel/MarginContainer/VBoxContainer/ItemDetailTitle").Text <- title
+    root.GetNode<Label>("Shop/ShopPanel/ShopDetailPanel/MarginContainer/VBoxContainer/ItemDetailDescription").Text <- description
+
 let refreshItems (items: Types.Item list) =
     let box = root.GetNode<VBoxContainer>("InGame/VBoxContainer/ItemsContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemScroll/VBoxContainer")
     clear box
+    hideInGameItemDetail()
     for item in items do
-        let p = new PanelContainer()
-        let v = new VBoxContainer()
-        let n = new Label()
-        n.Text <- item.name
-        n.AddThemeFontSizeOverride("font_size", 16)
-        v.AddChild(n)
-        v.AddChild(new HSeparator())
-        let d = new Label()
-        d.Text <- item.description
-        d.AutowrapMode <- TextServer.AutowrapMode.WordSmart
-        d.AddThemeFontSizeOverride("font_size", 16)
-        v.AddChild(d)
-        p.AddChild(v)
-        box.AddChild(p)
+        let b = new Button()
+        b.Text <- item.name
+        b.CustomMinimumSize <- Vector2(104f, 0f)
+        b.add_MouseEntered(fun () -> showInGameItemDetail item)
+        b.add_MouseExited(fun () -> hideInGameItemDetail())
+        box.AddChild(b)
 
 // ── Info ──
 let refreshInfo (round: int) (gold: int) (honbaLeft: int) (baseScore: int * int) =
@@ -242,13 +254,15 @@ let refreshInGame (state: Types.GameState) =
 // ── Shop ──
 let refreshShop (state: Types.GameState) =
     root.GetNode<Label>("Shop/ShopPanel/GoldLabel").Text <- $"Gold: {state.gold}  ·  Items: {state.items.Length}/{Config.maxItems}"
+    setShopItemDetail "Hover an item" "Item descriptions appear here."
     let bl = root.GetNode<VBoxContainer>("Shop/ShopPanel/ShopItemList")
     clear bl
     for i in 0 .. state.shopItems.Length - 1 do
         let item = state.shopItems[i]
         let b = new Button()
         b.SetMeta("item_idx", i)
-        b.Text <- $"[{i}] {item.name} ({item.cost}G)"
+        b.Text <- $"BUY {item.name} ({item.cost}G)"
+        b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle $"BUY {item.cost}G" item) item.description)
         bl.AddChild(b)
     let sl = root.GetNode<VBoxContainer>("Shop/ShopPanel/PlayerItemList")
     clear sl
@@ -256,7 +270,8 @@ let refreshShop (state: Types.GameState) =
         let item = state.items[i]
         let b = new Button()
         b.SetMeta("sell_idx", i)
-        b.Text <- $"[{i}] Sell {item.name} (+{Config.discount item.cost}G)"
+        b.Text <- $"SELL {item.name} (+{Config.discount item.cost}G)"
+        b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle $"SELL +{Config.discount item.cost}G" item) item.description)
         sl.AddChild(b)
 
 let refreshGameOver (state: Types.GameState) (seed: string) =

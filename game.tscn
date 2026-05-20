@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://0w0esuorjuf5" path="res://Main.cs" id="2_ryrav"]
 [ext_resource type="Texture2D" uid="uid://b1l1py6s8ooyh" path="res://mahjong_tiles/Bamboo2.png" id="3_bamboo2"]
 [ext_resource type="Texture2D" uid="uid://bu2l8y31vivoq" path="res://Ura.png" id="4_7jktm"]
+[ext_resource type="Texture2D" uid="uid://c1hsd2l68hy8a" path="res://space-worm-theme/general/PanelOutine.png" id="7_eow3j"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_7jktm"]
 font_size = 32
@@ -15,6 +16,13 @@ stacked_shadow_0/offset = Vector2(1, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_ryrav"]
 stacked_shadow_count = 1
 stacked_shadow_0/offset = Vector2(1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j5wjh"]
+texture = ExtResource("7_eow3j")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
 
 [node name="Control" type="Control" unique_id=1198561215]
 layout_mode = 3
@@ -83,7 +91,6 @@ layout_mode = 2
 text = "OPTIONS"
 
 [node name="InGame" type="Control" parent="." unique_id=168467896]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -675,6 +682,40 @@ custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 text = "END ROUND"
 
+[node name="ItemDetailPanel" type="PanelContainer" parent="InGame" unique_id=1787116636]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 262.0
+offset_right = 448.0
+offset_bottom = 352.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_j5wjh")
+
+[node name="MarginContainer" type="MarginContainer" parent="InGame/ItemDetailPanel" unique_id=1234646586]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGame/ItemDetailPanel/MarginContainer" unique_id=1823895193]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ItemDetailTitle" type="Label" parent="InGame/ItemDetailPanel/MarginContainer/VBoxContainer" unique_id=1148786629]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Item"
+
+[node name="ItemDetailDescription" type="Label" parent="InGame/ItemDetailPanel/MarginContainer/VBoxContainer" unique_id=1855474656]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Description"
+autowrap_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="InGame/ItemDetailPanel" unique_id=1614921230]
+layout_mode = 2
+color = Color(0.48235294, 0.5647059, 0.70980394, 1)
+
 [node name="InfoContainer" type="PanelContainer" parent="InGame" unique_id=2022906826]
 layout_mode = 1
 anchors_preset = 6
@@ -816,6 +857,32 @@ theme_override_font_sizes/font_size = 16
 text = "Gold: 0  ·  Items: 0/5"
 horizontal_alignment = 1
 
+[node name="ShopDetailPanel" type="PanelContainer" parent="Shop/ShopPanel" unique_id=1860682467]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Shop/ShopPanel/ShopDetailPanel" unique_id=905636850]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Shop/ShopPanel/ShopDetailPanel/MarginContainer" unique_id=647270547]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ItemDetailTitle" type="Label" parent="Shop/ShopPanel/ShopDetailPanel/MarginContainer/VBoxContainer" unique_id=1343708710]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Hover an item"
+
+[node name="ItemDetailDescription" type="Label" parent="Shop/ShopPanel/ShopDetailPanel/MarginContainer/VBoxContainer" unique_id=1962350592]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Item descriptions appear here."
+autowrap_mode = 3
+
 [node name="ShopItemsLabel" type="Label" parent="Shop/ShopPanel" unique_id=1861630620]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
@@ -847,6 +914,7 @@ size_flags_horizontal = 4
 text = "CONTINUE"
 
 [node name="GameOver" type="Control" parent="." unique_id=1400165214]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
