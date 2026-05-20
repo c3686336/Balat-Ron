@@ -286,7 +286,7 @@ let update (state: GameState) (input: PlayerInput) =
           | ConfirmScore when state.currentScore >= state.goalScore ->
             transitionTo state Shop [] 
 
-          | ConfirmScore when state.honbaLeft > 0 ->
+          | ConfirmScore when state.honbaLeft > 1 ->
             transitionTo state InGame []
 
           | ConfirmScore ->
