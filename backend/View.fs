@@ -20,7 +20,7 @@ let private ura () = GD.Load<Texture2D>("res://Ura.png")
 // ── Phase ──
 let phaseControls = Dictionary<string, Control>()
 let cachePhases () =
-    for n in ["MainMenu"; "InGame"; "ScorePresentation"; "Shop"; "GameOver"] do
+    for n in ["MainMenu"; "InGame"; "ScorePresentation"; "Shop"; "GameOver"; "HowToPlay"] do
         phaseControls[n] <- root.GetNode<Control>(n)
 
 let showPhase name =
@@ -222,7 +222,7 @@ let refreshItems (items: Types.Item list) =
 let refreshInfo (round: int) (gold: int) (honbaLeft: int) (baseScore: int * int) =
     root.GetNode<Label>("InGame/InfoContainer/MarginContainer/VBoxContainer/RoundLabel").Text <- $"-- ROUND {round} --"
     root.GetNode<Label>("InGame/InfoContainer/MarginContainer/VBoxContainer/GoldLabel").Text <- $"Gold: {gold}"
-    root.GetNode<Label>("InGame/InfoContainer/MarginContainer/VBoxContainer/TsumoLabel").Text <- $"{honbaLeft} tsumo left."
+    root.GetNode<Label>("InGame/InfoContainer/MarginContainer/VBoxContainer/TsumoLabel").Text <- $"{honbaLeft + 1} tsumo left."
     let (h, f) = baseScore
     root.GetNode<Label>("InGame/InfoContainer/MarginContainer/VBoxContainer/ExtraScoreLabel").Text <- $"+ {h} han\n+ {f} fu"
 
@@ -255,24 +255,24 @@ let refreshInGame (state: Types.GameState) =
 let refreshShop (state: Types.GameState) =
     root.GetNode<Label>("Shop/ShopPanel/GoldLabel").Text <- $"Gold: {state.gold}  ·  Items: {state.items.Length}/{state.maxItems}"
     setShopItemDetail "Hover an item" "Item descriptions appear here."
-    let bl = root.GetNode<VBoxContainer>("Shop/ShopPanel/ShopItemList")
+    let bl = root.GetNode<GridContainer>("Shop/ShopPanel/ShopItemList")
     clear bl
     for i in 0 .. state.shopItems.Length - 1 do
         let item = state.shopItems[i]
         let owned = state.items |> List.exists (fun x -> x.name = item.name)
         let b = new Button()
         b.SetMeta("item_idx", i)
-        b.Text <- if owned then $"OWNED {item.name}" else $"BUY {item.name} ({item.cost}G)"
+        b.Text <- if owned then $"OWNED\n{item.name}" else $"BUY\n{item.name} ({item.cost}G)"
         b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle (if owned then "OWNED" else $"BUY {item.cost}G") item) item.description)
         bl.AddChild(b)
-    let sl = root.GetNode<VBoxContainer>("Shop/ShopPanel/PlayerItemList")
+    let sl = root.GetNode<GridContainer>("Shop/ShopPanel/PlayerItemList")
     clear sl
     for i in 0 .. state.items.Length - 1 do
         let item = state.items[i]
         let b = new Button()
         b.SetMeta("sell_idx", i)
         b.Text <- $"SELL {item.name} (+{Config.discount item.cost}G)"
-        b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle $"SELL +{Config.discount item.cost}G" item) item.description)
+        b.add_MouseEntered(fun () -> setShopItemDetail (itemShopDetailTitle $"SELL\n+{Config.discount item.cost}G" item) item.description)
         sl.AddChild(b)
 
 let refreshGameOver (state: Types.GameState) (seed: string) =

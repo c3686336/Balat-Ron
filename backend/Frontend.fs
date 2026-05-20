@@ -92,7 +92,7 @@ let wireActionButtons () =
                 | _ -> View.refreshInGame state; wireHandClicks()))
 
 let rec wireShopButtons () =
-    let bl = root.GetNode<VBoxContainer>("Shop/ShopPanel/ShopItemList")
+    let bl = root.GetNode<GridContainer>("Shop/ShopPanel/ShopItemList")
     for child in bl.GetChildren() do
         match child with
         | :? Button as b ->
@@ -107,7 +107,7 @@ let rec wireShopButtons () =
                             View.refreshInGame state
                             wireShopButtons()))
         | _ -> ()
-    let sl = root.GetNode<VBoxContainer>("Shop/ShopPanel/PlayerItemList")
+    let sl = root.GetNode<GridContainer>("Shop/ShopPanel/PlayerItemList")
     for child in sl.GetChildren() do
         match child with
         | :? Button as b ->
@@ -135,6 +135,14 @@ let init (r: Control) =
             state <- createStateFromSeedText()
             let (s, log) = doStep Start
             afterLog log (fun () -> View.showPhase "InGame"; View.refreshInGame s; wireHandClicks()))
+
+    r.GetNode<Button>("MainMenu/VBoxContainer/HowToPlayButton").add_Pressed(fun () ->
+        if not inputLocked then
+            View.showPhase "HowToPlay")
+
+    r.GetNode<Button>("HowToPlay/BackButton").add_Pressed(fun () ->
+        if not inputLocked then
+            View.showPhase "MainMenu")
 
     r.GetNode<Button>("ScorePresentation/ScorePanel/ConfirmButton").add_Pressed(fun () ->
         if not inputLocked then

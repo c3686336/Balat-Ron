@@ -87,10 +87,12 @@ layout_mode = 2
 text = "HOW TO PLAY"
 
 [node name="OptionsButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=1751343529]
+visible = false
 layout_mode = 2
 text = "OPTIONS"
 
 [node name="InGame" type="Control" parent="." unique_id=168467896]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -888,9 +890,10 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Available to buy:"
 
-[node name="ShopItemList" type="VBoxContainer" parent="Shop/ShopPanel" unique_id=361540840]
+[node name="ShopItemList" type="GridContainer" parent="Shop/ShopPanel" unique_id=1607486887]
 layout_mode = 2
 size_flags_vertical = 3
+columns = 4
 
 [node name="Separator" type="HSeparator" parent="Shop/ShopPanel" unique_id=1014884098]
 layout_mode = 2
@@ -900,9 +903,10 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Your items:"
 
-[node name="PlayerItemList" type="VBoxContainer" parent="Shop/ShopPanel" unique_id=1411399625]
+[node name="PlayerItemList" type="GridContainer" parent="Shop/ShopPanel" unique_id=1270756743]
 layout_mode = 2
 size_flags_vertical = 3
+columns = 3
 
 [node name="ExitShopButton" type="Button" parent="Shop" unique_id=2144035605]
 layout_mode = 0
@@ -979,13 +983,59 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HowToPlay" type="Control" parent="." unique_id=1231966414]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HowToPlay" unique_id=2116636529]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HowToPlay/MarginContainer" unique_id=1308004337]
+layout_mode = 2
+text = "How to Play
+
+The game uses 36 tiles: four copies each of numbers 1 to 9. The 1 tile is shown as a bird.
+
+There are two piles in the center. The left pile is the draw pile, and the right pile is the reserve pile.
+
+One tile from the reserve pile is revealed. This is the Dora. When scoring, each tile in your hand that is one number higher than the Dora gives +1 han. If the Dora is 9, each 1 tile gives +1 han instead.
+
+Your hand is at the bottom of the screen. Tap a tile to discard it and draw a new tile.
+
+If you have four identical tiles, you can press the Kan button to set them aside. You cannot discard from them, and they are forced to be evaluated as three identical tiles. After a Kan, you draw a special tile from the reserve pile.
+
+Your goal is to make a complete hand: four groups and one pair. A group can be three identical tiles or three tiles in a row.
+
+When your hand is complete, the Tsumo button lights up. You can press it to score, or ignore it and keep playing.
+
+Scoring uses han and fu. The score is 6 × fu × 2^(2 + han).
+
+After scoring, all tiles are shuffled and play continues.
+
+Each round has a limited number of Tsumo declarations. Reach the target score before you run out, or you lose.
+
+If you reach the target score, you go to the shop. You can buy or sell items with gold. You earn more gold when you finish with more Tsumo declarations remaining. Selling items gives 90% of their value."
+
+[node name="BackButton" type="Button" parent="HowToPlay" unique_id=854913461]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 354.0
+offset_right = 584.0
+offset_bottom = 384.0
+text = "Back
+"
 
 [node name="EventLog" type="RichTextLabel" parent="." unique_id=617017987]
 visible = false
