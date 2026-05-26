@@ -400,10 +400,10 @@ let allItems : Item list = [
 
   { id = Guid.NewGuid();
     name = "Heavy Hand"
-    description = "Gain +1 han if item effects have already added at least +30 fu this hand."
+    description = "Gain +1 han per every 100 fu this hand."
     rarity = Rare;
     cost = 300;
-    effect = fun state _ event -> match event with | OnYakuCalc _ when snd state.baseScore >= 30 -> [ExtraScore (1, 0)] | _ -> [];
+    effect = fun state _ event -> match event with | OnYakuCalc _ -> [ExtraScore ((snd state.baseScore) / 100, 0)] | _ -> [];
     state = Nothing }
 
   { id = Guid.NewGuid();

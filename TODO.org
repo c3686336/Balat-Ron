@@ -44,7 +44,7 @@ CLOSED: [2026-05-20 Wed 00:55]
 
 * Balance notes
 - 역만이나 이상한역 다 없애고 (아니면 후반에 나오게 하고) 만들기 쉬운것들만 초반에 남기기
-- 라운드 점수 상승폭 줄이기
+- 라운드 점수 상승폭 늘리기
 - 청일색 삭제하거나 골드 엄청 올리기
 - 도라 너프, 1/9 버프
 - 깡도라 없애고 도라 아이템으로 사게만들기
@@ -57,7 +57,23 @@ CLOSED: [2026-05-20 Wed 00:55]
 
 - 확률 정상화 - 완
 
+* 현재 문제
+- 골드 쓸 곳이 없음 - 대부분 아이템이 쓰레기, 아이템 슬롯을 늘릴 방법 제공
+- 실험해 볼 여지도 없이 쓰레기인 아이템이 너무 많아
+  - 영상개화, 천화 등 우연역 버프 필요
+- 황패시 카드 버림뿐 아니라 계속하기 버튼 필요 - done
+- 점수 표시 연출 더 화려하게
+- 쓰안커 등 역만은 비싸고 드물게 나오도록 - 인벤토리에 여러개 있으면 개사기 - in progress
+
 * Bugs
-- The next button disappears if you buy 5 items in the shop
+- The next button disappears if you buy 5 items in the shop - done
 - There's no description for items in the shop
-- Score does not reset (At least visually)
+- Score does not reset (At least visually) - done
+- 쓰단이 쓰안커랑 중복 안됨 - done
+- 스코어 표시화면에 추가 스코어가 아니라 누적 스코어가 나옴 - done
+- 점수 표기에 공학적 표기법 사용 - done, 몇점 더벌어야하는지 알려주기
+- 게임 오버시 라운드 표기 안됨, 재시작시 - done
+- 쯔모패를 받아온 후 바로 호버되면, 다시 내려감
+- 도라 +1 아이템이 파괴된 후 한 턴 더 적용됨.
+- 0 tssumo left 후 사망 - done
+- patience 개사기

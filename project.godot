@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Balat-Ron"
 run/main_scene="uid://fv6wlutce1cu"
+config/features=PackedStringArray("4.6", "C#")
 
 [display]
 
