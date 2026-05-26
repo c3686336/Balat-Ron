@@ -284,10 +284,10 @@ let allItems : Item list = [
 
   { id = Guid.NewGuid();
     name = "Backpack"
-    description = "Increase your maximum item slots by 1 while held. You still cannot own two copies of the same item."
+    description = "Increase your maximum item slots by 2 while held. Since Backpack uses one slot, this gives 1 extra usable item slot."
     rarity = Rare;
     cost = 325;
-    effect = fun state _ event -> match event with | WhenObtained -> [AddMaxItems 1] | WhenSold -> [AddMaxItems -1] | _ -> [];
+    effect = fun state _ event -> match event with | WhenObtained -> [AddMaxItems 2] | WhenSold -> [AddMaxItems -2] | _ -> [];
     state = Nothing }
 
   { id = Guid.NewGuid();

@@ -125,9 +125,17 @@ let isHonbaSuppressed =
 let canTsumo (state: GameState) =
     state.canDeclareTsumo && (parseHand (isWrapAroundEnabled state) state.hand |> List.isEmpty |> not)
 
+let private itemMaxItemsDelta (state: GameState) (event: ItemEvent) (item: Item) =
+    item.effect state item event
+    |> List.sumBy (function | AddMaxItems n -> n | _ -> 0)
+
 let private itemIncreasesMaxItems (state: GameState) (item: Item) =
     item.effect state item WhenObtained
     |> List.exists (function | AddMaxItems n when n > 0 -> true | _ -> false)
+
+let private canSellWithoutOverfilling (state: GameState) (item: Item) =
+    let nextMaxItems = max Config.maxItems (state.maxItems + itemMaxItemsDelta state WhenSold item)
+    state.items.Length - 1 <= nextMaxItems
 
 let alreadyOwnsItem (item: Item) (state: GameState) =
     state.items |> List.exists (fun x -> x.name = item.name)
@@ -317,15 +325,18 @@ let update (state: GameState) (input: PlayerInput) =
             state, [NotEnoughGold]
 
           | Sell item ->
-            let newItems = List.filter (fun x -> x.id <> item.id) state.items
-            let returnedItem = { item with id = Guid.NewGuid() }
-            let state = { state with
-                            items = newItems
-                            gold = state.gold + discount item.cost
-                            shopItems = returnedItem :: (state.shopItems |> List.filter (fun x -> x.name <> item.name)) }
-            let log = [Sold item; PresentedItem state.shopItems]
+            if not (canSellWithoutOverfilling state item) then
+              state, [InventoryFull]
+            else
+              let newItems = List.filter (fun x -> x.id <> item.id) state.items
+              let returnedItem = { item with id = Guid.NewGuid() }
+              let state = { state with
+                              items = newItems
+                              gold = state.gold + discount item.cost
+                              shopItems = returnedItem :: (state.shopItems |> List.filter (fun x -> x.name <> item.name)) }
+              let log = [Sold item; PresentedItem state.shopItems]
 
-            applyItemEffects state WhenSold [item] log
+              applyItemEffects state WhenSold [item] log
 
           | ExitShop ->
             transitionTo state InGame []
