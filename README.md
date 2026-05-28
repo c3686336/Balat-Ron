@@ -87,3 +87,7 @@ The main place I had to manually change or reprompt was the frontend layout. The
 3. The main point that the LLM was not able to do correctly.
 
 The main thing the LLM was not able to do correctly on its own was coherent visual layout. It was good at code refactoring, UI logic, connecting screens, tools, tests, and draft animation code, but it did not reliably produce a balanced Godot layout that looked good and fit within the game screen without manual adjustment. It also could not reliably get animation details right without manual tuning.
+
+## Attributions
+- UI Theme : https://softwave.itch.io/godot-retro-theme-space-worm
+- Mahjong Tiles : https://natonato.itch.io/simple-tiny-mahjong-tiles
