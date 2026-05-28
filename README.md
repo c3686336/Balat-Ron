@@ -4,7 +4,7 @@ Balat-Ron is a Godot 4 / F# game that combines a simplified bamboo-only mahjong 
 
 ## How To Run
 
-I will attach a pre-built exported game alongside this repository. If you only want to play the game, use that pre-built version instead of building from source.
+I will attach a pre-built exported game alongside this repository for Windows, MacOS and Linux. If you only want to play the game, use that pre-built version instead of building from source. They are attached in the "Releases" section. For the macOS version, you'll have to disable the gatekeeper.
 
 To run from source, install:
 
@@ -40,24 +40,6 @@ dotnet build Balat-Ron.csproj --no-restore
 ```
 
 After that, open `project.godot` in Godot and run `game.tscn` as described above.
-
-To run tests:
-
-```sh
-dotnet test --no-restore
-```
-
-There is also a balance simulator for item/build testing:
-
-```sh
-dotnet run --project tools/Balat-Ron.Balance/Balat-Ron.Balance.fsproj -- --items "Pinfu,Iipeikou,Open Road" --samples 100000
-```
-
-To list item names accepted by the simulator:
-
-```sh
-dotnet run --project tools/Balat-Ron.Balance/Balat-Ron.Balance.fsproj -- --list-items
-```
 
 ## Requirement Changes
 
