@@ -12,8 +12,30 @@ Download and unzip the `.zip` file for your operating system:
 * **Linux:** Double-click `Balat-Ron-Linux` or run `./Balat-Ron-Linux` in your terminal in the folder named `Balat-Ron-Linux`
 * **macOS:** Open `Balat-Ron.app` following the instructions below.
 
-### How to Disable The Gatekeeper
-Because this game is an indie project and not digitally signed by Apple, your Mac's Gatekeeper security will block it the first time you try to open it. This is normal. To play the game: Double-click the game to open it. You will get a warning that the app is damaged or from an untrusted developer. Click Done or OK. Open your Mac's System Settings and click on Privacy & Security in the left sidebar. Scroll all the way down to the Security section. You will see a message saying the game was blocked from use. Click the Open Anyway button next to it. Enter your Mac password (or use TouchID) to confirm. The game will now open! You only have to do this once. In the future, you can just double-click the game to play it normally. 
+### How to Bypass Gatekeeper
+Because this game is an indie project and not digitally signed by Apple, your Mac's Gatekeeper security will block it the first time you try to open it. This is completely normal. 
+
+1. **Double-click** the game to try opening it. You will get a warning that the app is from an untrusted developer. Click **Done** or **OK**.
+2. Open your Mac's **System Settings** and click on **Privacy & Security** in the left sidebar.
+3. Scroll all the way down to the **Security** section. You will see a message stating the game was blocked.
+4. Click the **Open Anyway** button next to it, then enter your Mac password (or use Touch ID) to confirm.
+
+The game will now open! You only have to do this once. In the future, you can just double-click the game to play it normally. 
+
+### Troubleshooting: "Application cannot be opened" or "Damaged"
+If macOS refuses to launch the game even after clicking "Open Anyway," or if it immediately says the application cannot be opened, your extraction tool likely stripped away the file's internal execution permissions. 
+
+You can fix this in a few seconds using the Mac Terminal:
+
+1. Open the **Terminal** app (Press `Cmd + Space`, type "Terminal", and press Enter).
+2. Type `chmod -R +x ` (make sure to leave a **space** after the `+x`).
+3. Drag and drop the `Balat-Ron.app` folder from your Finder window directly into the Terminal window. This will automatically paste the correct path.
+4. Press **Enter**. 
+
+The permissions are now restored, and you can launch the game normally.
+
+### Fallback Option
+If the macOS build repeatedly fails to launch despite trying the troubleshooting steps above, please consider running the **Windows** or **Linux** version of the game instead. Those builds are less restrictive and may work better depending on your system configuration.
 
 To run from source, install:
 
