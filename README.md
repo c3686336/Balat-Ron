@@ -6,8 +6,14 @@ Balat-Ron is a Godot 4 / F# game that combines a simplified bamboo-only mahjong 
 
 I will attach a pre-built exported game alongside this repository for Windows, MacOS and Linux. If you only want to play the game, use that pre-built version instead of building from source. They are attached in the "Releases" section. For the macOS version, you'll have to disable the gatekeeper.
 
+Download and unzip the `.zip` file for your operating system:
+
+* **Windows:** Double-click `Balat-Ron-Windows.exe` in the folder named `Balat-Ron-Windows`.
+* **Linux:** Double-click `Balat-Ron-Linux` or run `./Balat-Ron-Linux` in your terminal in the folder named `Balat-Ron-Linux`
+* **macOS:** Open `Balat-Ron.app` following the instructions below.
+
 ### How to Disable The Gatekeeper
-Because this game is an indie project and not digitally signed by Apple, your Mac's Gatekeeper security will block it the first time you try to open it. This is normal. To play the game:Double-click the game to open it. You will get a warning that the app is damaged or from an untrusted developer. Click Done or OK. Open your Mac's System Settings and click on Privacy & Security in the left sidebar. Scroll all the way down to the Security section. You will see a message saying the game was blocked from use. Click the Open Anyway button next to it. Enter your Mac password (or use TouchID) to confirm. The game will now open! You only have to do this once. In the future, you can just double-click the game to play it normally. 
+Because this game is an indie project and not digitally signed by Apple, your Mac's Gatekeeper security will block it the first time you try to open it. This is normal. To play the game: Double-click the game to open it. You will get a warning that the app is damaged or from an untrusted developer. Click Done or OK. Open your Mac's System Settings and click on Privacy & Security in the left sidebar. Scroll all the way down to the Security section. You will see a message saying the game was blocked from use. Click the Open Anyway button next to it. Enter your Mac password (or use TouchID) to confirm. The game will now open! You only have to do this once. In the future, you can just double-click the game to play it normally. 
 
 To run from source, install:
 
