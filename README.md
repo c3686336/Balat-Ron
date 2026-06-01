@@ -117,3 +117,49 @@ The main thing the LLM was not able to do correctly on its own was coherent visu
 ## Attributions
 - UI Theme : https://softwave.itch.io/godot-retro-theme-space-worm
 - Mahjong Tiles : https://natonato.itch.io/simple-tiny-mahjong-tiles
+
+## How To Play
+The game uses 36 tiles: four copies each of numbers 1 to 9. The 1 tile is shown as a bird.
+
+There are two piles in the center. The left pile is the draw pile, and the right pile is the reserve pile.
+
+One tile from the reserve pile is revealed. This is the Dora. When scoring, each tile in your hand that is one number higher than the Dora gives +1 han. If the Dora is 9, each 1 tile gives +1 han instead.
+
+Your hand is at the bottom of the screen. Tap a tile to discard it and draw a new tile.
+
+If you have four identical tiles, you can press the Kan button to set them aside. You cannot discard from them, and they are forced to be evaluated as three identical tiles. After a Kan, you draw a special tile from the reserve pile.
+
+Your goal is to make a complete hand: four groups and one pair. A group can be three identical tiles or three tiles in a row.
+
+When your hand is complete, the Tsumo button lights up. You can press it to score, or ignore it and keep playing.
+
+Scoring uses han and fu. The score is 6 × fu × 2^(2 + han).
+
+After scoring, all tiles are shuffled and play continues.
+
+Each round has a limited number of Tsumo declarations. Reach the target score before you run out, or you lose.
+
+If you reach the target score, you go to the shop. You can buy or sell items with gold. You earn more gold when you finish with more Tsumo declarations remaining. Selling items gives 90% of their value.
+
+## How To Play (한국어)
+이 게임은 1부터 9까지의 숫자가 각각 4장씩, 총 36장의 패를 사용합니다. 1 패는 새 모양으로 표시됩니다.
+
+화면 중앙에는 두 개의 패 더미가 있습니다. 왼쪽은 뽑기 더미, 오른쪽은 예비 더미입니다.
+
+예비 더미에서 패 한 장이 공개되며, 이것이 '도라(Dora)'가 됩니다. 점수를 계산할 때, 손패에 도라보다 숫자가 1 높은 패가 있을 때마다 +1판(han)을 얻습니다. 만약 도라가 9라면, 대신 1 패가 있을 때마다 +1판을 얻습니다.
+
+플레이어의 손패는 화면 하단에 표시됩니다. 패를 탭하면 해당 패를 버리고 새로운 패를 뽑습니다.
+
+똑같은 패를 4장 가지고 있다면, '깡(Kan)' 버튼을 눌러 따로 빼놓을 수 있습니다. 이 패들은 버릴 수 없으며, 완성형을 계산할 때 똑같은 패 3장(몸통)으로 취급됩니다. 깡을 선언한 후에는 예비 더미에서 특별한 패를 한 장 뽑습니다.
+
+최종 목표는 몸통 4개와 머리(쌍) 1개를 모아 완성된 손패를 만드는 것입니다. 몸통은 똑같은 패 3장 또는 연속된 숫자 패 3장으로 구성할 수 있습니다.
+
+손패가 완성되면 '쯔모(Tsumo)' 버튼에 불이 들어옵니다. 버튼을 눌러 점수를 획득하거나, 이를 무시하고 플레이를 계속할 수도 있습니다.
+
+점수 계산에는 '판(han)'과 '부(fu)'를 사용합니다. 점수는 6 × 부 × 2^(2 + 판)으로 계산됩니다.
+
+점수 계산이 끝나면 모든 패를 다시 섞고 플레이가 계속됩니다.
+
+각 라운드마다 선언할 수 있는 쯔모 횟수가 제한되어 있습니다. 제한 횟수가 모두 소진되기 전에 목표 점수에 도달해야 하며, 그러지 못하면 패배합니다.
+
+목표 점수에 도달하면 상점으로 이동합니다. 상점에서는 골드를 사용하여 아이템을 구매하거나 판매할 수 있습니다. 라운드가 끝났을 때 남은 쯔모 선언 횟수가 많을수록 더 많은 골드를 획득합니다. 아이템을 판매할 때는 원래 가치의 90%를 받습니다.
