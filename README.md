@@ -60,23 +60,21 @@ The proposal said invalid `TSUMO` or `KAN` attempts would deduct score. In the f
 
 The original design also mentioned a penalty if the player declared `TSUMO` without a valid hand. I removed this because the game already has a limited number of scoring attempts per round, and accidental penalties made the game feel worse rather than more strategic. This is the biggest deviation from the requirements.
 
-1. Changed hand upgrades/yaku into shop items.
+2. Changed hand upgrades/yaku into shop items.
 
 The proposal had a separate `HandUpgrade` concept. In the final version, most yaku-like scoring bonuses are represented as items. This better matches the Balatro-style design because the player builds a scoring engine through shop choices.
+
+## Requirement Expansions
 
 1. Expanded the `Item` model beyond a simple score function.
 
 The original requirement described items as something like `GameState -> (int, int) -> (int, int)`. The final item system is event-based. Items can react to actions such as discard, kan, scoring, round start, being bought, being sold, or pile exhaustion. This was necessary for items such as `Backpack`, `Dora Lantern`, `Riichi`, and `Graveyard Revival`.
 
-1. Changed deck exhaustion behavior.
+2. Changed deck exhaustion behavior.
 
-The proposal said deck exhaustion would cause a penalty and reshuffle. In the final game, an `END ROUND` button appears when the pile is empty. Some items can interact with that moment, such as `Graveyard Revival`. This made the rule clearer and gave room for late-round items.
+The proposal said deck exhaustion would cause a penalty and reshuffle. In the final game, an `END ROUND` button appears when the pile is empty. When pressed, the player gets the penalty of reshuffling the deck without getting any additional points from items triggered at `TSUMO`. In addition to that, some items can now interact with that moment, such as `Graveyard Revival`. This made the rule clearer and gave room for late-round items.
 
-1. Implemented a GUI instead of only a terminal interface.
-
-The proposal said the game would be played in the terminal, with graphics optional. The final game uses a Godot GUI. A legacy CLI still exists, but the intended player experience is the graphical version.
-
-1. Added duplicate-item prevention and dynamic item slots.
+3. Added duplicate-item prevention and dynamic item slots.
 
 The original proposal had a fixed item list idea. The final game prevents owning duplicate items and supports items that change maximum inventory size, such as `Backpack`. This makes build choices clearer and avoids degenerate stacking.
 
