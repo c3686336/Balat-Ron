@@ -104,7 +104,7 @@ The original proposal had a fixed item list idea. The final game prevents owning
 
 1. What you used the LLM for,
 
-I used an LLM mainly for several kinds of implementation help. First, I used it for trivial refactoring that affected a large part of the codebase, which went well. Second, I used it for frontend/view work in Godot and F#, including UI wiring, score presentation, shop display, item descriptions, and layout iteration. Third, I used it to create various tools and tests, including the balance simulator, which also went well. The animation code was also written with LLM help and then adjusted by me.
+I used an LLM mainly for several kinds of implementation help. First, I used it for trivial refactoring that affected a large part of the codebase, which went well. Second, I used it for frontend/view work in Godot and F#, including UI wiring, score presentation, shop display, item descriptions, and layout iteration. Third, I used it to create various tools and tests, including the balance simulator, which also went well. The animation code was also written with LLM help and then adjusted by me. Also, I used LLM to police sentences and proses in my README.md
 
 2. What you had to manually change or reprompt because the LLM did not understand your first prompt,
 
